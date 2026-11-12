@@ -1,0 +1,20 @@
+{
+  "name": "peakdle",
+  "title": "Peakdle",
+  "url": "https://peakdle.pages.dev",
+  "cloudflareProject": "peakdle",
+  "epoch": "2026-11-12",
+  "tagline": "Which Steam game had more players? Ten pairs a day.",
+  "description": "A daily guessing game about Steam player counts. Two games, one question: which one had more people playing at once? Ten pairs a day, getting closer as you go.",
+  "themeColor": "#6aaa64",
+  "icon": "▲",
+  "operator": "Rico Rico RPG",
+  "contact": "",
+  "adsense": {
+    "client": "",
+    "slots": { "results": "", "footer": "" }
+  },
+  "puzzles": { "noRepeatDays": 7, "noRepeatBy": "group" },
+  "live": { "minPeak": 300, "lagDays": 2 },
+  "alltime": { "minTrackedDays": 30, "minPeak": 1000, "seed": "" }
+}
