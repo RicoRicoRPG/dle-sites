@@ -54,7 +54,7 @@ if (process.argv.includes("--dist")) {
   for (const site of ["speedrundle", "peakdle"]) {
     const pg = await openPage(path.join(ROOT, "dist", site, "index.html"));
     ok(!pg.errs.length, `dist ${site}: script errors ${pg.errs.join("; ")}`);
-    ok(pg.d.querySelectorAll(".card").length === 2 || pg.d.querySelector(".notice"), `dist ${site}: no cards and no notice`);
+    ok(pg.d.querySelectorAll("#game .card").length === 2 || pg.d.querySelector("#game .notice"), `dist ${site}: no cards and no notice`);
     pg.w.close();
   }
   console.log(failures ? `${failures} failure(s), ${passes} passed` : `dist ok (${passes} checks)`);
