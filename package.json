@@ -1,0 +1,16 @@
+{
+  "name": "dle-sites",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "refresh:speedrun": "node scripts/speedrundle-refresh.mjs",
+    "poll": "node scripts/peakdle-poll.mjs",
+    "close": "node scripts/peakdle-close.mjs",
+    "puzzles": "node scripts/puzzles.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node test/check.mjs",
+    "daily": "node scripts/peakdle-close.mjs && node scripts/puzzles.mjs && node scripts/build.mjs && node test/check.mjs"
+  },
+  "devDependencies": { "jsdom": "^24.1.3" }
+}
