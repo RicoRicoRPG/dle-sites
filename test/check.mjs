@@ -141,7 +141,7 @@ const setSite = (name, patch) => {
   fs.writeFileSync(path.join(T, "data/peakdle/pool.json"), JSON.stringify(before));
 }
 
-// ---------- 2. Peakdle: four simulated days of hourly polling ----------
+// ---------- 2. CCUdle (internally "peakdle"): four simulated days of hourly polling ----------
 const sample = readJ(path.join(T, "test/fixtures/peaks-sample.json"));
 fs.writeFileSync(path.join(T, "fake-steam.mjs"), `
 const sample = ${JSON.stringify(sample)};
@@ -209,7 +209,7 @@ ok(fs.existsSync(live("2026-12-06")) && readJ(live("2026-12-06")).meta.day === "
   const err = playDay(pg);
   ok(!err, "peakdle: full day plays " + (err || ""));
   const share = pg.d.querySelector("#sharetext")?.textContent || "";
-  ok(/^Peakdle( Live)? #\d+ · \d+\/10\n[🟩⬛]{10}\npeakdle\.pages\.dev$/u.test(share), `peakdle share text: ${JSON.stringify(share)}`);
+  ok(/^CCUdle( Live)? #\d+ · \d+\/10\n[🟩⬛]{10}\nccudle\.pages\.dev$/u.test(share), `peakdle share text: ${JSON.stringify(share)}`);
   pg.w.close();
 }
 // All-Time opens once history passes the threshold
