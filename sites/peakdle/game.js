@@ -1,6 +1,6 @@
 {
-  title: "Peakdle",
-  storeKey: "peakdle.v1",
+  title: "CCUdle",
+  storeKey: "ccudle.v1",
   better: "higher",
   pairRule: (a, b) => !(a.top10 && b.top10),
   // Header art from Steam's store CDN; the path comes from IStoreBrowseService (scripts/peakdle-assets.mjs).
@@ -15,7 +15,7 @@
       return `Which game had more players at its peak on ${d}?`;
     },
     hint: "Counts are the most people playing at the same moment on Steam during that UTC day, sampled every hour.",
-    unavailable: "The first Live puzzle appears once Peakdle has a full day of player counts. Check back tomorrow.",
+    unavailable: "The first Live puzzle appears once CCUdle has a full day of player counts. Check back tomorrow.",
     card: g => ({ name: g.name, meta: [g.genre, g.free ? "Free" : "Paid"].filter(Boolean).join(" · ") }),
     format: g => g.v.toLocaleString("en-US"),
     detail: g => "daily peak",
@@ -27,7 +27,7 @@
       ? `Which game has the higher player peak since ${new Date(m.since + "T12:00:00Z").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" })}?`
       : "Which game has the higher all-time player peak?",
     hint: "The most people ever recorded playing a game at the same moment on Steam.",
-    unavailable: "All-Time opens once Peakdle has enough history. Play Live in the meantime.",
+    unavailable: "All-Time opens once CCUdle has enough history. Play Live in the meantime.",
     card: g => ({ name: g.name, meta: [g.genre, g.free ? "Free" : "Paid"].filter(Boolean).join(" · ") }),
     format: g => g.v.toLocaleString("en-US"),
     detail: g => g.when ? `peak set ${g.when}` : "record peak",
