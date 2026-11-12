@@ -47,7 +47,7 @@ ${ads ? `<meta name="google-adsense-account" content="${esc(site.adsense.client)
 }
 
 function footerLinks(ads) {
-  return `<nav class="links" aria-label="Site"><a href="/about">How to play &amp; about</a><a href="/privacy">Privacy</a>${ads ? `<a href="#" data-privacy-choices>Privacy choices</a>` : ""}</nav>`;
+  return `<nav class="links" aria-label="Site"><a href="/about">How to play &amp; about</a><a href="/privacy">Privacy</a>${ads ? `<a href="#" data-privacy-choices hidden>Privacy choices</a>` : ""}</nav>`;
 }
 
 // ---------- the game page ----------
@@ -166,7 +166,7 @@ function privacy(site, ads) {
 <p>The site shows ads from Google AdSense. Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to you based on your visits to this site and/or other sites on the Internet.</p>
 <p>You can opt out of personalised advertising in <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google's Ads Settings</a>, or opt out of some third-party vendors' use of cookies for personalised advertising at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener">aboutads.info</a>. Google explains how it uses information from sites that use its services at <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">policies.google.com/technologies/partner-sites</a>.</p>
 <h2>Your choices</h2>
-<p>If you are in the European Economic Area, the UK or Switzerland, the site asks for your consent before ads use cookies for personalisation, through Google's consent tool. If you live in a US state with its own privacy law, the same tool lets you opt out of the sale or sharing of your personal information for advertising. You can change either choice at any time with the "Privacy choices" link at the bottom of the game page.</p>
+<p>If you are in the European Economic Area, the UK or Switzerland, the site asks for your consent before ads use cookies for personalisation, through Google's consent tool. If you live in a US state with its own privacy law, the same tool shows a "Do not sell or share my personal information" link that lets you opt out of the sale or sharing of your personal information for advertising. Visitors in the EEA, the UK or Switzerland can change their consent at any time with the "Privacy choices" link at the bottom of the game page; the link only appears where that consent applies.</p>
 <h2>Children</h2>
 <p>The site is not directed to children under 13, and we don't knowingly collect information from them.</p>
 <h2>Changes and contact</h2>
