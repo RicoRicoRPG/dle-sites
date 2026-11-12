@@ -8,7 +8,7 @@
   "description": "A daily guessing game about Steam concurrent users (CCU). Two games, one question: which one had more people playing at once? Ten pairs a day, getting closer as you go.",
   "themeColor": "#6aaa64",
   "icon": "▲",
-  "operator": "Rico Rico RPG",
+  "operator": "Counterspell",
   "contact": "info@counterspell.dev",
   "adsense": {
     "client": "",
