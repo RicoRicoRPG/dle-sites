@@ -23,7 +23,7 @@
   },
   "live": {
     "minPeak": 300,
-    "lagDays": 2
+    "lagDays": 1
   },
   "alltime": {
     "minTrackedDays": 30,
