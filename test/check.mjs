@@ -279,6 +279,7 @@ polls("2026-12-06", HOURS); daily("2026-12-07");
   ok(pg.d.querySelectorAll('ins[data-ad-slot="1111111111"]').length === 1, "ads on: results slot appears after the last pair");
   ok((pg.w.adsbygoogle || []).length === 2, `ads on: each slot pushed once (${(pg.w.adsbygoogle || []).length})`);
   ok(pg.d.querySelector("[data-privacy-choices]"), "ads on: Privacy choices link");
+  ok(pg.d.querySelector("[data-privacy-choices]")?.hidden, "ads on: Privacy choices link hidden until consent applies");
   const share = pg.d.querySelector("#sharetext")?.textContent || "";
   ok(/^Speedrundle #\d+ · \d+\/10\n[🟩⬛]{10}\nspeedrundle\.com$/u.test(share), `speedrundle share text: ${JSON.stringify(share)}`);
   ok(pg.d.querySelector(".hist"), "speedrundle: stats histogram");
