@@ -76,6 +76,8 @@ const setSite = (name, patch) => {
   const s = readJ(f); for (const [k, v] of Object.entries(patch)) s[k] = typeof v === "object" && !Array.isArray(v) ? { ...s[k], ...v } : v;
   fs.writeFileSync(f, JSON.stringify(s, null, 1));
 };
+// the lifecycle checks below assume the standard two-day Live lag, whatever the live config says
+setSite("peakdle", { live: { lagDays: 2 } });
 
 // ---------- 1. speedrun.com response parsing ----------
 {
