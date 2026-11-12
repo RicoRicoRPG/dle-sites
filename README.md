@@ -27,7 +27,7 @@ CCUdle Live uses the UTC day that ended two days before the puzzle date, because
 
 ### 1. Domains
 
-AdSense needs a domain you own: it won't approve a `*.pages.dev` address, because `ads.txt` must sit at the root of the domain. Buy one domain per site. Then put each domain in `url` in `sites/<name>/site.json` (for example `"url": "https://speedrundle.example"`).
+Done. speedrundle.com and ccudle.com are registered with Cloudflare Registrar and attached to their Pages projects. `www.` redirects to the bare domain with a Redirect Rule on each zone. The `url` in each `site.json` sets the canonical link, share text and sitemap.
 
 ### 2. GitHub
 
