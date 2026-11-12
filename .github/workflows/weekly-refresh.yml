@@ -1,0 +1,37 @@
+name: Weekly data refresh
+
+# Mondays 03:40 UTC:
+# - re-pull every Speedrundle world record from the speedrun.com API (about 20 minutes at its rate limit)
+# - refresh Peakdle's Steam header image paths and drop apps Steam marks adult-only
+# Commits the results; the next daily run builds puzzles and pages from them.
+on:
+  schedule:
+    - cron: "40 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Refresh world records
+        run: node scripts/speedrundle-refresh.mjs
+      - name: Refresh Steam images
+        run: node scripts/peakdle-assets.mjs
+      - name: Commit
+        run: |
+          git config user.name "dle-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/speedrundle/records.json data/peakdle/pool.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Weekly data $(date -u +%F)"
+            git pull --rebase
+            git push
+          fi

@@ -1,0 +1,37 @@
+name: Peakdle poll
+
+# Hourly sample of Steam player counts. The running daily maximum lives in the Actions cache
+# (state/), not in git; the daily workflow closes finished days into data/peakdle/peaks/.
+on:
+  schedule:
+    - cron: "7 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: peakdle-state
+  cancel-in-progress: false
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Restore polling state
+        uses: actions/cache/restore@v4
+        with:
+          path: state
+          key: peakdle-state-${{ github.run_id }}
+          restore-keys: peakdle-state-
+      - name: Poll Steam
+        run: node scripts/peakdle-poll.mjs
+        env:
+          STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
+      - name: Save polling state
+        uses: actions/cache/save@v4
+        with:
+          path: state
+          key: peakdle-state-${{ github.run_id }}
