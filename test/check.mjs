@@ -209,7 +209,7 @@ ok(fs.existsSync(live("2026-12-06")) && readJ(live("2026-12-06")).meta.day === "
   const err = playDay(pg);
   ok(!err, "peakdle: full day plays " + (err || ""));
   const share = pg.d.querySelector("#sharetext")?.textContent || "";
-  ok(/^CCUdle( Live)? #\d+ · \d+\/10\n[🟩⬛]{10}\nccudle\.pages\.dev$/u.test(share), `peakdle share text: ${JSON.stringify(share)}`);
+  ok(/^CCUdle( Live)? #\d+ · \d+\/10\n[🟩⬛]{10}\nccudle\.com$/u.test(share), `peakdle share text: ${JSON.stringify(share)}`);
   pg.w.close();
 }
 // All-Time opens once history passes the threshold
@@ -279,7 +279,7 @@ polls("2026-12-06", HOURS); daily("2026-12-07");
   ok((pg.w.adsbygoogle || []).length === 2, `ads on: each slot pushed once (${(pg.w.adsbygoogle || []).length})`);
   ok(pg.d.querySelector("[data-privacy-choices]"), "ads on: Privacy choices link");
   const share = pg.d.querySelector("#sharetext")?.textContent || "";
-  ok(/^Speedrundle #\d+ · \d+\/10\n[🟩⬛]{10}\nspeedrundle\.pages\.dev$/u.test(share), `speedrundle share text: ${JSON.stringify(share)}`);
+  ok(/^Speedrundle #\d+ · \d+\/10\n[🟩⬛]{10}\nspeedrundle\.com$/u.test(share), `speedrundle share text: ${JSON.stringify(share)}`);
   ok(pg.d.querySelector(".hist"), "speedrundle: stats histogram");
   pg.w.close();
   const priv = fs.readFileSync(path.join(T, "dist/speedrundle/privacy.html"), "utf8");
