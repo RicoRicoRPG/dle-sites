@@ -256,6 +256,7 @@ polls("2026-12-06", HOURS); daily("2026-12-07");
 // ---------- 4. build: ads off, ads on, bad config, fallback ----------
 {
   const day = "2026-12-20";
+  for (const n of ["speedrundle", "peakdle"]) setSite(n, { adsense: { client: "", slots: { results: "", footer: "" } } });
   run("scripts/build.mjs", { DLE_NOW: `${day}T00:20:00Z` }, ["--allow-date"]);
   checkDist(path.join(T, "dist"), "ads-off");
   ok(!fs.existsSync(path.join(T, "dist/speedrundle/ads.txt")), "ads off: no ads.txt");
