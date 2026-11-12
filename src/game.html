@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--HEAD-->
+<script>
+// Apply the saved theme before first paint so dark-mode players don't see a white flash.
+try { const s = JSON.parse(localStorage.getItem('dle.settings') || '{}');
+  if (s.theme) document.documentElement.dataset.theme = s.theme;
+  if (s.contrast) document.documentElement.dataset.contrast = 'high'; } catch(e){}
+</script>
+<style>
+:root{
+  --bg:#ffffff; --ink:#1a1a1b; --quiet:#787c7e; --line:#d3d6da; --tile:#ffffff; --tile-line:#d3d6da;
+  --good:#6aaa64; --bad:#787c7e; --key:#d3d6da; --btn:#1a1a1b; --btn-ink:#ffffff; --modal:#ffffff; --shade:rgba(255,255,255,.5);
+  --font:"Helvetica Neue",Arial,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121213; --ink:#f8f8f8; --quiet:#818384; --line:#3a3a3c; --tile:#121213; --tile-line:#3a3a3c;
+    --good:#538d4e; --bad:#3a3a3c; --key:#818384; --btn:#f8f8f8; --btn-ink:#121213; --modal:#121213; --shade:rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121213; --ink:#f8f8f8; --quiet:#818384; --line:#3a3a3c; --tile:#121213; --tile-line:#3a3a3c;
+  --good:#538d4e; --bad:#3a3a3c; --key:#818384; --btn:#f8f8f8; --btn-ink:#121213; --modal:#121213; --shade:rgba(0,0,0,.5);
+}
+:root[data-contrast="high"]{ --good:#f5793a; }
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 var(--font)}
+button{font-family:inherit}
+
+/* header bar */
+.bar{height:56px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 12px}
+.bar .side{display:flex;gap:4px}
+.bar .side.right{justify-content:flex-end}
+.bar h1{margin:0;font-size:30px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;line-height:1}
+.icon{width:40px;height:40px;border:0;background:none;color:var(--ink);cursor:pointer;display:grid;place-items:center;border-radius:6px;padding:0}
+.icon:hover{background:var(--line)}
+.icon:focus:not(:focus-visible){outline:none}
+.icon svg{width:24px;height:24px;fill:currentColor}
+
+main{max-width:520px;margin:0 auto;padding:12px 12px 32px}
+.sub{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:4px 0 12px}
+.sub .no{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--quiet)}
+.modes{display:flex;border:1px solid var(--line);border-radius:999px;padding:2px}
+.modes button{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:6px 12px;border:0;border-radius:999px;background:none;color:var(--quiet);cursor:pointer}
+.modes button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+/* progress tiles */
+.dots{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:0 auto 14px;max-width:360px}
+.dot{aspect-ratio:1;border:2px solid var(--tile-line);background:var(--tile)}
+.dot.cur{border-color:var(--key)}
+.dot.good{background:var(--good);border-color:var(--good)} .dot.bad{background:var(--bad);border-color:var(--bad)}
+.dot.pop{animation:pop .12s ease-in}
+@keyframes pop{from{transform:scale(.8)}50%{transform:scale(1.1)}to{transform:scale(1)}}
+
+.question{text-align:center;font-size:18px;font-weight:700;margin:0 0 4px}
+.band{display:block;text-align:center;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--quiet);margin-bottom:14px}
+
+/* the two cards */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;position:relative}
+.or{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--tile-line);display:grid;place-items:center;font-size:12px;font-weight:800;color:var(--quiet);z-index:2;pointer-events:none}
+.card{font:inherit;text-align:center;color:var(--ink);background:var(--tile);border:2px solid var(--tile-line);border-radius:6px;
+  padding:0;overflow:hidden;display:flex;flex-direction:column;align-items:stretch;cursor:pointer}
+.card .body{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 10px 14px;flex:1}
+.art{position:relative;display:block;width:100%;aspect-ratio:var(--art,16/9);background:var(--line);overflow:hidden}
+.art .blur{position:absolute;inset:-16px;background-size:cover;background-position:center;filter:blur(14px) brightness(.75)}
+.art img{position:relative;display:block;width:100%;height:100%;object-fit:contain}
+.art .init{display:none;position:absolute;inset:0;place-items:center;font-size:34px;font-weight:800;letter-spacing:.04em;color:var(--quiet)}
+.art.noimg .init{display:grid}.art.noimg img,.art.noimg .blur{display:none}
+.card:hover:not([disabled]){border-color:var(--key)}
+.card:focus-visible{outline:3px solid var(--key);outline-offset:2px}
+.card[disabled]{cursor:default}
+.card .name{font-weight:800;font-size:19px;line-height:1.2}
+.card .meta{font-size:13px;color:var(--quiet)}
+.card .pill{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:4px 8px;border:2px solid var(--tile-line);border-radius:3px}
+.card .value{margin-top:auto;font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;min-height:38px;letter-spacing:.01em}
+.card .detail{font-size:12px;color:var(--quiet);min-height:16px}
+.card .detail a{color:inherit}
+.card .key{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--quiet)}
+.card.flip{animation:flip .5s ease-in-out}
+@keyframes flip{0%{transform:rotateX(0)}50%{transform:rotateX(-90deg)}100%{transform:rotateX(0)}}
+.card.win,.card.lose{color:#fff}
+.card.win{background:var(--good);border-color:var(--good)}
+.card.lose{background:var(--bad);border-color:var(--bad)}
+.card.win .meta,.card.win .detail,.card.lose .meta,.card.lose .detail{color:rgba(255,255,255,.85)}
+.card.win .pill,.card.lose .pill{border-color:rgba(255,255,255,.6)}
+.card .picked{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:rgba(0,0,0,.25);padding:2px 8px;border-radius:999px}
+
+.result{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:16px;min-height:96px}
+.verdict{font-weight:700;font-size:15px;padding:8px 14px;border-radius:4px;background:var(--btn);color:var(--btn-ink)}
+.btn{font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;padding:0 22px;height:48px;border-radius:24px;border:0;
+  background:var(--btn);color:var(--btn-ink);cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn.share{background:var(--good);color:#fff}
+.btn.share svg{width:20px;height:20px;fill:currentColor}
+.btn.ghost{background:none;color:var(--ink);border:2px solid var(--line)}
+.hint{font-size:13px;color:var(--quiet);text-align:center;margin-top:14px}
+
+/* results */
+.done{text-align:center}
+.done .score{font-size:56px;font-weight:800;margin:6px 0 0;line-height:1}
+.done .of{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--quiet)}
+pre.share{font:15px/1.35 var(--font);margin:12px 0;white-space:pre-wrap}
+.footer-row{display:flex;justify-content:center;align-items:center;gap:18px;flex-wrap:wrap;margin:14px 0 6px}
+.next{text-align:center}
+.next .lbl{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.next .countdown{font-size:32px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.vr{width:1px;height:56px;background:var(--line)}
+h3.cap{font-size:15px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;text-align:center;margin:22px 0 10px}
+.stats{display:flex;justify-content:center;gap:6px;margin-bottom:6px}
+.stats span{width:72px;font-size:12px;text-align:center;line-height:1.2}
+.stats b{display:block;font-size:34px;font-weight:600;line-height:1.1}
+.hist{max-width:340px;margin:0 auto;display:flex;flex-direction:column;gap:4px}
+.hist .row{display:flex;align-items:center;gap:6px;font-size:13px}
+.hist .row .k{width:16px;text-align:right}
+.hist .row .hb{background:var(--bad);color:#fff;font-weight:700;text-align:right;padding:2px 7px;min-width:22px}
+.hist .row.me .hb{background:var(--good)}
+.review{width:100%;border-collapse:collapse;font-size:14px;text-align:left}
+.review td{padding:8px 4px;border-top:1px solid var(--line);vertical-align:top}
+.review td.n{width:22px;color:var(--quiet)}
+.review td.r{width:26px}
+.review td.t{width:72px}.review td.t .art{width:64px;border-radius:3px}
+.review .sq{display:inline-block;width:16px;height:16px;vertical-align:-3px;background:var(--bad)}
+.review .sq.good{background:var(--good)}
+.review .w{font-weight:700}
+.review .meta{color:var(--quiet)}
+.notice{border:2px solid var(--line);border-radius:4px;padding:18px;text-align:center}
+
+/* modal + toast */
+.modal{position:fixed;inset:0;background:var(--shade);display:flex;align-items:center;justify-content:center;z-index:20;padding:16px}
+.modal[hidden]{display:none}
+.sheet{position:relative;background:var(--modal);color:var(--ink);border-radius:8px;box-shadow:0 4px 23px rgba(0,0,0,.2);max-width:500px;width:100%;
+  max-height:calc(100vh - 32px);overflow:auto;padding:28px 24px 24px;animation:slidein .2s ease-out}
+@keyframes slidein{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.sheet .x{position:absolute;right:10px;top:10px}
+.sheet h2{font-size:28px;font-weight:800;margin:0 0 4px}
+.sheet h2.small{font-size:16px;letter-spacing:.06em;text-transform:uppercase;text-align:center}
+.sheet .lede{font-size:19px;margin:0 0 14px}
+.sheet ul{padding-left:20px;margin:0 0 14px}.sheet li{margin:4px 0}
+.sheet .ex{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 6px}
+.sheet .ex .card{cursor:default}.sheet .ex .card .body{padding:8px 6px 10px}
+.sheet .ex .card .name{font-size:15px}.sheet .ex .card .value{font-size:20px;min-height:0}
+.sheet hr{border:0;border-top:1px solid var(--line);margin:16px 0}
+.setting{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.setting .t{font-size:18px}.setting .d{font-size:12px;color:var(--quiet)}
+.switch{width:32px;height:20px;border-radius:999px;background:var(--quiet);border:0;position:relative;cursor:pointer;flex:none}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
+.switch[aria-checked="true"]{background:var(--good)}
+.switch[aria-checked="true"]::after{left:14px}
+.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%);background:var(--btn);color:var(--btn-ink);font-weight:700;font-size:14px;
+  padding:13px 16px;border-radius:4px;z-index:30;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+
+footer{margin-top:28px;font-size:12px;color:var(--quiet);line-height:1.5;text-align:center}
+footer p{margin:4px 0}
+footer a{color:var(--quiet)}
+nav.links{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:8px}
+nav.links a{color:var(--quiet)}
+.ad{margin:40px auto 0;max-width:728px;text-align:center}
+.ad .adlabel{display:block;font-size:11px;color:var(--quiet);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.ad ins{display:block;min-height:100px}
+.ad.preview ins{background:repeating-linear-gradient(45deg,var(--line) 0 8px,transparent 8px 16px);min-height:100px}
+.done-grid{display:block}
+@media (max-width:420px){
+  .bar h1{font-size:24px}
+  .card .body{padding:10px 6px 12px}.card .name{font-size:16px}.card .value{font-size:24px}
+}
+/* web layout: wide cards, larger type, results in two columns */
+@media (min-width:760px){
+  main{max-width:1000px;padding-top:20px}
+  .bar{height:64px}.bar h1{font-size:36px}
+  .dots{max-width:460px;gap:6px}
+  .question{font-size:26px}.band{font-size:13px;margin-bottom:22px}
+  .pair{gap:32px;max-width:900px;margin:0 auto}
+  .or{width:52px;height:52px;font-size:15px;top:38%}
+  .card .art{aspect-ratio:var(--art-d,var(--art,16/9))}
+  .card .body{padding:18px 18px 20px;gap:8px}
+  .card .name{font-size:24px}.card .meta{font-size:15px}.card .pill{font-size:13px}
+  .card .value{font-size:46px;min-height:58px}.card .detail{font-size:13px}
+  .result{flex-direction:row;justify-content:center;gap:18px;min-height:64px;margin-top:22px}
+  .done-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:48px;align-items:start}
+  .done-grid .ad{margin-top:28px}
+  .review{font-size:15px}
+  footer{max-width:720px;margin-left:auto;margin-right:auto}
+}
+@media (prefers-reduced-motion: reduce){ .card.flip,.dot.pop,.sheet{animation:none} }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="side">
+    <button type="button" class="icon" id="btn-help" aria-label="How to play"><svg viewBox="0 0 24 24"><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/></svg></button>
+  </div>
+  <h1 id="title"></h1>
+  <div class="side right">
+    <button type="button" class="icon" id="btn-stats" aria-label="Statistics"><svg viewBox="0 0 24 24"><path d="M16 11V3H8v6H2v12h20V11h-6zm-6-6h4v14h-4V5zm-6 6h4v8H4v-8zm16 8h-4v-6h4v6z"/></svg></button>
+    <button type="button" class="icon" id="btn-settings" aria-label="Settings"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></button>
+  </div>
+</header>
+<main>
+  <div class="sub"><span class="no" id="no"></span><nav class="modes" id="modes" aria-label="Mode"></nav></div>
+  <div id="game"></div>
+  <footer id="footer"></footer>
+  <div id="footerad"></div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="modal" hidden><div class="sheet" role="dialog" aria-modal="true"><button type="button" class="icon x" id="modal-x" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div id="modal-body"></div></div></div>
+<script>
+/*CORE*/
+const SITE = /*SITE*/;
+const CONFIG = /*CONFIG*/;
+const PUZZLES = /*PUZZLES*/;
+const POOLS = /*POOLS*/;
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const SHARE_ICON = '<svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>';
+
+// ---------- storage (optional: falls back to memory) ----------
+const mem = {};
+const store = {
+  get(k){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : (mem[k] ?? null); } catch(e){ return mem[k] ?? null; } },
+  set(k,v){ mem[k] = v; try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+};
+
+// ---------- dates ----------
+function localISO(d){ const z = n => String(n).padStart(2,'0'); return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate()); }
+const TODAY = (() => { try { const q = new URLSearchParams(location.search).get('date'); if (SITE.allowDateParam && q && /^\d{4}-\d{2}-\d{2}$/.test(q)) return q; } catch(e){} return localISO(new Date()); })();
+function dayNumber(iso){ return Math.round((Date.parse(iso) - Date.parse(SITE.epoch)) / 864e5) + 1; }
+function puzzleNo(iso){ const n = dayNumber(iso); return n >= 1 ? '#' + n : 'preview'; }
+const better = CONFIG.better;
+const win = pair => winnerIndex(pair, better);
+const questionOf = (mode, meta) => typeof mode.question === 'function' ? mode.question(meta) : mode.question;
+
+// ---------- state ----------
+let modeId = CONFIG.modes[0].id;
+let practiceSeed = null;
+let state = null; // {mode, date, practice, pairs, picks[], revealed, meta}
+
+function modeOf(id){ return CONFIG.modes.find(m => m.id === id); }
+function storeKey(id){ return CONFIG.storeKey + ':' + id; }
+function loadHistory(id){ return store.get(storeKey(id)) || {days:{}}; }
+function saveHistory(id,h){ store.set(storeKey(id), h); }
+
+// Today's pairs come frozen from the build, so every player gets the same set even if the
+// data behind the site changes. If the build is missing today (a failed daily job), fall back
+// to generating from the bundled pool with the same seed for everyone on this build.
+function dailyPuzzle(mode){
+  const fixed = (PUZZLES[mode.id] || {})[TODAY];
+  if (fixed) return fixed;
+  const pool = POOLS[mode.id];
+  if (!pool || !pool.items.length) return null;
+  return {date: TODAY, pairs: generate(pool.items, SITE.name + ':' + mode.id + ':' + TODAY, {pairRule: CONFIG.pairRule}), meta: pool.meta || {}, fallback: true};
+}
+function start(){
+  const mode = modeOf(modeId);
+  const practice = practiceSeed !== null;
+  let puzzle;
+  if (practice){
+    const pool = POOLS[mode.id] || {items: [], meta: {}};
+    puzzle = {pairs: generate(pool.items, 'practice:' + practiceSeed, {pairRule: CONFIG.pairRule}), meta: pool.meta || {}};
+  } else puzzle = dailyPuzzle(mode);
+  const pairs = puzzle ? puzzle.pairs : [];
+  let picks = [];
+  if (!practice){
+    const h = loadHistory(mode.id);
+    const saved = h.days[TODAY];
+    if (saved && Array.isArray(saved.picks)) picks = saved.picks.slice(0, pairs.length);
+  }
+  state = {mode, date:TODAY, practice, pairs, picks, revealed: false, meta: (puzzle && puzzle.meta) || {}, justPicked: false};
+  render();
+}
+
+function record(){
+  if (state.practice) return;
+  const h = loadHistory(state.mode.id);
+  const correct = state.picks.filter((p,i) => p === win(state.pairs[i])).length;
+  h.days[state.date] = {picks: state.picks.slice(), score: correct, done: state.picks.length >= state.pairs.length};
+  saveHistory(state.mode.id, h);
+}
+
+// ---------- ads ----------
+// Slots only exist when an AdSense client and slot id are configured. They sit below the
+// results and at the very end of the page, never next to the cards being played.
+const ADS = SITE.ads || {};
+function adSlot(name){
+  const slot = (ADS.slots || {})[name];
+  if (ADS.preview) return `<aside class="ad preview" data-ad="${name}"><span class="adlabel">Advertisement</span><ins></ins></aside>`;
+  if (!ADS.client || !slot) return '';
+  return `<aside class="ad" data-ad="${name}"><span class="adlabel">Advertisement</span><ins class="adsbygoogle" style="display:block" data-ad-client="${esc(ADS.client)}" data-ad-slot="${esc(slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>`;
+}
+function fillAds(root){
+  root.querySelectorAll('ins.adsbygoogle:not([data-pushed])').forEach(el => {
+    el.setAttribute('data-pushed', '1');
+    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  });
+}
+
+// ---------- toast, modal, countdown ----------
+let toastTimer = null;
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 1600); }
+function openModal(html){ $('#modal-body').innerHTML = html; $('#modal').hidden = false; $('#modal-x').focus({preventScroll:true}); return $('#modal-body'); }
+function closeModal(){ $('#modal').hidden = true; }
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+$('#modal-x').onclick = closeModal;
+
+function untilMidnight(){
+  const n = new Date(), m = new Date(n); m.setHours(24,0,0,0);
+  const s = Math.max(0, Math.floor((m - n) / 1000)), z = x => String(x).padStart(2,'0');
+  return `${z(Math.floor(s/3600))}:${z(Math.floor(s%3600/60))}:${z(s%60)}`;
+}
+setInterval(() => {
+  document.querySelectorAll('.countdown').forEach(el => el.textContent = untilMidnight());
+  if (localISO(new Date()) !== TODAY && !SITE.allowDateParam && document.querySelector('.countdown')) location.reload();
+}, 1000);
+
+// ---------- rendering ----------
+function renderHeader(){
+  $('#title').textContent = CONFIG.title;
+  $('#no').textContent = state.practice ? 'Practice' : puzzleNo(state.date);
+  const nav = $('#modes');
+  const btns = CONFIG.modes.map(m => `<button type="button" data-mode="${m.id}" aria-pressed="${practiceSeed===null && m.id===modeId}">${esc(m.label)}</button>`);
+  btns.push(`<button type="button" data-practice="1" aria-pressed="${practiceSeed!==null}">Practice</button>`);
+  nav.innerHTML = btns.join('');
+  nav.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => { modeId = b.dataset.mode; practiceSeed = null; start(); });
+  nav.querySelector('[data-practice]').onclick = () => { practiceSeed = Math.floor(Math.random()*1e9); start(); };
+}
+
+// Game art: the image is contained (never cropped) over a blurred copy of itself, so Steam
+// headers and portrait box art both fill the same frame. A broken image shows the initials.
+function imageOf(item){ try { return CONFIG.image ? CONFIG.image(item) || '' : ''; } catch(e){ return ''; } }
+function initials(name){ return String(name).replace(/[^\p{L}\p{N} ]/gu, ' ').split(/\s+/).filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase(); }
+function artHTML(item, name){
+  const src = imageOf(item);
+  if (!src) return `<span class="art noimg"><span class="init">${esc(initials(name))}</span></span>`;
+  return `<span class="art"><span class="blur" style="background-image:url('${esc(src)}')"></span><img src="${esc(src)}" alt="" decoding="async" referrerpolicy="no-referrer" onerror="this.parentNode.classList.add('noimg')"><span class="init">${esc(initials(name))}</span></span>`;
+}
+function preload(pair){ if (pair) pair.forEach(it => { const u = imageOf(it); if (u){ const i = new Image(); i.referrerPolicy = 'no-referrer'; i.src = u; } }); }
+
+function cardHTML(item, idx, revealed, pickedIdx, winIdx, flip){
+  const cls = ['card'];
+  if (revealed){ cls.push(idx === winIdx ? 'win' : 'lose'); if (flip) cls.push('flip'); }
+  const f = state.mode.card(item);
+  return `<button type="button" class="${cls.join(' ')}" data-idx="${idx}" ${revealed ? 'disabled' : ''} aria-label="${esc(f.name)}${f.pill ? ', ' + esc(f.pill) : ''}"${flip ? ` style="animation-delay:${idx*0.15}s"` : ''}>
+    ${artHTML(item, f.name)}
+    <span class="body">
+    <span class="name">${esc(f.name)}</span>
+    ${f.meta ? `<span class="meta">${esc(f.meta)}</span>` : ''}
+    ${f.pill ? `<span class="pill">${esc(f.pill)}</span>` : ''}
+    <span class="value">${revealed ? esc(state.mode.format(item)) : ''}</span>
+    <span class="detail">${revealed ? state.mode.detail(item) : `<span class="key">Press ${idx+1}</span>`}</span>
+    ${revealed && idx === pickedIdx ? '<span class="picked">Your pick</span>' : ''}
+    </span>
+  </button>`;
+}
+
+function dotsHTML(){
+  return '<div class="dots" aria-hidden="true">' + state.pairs.map((p,i) => {
+    if (i < state.picks.length) return `<div class="dot ${state.picks[i] === win(p) ? 'good' : 'bad'}${state.justPicked && i === state.picks.length - 1 ? ' pop' : ''}"></div>`;
+    return `<div class="dot ${i === state.picks.length ? 'cur' : ''}"></div>`;
+  }).join('') + '</div>';
+}
+
+function render(){
+  renderHeader();
+  const g = $('#game');
+  if (state.pairs.length < 10){ g.innerHTML = `<div class="notice"><p>${esc(state.mode.unavailable || 'There is no puzzle for this mode today. Check back tomorrow.')}</p></div>`; return; }
+  const n = state.picks.length;
+  if (n >= state.pairs.length && !state.revealed){ renderResults(); return; }
+  const showIdx = state.revealed ? n - 1 : n;
+  const pair = state.pairs[showIdx];
+  const winIdx = win(pair);
+  const revealed = state.revealed;
+  const pickedIdx = revealed ? state.picks[showIdx] : -1;
+  const flip = revealed && state.justPicked;
+  const band = showIdx < 3 ? 'Warm-up' : showIdx < 7 ? 'Closer' : 'Close call';
+  let resultHTML = '<div class="result"></div>';
+  if (revealed){
+    const ok = pickedIdx === winIdx;
+    resultHTML = `<div class="result"><span class="verdict">${ok ? 'Correct' : 'Not this time'} · ${esc(state.mode.ratioText(ratioOf(pair[0], pair[1])))}</span>
+      <button type="button" class="btn" id="next">${n >= state.pairs.length ? 'See results' : 'Next pair'}</button></div>`;
+  }
+  g.innerHTML = `${dotsHTML()}
+    <p class="question">${esc(questionOf(state.mode, state.meta))}</p>
+    <span class="band">Round ${showIdx+1} of 10 · ${band}</span>
+    <div class="pair">${cardHTML(pair[0],0,revealed,pickedIdx,winIdx,flip)}<span class="or">OR</span>${cardHTML(pair[1],1,revealed,pickedIdx,winIdx,flip)}</div>
+    ${resultHTML}`;
+  state.justPicked = false;
+  if (!revealed) g.querySelectorAll('.card').forEach(c => c.onclick = () => choose(Number(c.dataset.idx)));
+  else { const nx = $('#next'); nx.onclick = next; nx.focus({preventScroll:true}); }
+  preload(state.pairs[showIdx + 1]);
+}
+
+function choose(idx){
+  if (state.revealed) return;
+  state.picks.push(idx);
+  state.revealed = true;
+  state.justPicked = true;
+  record();
+  render();
+}
+function next(){
+  state.revealed = false;
+  const finished = state.picks.length >= state.pairs.length;
+  render();
+  if (finished && !state.practice) setTimeout(showStats, 350);
+}
+
+function shareText(){
+  const correct = state.picks.filter((p,i) => p === win(state.pairs[i])).length;
+  const head = state.practice ? `${CONFIG.title} practice` : `${CONFIG.title}${CONFIG.modes.length > 1 ? ' ' + state.mode.label : ''} ${puzzleNo(state.date)}`;
+  const row = state.picks.map((p,i) => p === win(state.pairs[i]) ? '🟩' : '⬛').join('');
+  return `${head} · ${correct}/10\n${row}\n${SITE.shareUrl}`;
+}
+async function share(){
+  const txt = shareText();
+  let ok = false;
+  try { await navigator.clipboard.writeText(txt); ok = true; } catch(e){
+    try { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); ok = document.execCommand('copy'); ta.remove(); } catch(e2){}
+  }
+  toast(ok ? 'Copied results to clipboard' : 'Select the text to copy it');
+}
+
+function stats(modeIdArg){
+  const h = loadHistory(modeIdArg);
+  const days = Object.entries(h.days).filter(([,d]) => d.done).sort(([a],[b]) => a < b ? -1 : 1);
+  const dist = Array(11).fill(0); days.forEach(([,d]) => dist[d.score]++);
+  // streak = consecutive days played ending today (or yesterday)
+  let streak = 0; let cur = new Date(TODAY + 'T12:00:00');
+  const has = iso => h.days[iso] && h.days[iso].done;
+  if (!has(localISO(cur))) cur.setDate(cur.getDate() - 1);
+  while (has(localISO(cur))){ streak++; cur.setDate(cur.getDate() - 1); }
+  let best = 0, run = 0, prev = null;
+  days.forEach(([iso]) => { const d = Date.parse(iso); run = (prev !== null && Math.round((d - prev)/864e5) === 1) ? run + 1 : 1; best = Math.max(best, run); prev = d; });
+  const avg = days.length ? (days.reduce((s,[,d]) => s + d.score, 0) / days.length).toFixed(1) : '0';
+  const today = h.days[TODAY] && h.days[TODAY].done ? h.days[TODAY].score : null;
+  return {played: days.length, streak, best, avg, dist, today};
+}
+function statsHTML(s){
+  const max = Math.max(1, ...s.dist);
+  return `<div class="stats"><span><b>${s.played}</b>Played</span><span><b>${s.avg}</b>Average</span><span><b>${s.streak}</b>Current Streak</span><span><b>${s.best}</b>Max Streak</span></div>
+    <h3 class="cap">Score Distribution</h3>
+    <div class="hist" aria-label="Score distribution">${s.dist.map((c,i) => ({c,i})).reverse().map(({c,i}) =>
+      `<div class="row${i === s.today ? ' me' : ''}"><span class="k">${i}</span><span class="hb" style="width:${Math.max(7, Math.round(c/max*100))}%">${c}</span></div>`).join('')}</div>`;
+}
+function doneFooterHTML(){
+  return `<div class="footer-row"><div class="next"><div class="lbl">Next ${esc(CONFIG.title)}</div><div class="countdown">${untilMidnight()}</div></div><div class="vr"></div>
+    <button type="button" class="btn share" data-share>Share ${SHARE_ICON}</button></div>`;
+}
+
+function showStats(){
+  const s = stats(state.mode.id);
+  const done = !state.practice && state.picks.length >= state.pairs.length && state.pairs.length >= 10;
+  const body = openModal(`<h2 class="small">Statistics${CONFIG.modes.length > 1 ? ' · ' + esc(state.mode.label) : ''}</h2>${statsHTML(s)}${done ? doneFooterHTML() : ''}`);
+  body.querySelectorAll('[data-share]').forEach(b => b.onclick = share);
+}
+
+function showHelp(){
+  const m = state ? state.mode : CONFIG.modes[0];
+  const ex = CONFIG.example || null;
+  openModal(`<h2>How To Play</h2><p class="lede">${esc(questionOf(m, (state && state.meta) || {}))}</p>
+    <ul><li>Each day has 10 pairs. Pick the card you think wins.</li>
+    <li>The answer shows right away. The first pairs are far apart; the last three are within 1.5× of each other.</li>
+    <li>Everyone gets the same pairs. A new set starts at midnight.</li></ul>
+    ${m.hint ? `<p>${esc(m.hint)}</p>` : ''}
+    ${ex ? `<hr><p><strong>Example</strong></p><div class="ex">${ex.slice(0,2).map((e,i) => `<div class="card ${i ? 'lose' : 'win'}">${artHTML(e, e.name)}<span class="body"><span class="name">${esc(e.name)}</span>${e.pill ? `<span class="pill">${esc(e.pill)}</span>` : ''}<span class="value">${esc(e.value)}</span></span></div>`).join('')}</div><p>${esc(ex.note)}</p>` : ''}
+    <hr><p>Practice plays random pairs that don't count. Keys: 1 or ← for the left card, 2 or → for the right, Enter for the next pair.</p>`);
+}
+
+const SETTINGS_KEY = 'dle.settings';
+function getSettings(){ return store.get(SETTINGS_KEY) || {}; }
+function applySettings(s){
+  const r = document.documentElement;
+  if (s.theme) r.dataset.theme = s.theme; else delete r.dataset.theme;
+  if (s.contrast) r.dataset.contrast = 'high'; else delete r.dataset.contrast;
+}
+function showSettings(){
+  const s = getSettings();
+  const dark = s.theme ? s.theme === 'dark' : (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  const body = openModal(`<h2 class="small">Settings</h2>
+    <div class="setting"><div><div class="t">Dark Theme</div></div><button type="button" class="switch" role="switch" aria-label="Dark theme" aria-checked="${dark}" data-k="theme"></button></div>
+    <div class="setting"><div><div class="t">High Contrast Mode</div><div class="d">For improved color vision</div></div><button type="button" class="switch" role="switch" aria-label="High contrast" aria-checked="${!!s.contrast}" data-k="contrast"></button></div>`);
+  body.querySelectorAll('.switch').forEach(b => b.onclick = () => {
+    const on = b.getAttribute('aria-checked') !== 'true';
+    b.setAttribute('aria-checked', String(on));
+    const cur = getSettings();
+    if (b.dataset.k === 'theme') cur.theme = on ? 'dark' : 'light'; else cur.contrast = on;
+    store.set(SETTINGS_KEY, cur); applySettings(cur);
+  });
+}
+
+function renderResults(){
+  const correct = state.picks.filter((p,i) => p === win(state.pairs[i])).length;
+  const txt = shareText();
+  const rows = state.pairs.map((p,i) => {
+    const w = win(p), ok = state.picks[i] === w;
+    const name = it => esc(state.mode.card(it).name) + (state.mode.card(it).pill ? ` <span class="meta">(${esc(state.mode.card(it).pill)})</span>` : '');
+    return `<tr><td class="n">${i+1}</td><td class="r"><span class="sq ${ok ? 'good' : ''}" title="${ok ? 'correct' : 'missed'}"></span></td><td class="t">${artHTML(p[w], state.mode.card(p[w]).name)}</td>
+      <td><span class="w">${name(p[w])}</span> ${esc(state.mode.format(p[w]))}<br><span class="meta">vs ${name(p[1-w])} ${esc(state.mode.format(p[1-w]))}</span></td></tr>`;
+  }).join('');
+  $('#game').innerHTML = `${dotsHTML()}
+    <div class="done-grid"><div class="col">
+    <div class="done">
+      <div class="of">${state.practice ? 'Practice round' : 'Today\'s score'}</div>
+      <p class="score">${correct}/10</p>
+      <pre class="share" id="sharetext">${esc(txt)}</pre>
+      ${state.practice ? `<div class="footer-row"><button type="button" class="btn share" data-share>Share ${SHARE_ICON}</button><button type="button" class="btn ghost" id="again">Play again</button></div>` : doneFooterHTML()}
+    </div>
+    ${state.practice ? '' : `<h3 class="cap">Your Record</h3>${statsHTML(stats(state.mode.id))}`}
+    ${adSlot('results')}
+    </div><div class="col">
+    <h3 class="cap">${state.practice ? 'The Pairs' : 'Today\'s Pairs'}</h3>
+    <table class="review">${rows}</table>
+    </div></div>`;
+  $('#game').querySelectorAll('[data-share]').forEach(b => b.onclick = share);
+  fillAds($('#game'));
+  const again = $('#again'); if (again) again.onclick = () => { practiceSeed = Math.floor(Math.random()*1e9); start(); };
+}
+
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey || !state) return;
+  if (e.key === 'Escape' && !$('#modal').hidden){ closeModal(); return; }
+  if (!$('#modal').hidden) return;
+  if (!state.revealed && (e.key === '1' || e.key === 'ArrowLeft')){ const c = document.querySelector('.card[data-idx="0"]'); if (c){ e.preventDefault(); c.click(); } }
+  else if (!state.revealed && (e.key === '2' || e.key === 'ArrowRight')){ const c = document.querySelector('.card[data-idx="1"]'); if (c){ e.preventDefault(); c.click(); } }
+});
+
+// Each site sets its art frame to its images' shape (Steam headers are 460x215; box art is portrait).
+if (CONFIG.art){ const r = document.documentElement.style; r.setProperty('--art', CONFIG.art.mobile); r.setProperty('--art-d', CONFIG.art.desktop || CONFIG.art.mobile); }
+$('#btn-help').onclick = showHelp;
+$('#btn-stats').onclick = showStats;
+$('#btn-settings').onclick = showSettings;
+$('#footer').innerHTML = CONFIG.footer + SITE.footerLinks;
+const fa = document.querySelector('#footerad'); if (fa){ fa.outerHTML = adSlot('footer'); fillAds(document.body); }
+const pc = document.querySelector('[data-privacy-choices]');
+if (pc) pc.onclick = e => { e.preventDefault(); try { (window.googlefc = window.googlefc || {}).callbackQueue = window.googlefc.callbackQueue || []; window.googlefc.callbackQueue.push(() => window.googlefc.showRevocationMessage()); } catch(err){} };
+start();
+// First visit: open How To Play, the way most daily games do.
+if (!store.get('dle.seenHelp') && !SITE.allowDateParam){ store.set('dle.seenHelp', 1); showHelp(); }
+window.__dle = {generate, winnerIndex, ratioOf, PUZZLES, POOLS, CONFIG, SITE, TODAY};
+})();
+</script>
+</body>
+</html>
