@@ -1,0 +1,8558 @@
+[
+{
+"gid": "3dx2pk41",
+"name": "!findseed the map",
+"year": 2020,
+"abbr": "findseed"
+},
+{
+"gid": "y65ryn41",
+"name": "0 CPS Bridging",
+"year": 2011,
+"abbr": "0cps"
+},
+{
+"gid": "4d72l367",
+"name": "1-2-Switch",
+"year": 2017,
+"abbr": "1_2_switch"
+},
+{
+"gid": "268ery6p",
+"name": "1080° Snowboarding",
+"year": 1998,
+"abbr": "1080snowboarding"
+},
+{
+"gid": "576rp418",
+"name": "2048",
+"year": 2014,
+"abbr": "2048"
+},
+{
+"gid": "j1lqp0e6",
+"name": "234PlayerGames",
+"year": 2018,
+"abbr": "234pg"
+},
+{
+"gid": "m1z8yz10",
+"name": "30th Anniversary of PAC-MAN",
+"year": 2010,
+"abbr": "googlepacman"
+},
+{
+"gid": "o6g4mo62",
+"name": "60 Seconds Burger Run",
+"year": 2012,
+"abbr": "60sbr"
+},
+{
+"gid": "j1ljjjdg",
+"name": "60 Seconds!",
+"year": 2015,
+"abbr": "60_seconds"
+},
+{
+"gid": "nd2e9z3d",
+"name": "60 Seconds! Reatomized",
+"year": 2019,
+"abbr": "60_seconds_reatomized"
+},
+{
+"gid": "j1lq7je6",
+"name": "7 Days to Die",
+"year": 2013,
+"abbr": "7dtd"
+},
+{
+"gid": "9d3wmj91",
+"name": "99 Nights in the Forest",
+"year": 2025,
+"abbr": "99NitF"
+},
+{
+"gid": "76rxmvl6",
+"name": "A Dance of Fire and Ice",
+"year": 2019,
+"abbr": "adofai"
+},
+{
+"gid": "y65ro341",
+"name": "A Difficult Game About Climbing",
+"year": 2024,
+"abbr": "adgac"
+},
+{
+"gid": "kdkqr9ed",
+"name": "a dusty trip",
+"year": 2024,
+"abbr": "a_dusty_trip"
+},
+{
+"gid": "m1zy0006",
+"name": "A Game About Digging A Hole",
+"year": 2025,
+"abbr": "A_Game_About_Digging_A_Hole"
+},
+{
+"gid": "yd4ljx1e",
+"name": "A Hat in Time",
+"year": 2017,
+"abbr": "ahit"
+},
+{
+"gid": "pdvje9dw",
+"name": "A Hat in Time (Beta Build)",
+"year": 2015,
+"abbr": "ahitbb"
+},
+{
+"gid": "4d799yl1",
+"name": "A Platformer for Ants",
+"year": 2017,
+"abbr": "apfa"
+},
+{
+"gid": "pdvzpo46",
+"name": "A Short Hike",
+"year": 2019,
+"abbr": "ash"
+},
+{
+"gid": "9doxox3d",
+"name": "A Stereotypical Obby",
+"year": 2023,
+"abbr": "a_stereotypical_obby"
+},
+{
+"gid": "nd2w83d0",
+"name": "A Story About My Uncle",
+"year": 2014,
+"abbr": "asamu"
+},
+{
+"gid": "kdkz5nxd",
+"name": "A Township Tale",
+"year": 2020,
+"abbr": "a_township_tale"
+},
+{
+"gid": "nd2e7m5d",
+"name": "A Way Out",
+"year": 2018,
+"abbr": "a_way_out"
+},
+{
+"gid": "v1pl9vm6",
+"name": "Abyssus ",
+"year": 2025,
+"abbr": "Abyssus_"
+},
+{
+"gid": "2688376p",
+"name": "Achievement Unlocked",
+"year": 2008,
+"abbr": "AU"
+},
+{
+"gid": "yd4vq5de",
+"name": "Adventure",
+"year": 1979,
+"abbr": "advt"
+},
+{
+"gid": "m1zrjzd0",
+"name": "AdVenture Capitalist",
+"year": 2015,
+"abbr": "adcap"
+},
+{
+"gid": "4d7rjl17",
+"name": "Adventure Forward 2: Points of Conflict",
+"year": 2017,
+"abbr": "af2"
+},
+{
+"gid": "nd28nxed",
+"name": "After the Fall",
+"year": 2021,
+"abbr": "after_the_fall"
+},
+{
+"gid": "9d3lrydl",
+"name": "Agar.io",
+"year": 2015,
+"abbr": "agario"
+},
+{
+"gid": "kdkzo5qd",
+"name": "Age of Empires II: Definitive Edition",
+"year": 2019,
+"abbr": "aoe2de"
+},
+{
+"gid": "3dx2lw41",
+"name": "Age of History 2",
+"year": 2018,
+"abbr": "aoh2"
+},
+{
+"gid": "w6j78e6j",
+"name": "Age of War",
+"year": 2014,
+"abbr": "age_of_war"
+},
+{
+"gid": "kdkqxgdm",
+"name": "Alien: Isolation",
+"year": 2014,
+"abbr": "ai"
+},
+{
+"gid": "76r34p46",
+"name": "Alpaca Stacka",
+"year": 2021,
+"abbr": "alpaca_stacka"
+},
+{
+"gid": "k6qweko6",
+"name": "Amnesia: The Bunker",
+"year": 2023,
+"abbr": "atb"
+},
+{
+"gid": "n268j7dp",
+"name": "Amnesia: The Dark Descent",
+"year": 2010,
+"abbr": "tdd"
+},
+{
+"gid": "kdkm5ol1",
+"name": "Amok Runner",
+"year": 2022,
+"abbr": "amok_runner"
+},
+{
+"gid": "ldej3o51",
+"name": "Among Us",
+"year": 2018,
+"abbr": "among_us"
+},
+{
+"gid": "k6qwgvz6",
+"name": "Anger Foot",
+"year": 2024,
+"abbr": "anger_foot_steam"
+},
+{
+"gid": "3dx2j9y1",
+"name": "Angry Birds",
+"year": 2009,
+"abbr": "abclassic"
+},
+{
+"gid": "369p9l1l",
+"name": "Animal Crossing",
+"year": 2002,
+"abbr": "ac"
+},
+{
+"gid": "o1y97r6q",
+"name": "Animal Crossing: City Folk",
+"year": 2008,
+"abbr": "accf"
+},
+{
+"gid": "m1z339xd",
+"name": "Animal Hospital",
+"year": 2026,
+"abbr": "Animal_Hospital"
+},
+{
+"gid": "j1le3j6g",
+"name": "Animal Jam Classic",
+"year": 2010,
+"abbr": "ajc"
+},
+{
+"gid": "4d7xvzr1",
+"name": "Animal Well",
+"year": 2024,
+"abbr": "animalwell"
+},
+{
+"gid": "46wrren1",
+"name": "Another Crab's Treasure",
+"year": 2024,
+"abbr": "Another_Crabs_Treasure"
+},
+{
+"gid": "46w3ln1r",
+"name": "Antichamber",
+"year": 2013,
+"abbr": "antichamber"
+},
+{
+"gid": "yd4k3zk6",
+"name": "ANTONBLAST",
+"year": 2024,
+"abbr": "antonblast"
+},
+{
+"gid": "vo6gr5d2",
+"name": "Ape Escape",
+"year": 1999,
+"abbr": "ae1"
+},
+{
+"gid": "m1mn0ekd",
+"name": "Apeirophobia",
+"year": 2022,
+"abbr": "apeirophobia"
+},
+{
+"gid": "pd0woyw1",
+"name": "Apes vs Helium",
+"year": 2020,
+"abbr": "avh"
+},
+{
+"gid": "v1poy886",
+"name": "Apex Legends",
+"year": 2019,
+"abbr": "apex_legends"
+},
+{
+"gid": "lde387j6",
+"name": "Arknights",
+"year": 2020,
+"abbr": "arknights"
+},
+{
+"gid": "m1zyrwm6",
+"name": "Armless Detective",
+"year": 2025,
+"abbr": "Armless_Detective"
+},
+{
+"gid": "76rx9jv6",
+"name": "Asphalt 8: Airborne",
+"year": 2013,
+"abbr": "Asphalt8Airborne"
+},
+{
+"gid": "j1n8rx1p",
+"name": "Assassin's Creed II",
+"year": 2009,
+"abbr": "ac2"
+},
+{
+"gid": "3dxymop6",
+"name": "Astro Bot",
+"year": 2024,
+"abbr": "Astro_Bot"
+},
+{
+"gid": "46w305q1",
+"name": "Astro's Playroom",
+"year": 2020,
+"abbr": "astros_playroom"
+},
+{
+"gid": "m1m8pxd2",
+"name": "Astroneer",
+"year": 2016,
+"abbr": "astroneer"
+},
+{
+"gid": "9do3kodp",
+"name": "Axiom Verge",
+"year": 2015,
+"abbr": "axiomverge"
+},
+{
+"gid": "w6j75526",
+"name": "BABBDI",
+"year": 2022,
+"abbr": "babbdi"
+},
+{
+"gid": "ldejzoe1",
+"name": "Back 4 Blood",
+"year": 2021,
+"abbr": "b4b"
+},
+{
+"gid": "o1yj8n41",
+"name": "Backrooms: Escape Together",
+"year": 2022,
+"abbr": "bet"
+},
+{
+"gid": "ldeww3jd",
+"name": "Balatro",
+"year": 2023,
+"abbr": "Balatro"
+},
+{
+"gid": "lde3zyx6",
+"name": "Baldi's Basics +",
+"year": 2020,
+"abbr": "baldi"
+},
+{
+"gid": "3dxke2p1",
+"name": "Baldi's Basics Classic Remastered",
+"year": 2022,
+"abbr": "baldicr"
+},
+{
+"gid": "46w2qx96",
+"name": "Baldur's Gate 3",
+"year": 2023,
+"abbr": "baldurs_gate_3"
+},
+{
+"gid": "3695w2dl",
+"name": "Balloon Fight (NES)",
+"year": 1985,
+"abbr": "balloonfight"
+},
+{
+"gid": "9dokge1p",
+"name": "Banjo-Kazooie",
+"year": 1998,
+"abbr": "bk"
+},
+{
+"gid": "m1m7pp12",
+"name": "Banjo-Tooie",
+"year": 2000,
+"abbr": "bt"
+},
+{
+"gid": "268pjodp",
+"name": "Barney's Hide & Seek Game",
+"year": 1993,
+"abbr": "barneys_hide_and_seek_game"
+},
+{
+"gid": "j1n8qpl1",
+"name": "BARRY'S PRISON RUN",
+"year": 2022,
+"abbr": "barry"
+},
+{
+"gid": "n268p5dp",
+"name": "Bastion",
+"year": 2011,
+"abbr": "bastion"
+},
+{
+"gid": "4pd0p06e",
+"name": "Batman: Arkham Asylum",
+"year": 2009,
+"abbr": "arkhamasylum"
+},
+{
+"gid": "x3692ldl",
+"name": "Batman: Arkham City",
+"year": 2011,
+"abbr": "arkhamcity"
+},
+{
+"gid": "4d7p4rd7",
+"name": "Batman: Arkham Knight",
+"year": 2015,
+"abbr": "arkhamknight"
+},
+{
+"gid": "m1zqm010",
+"name": "Batman: The Video Game (NES)",
+"year": 1989,
+"abbr": "batman_the_video_game_nes"
+},
+{
+"gid": "v1p527d8",
+"name": "Battle For Dream Island Again 5b",
+"year": 2013,
+"abbr": "bfdia"
+},
+{
+"gid": "pdvgo9dw",
+"name": "BattleBlock Theater",
+"year": 2013,
+"abbr": "battleblock_theater"
+},
+{
+"gid": "w6jlqo7d",
+"name": "Battletoads",
+"year": 2020,
+"abbr": "battletoads_"
+},
+{
+"gid": "pdvg74dw",
+"name": "Battletoads (NES)",
+"year": 1991,
+"abbr": "battletoads_nes"
+},
+{
+"gid": "k6qwx9z6",
+"name": "be a dad and get milk simulator",
+"year": 2022,
+"abbr": "badagms"
+},
+{
+"gid": "76rxrzq6",
+"name": "Beach Buggy Racing",
+"year": 2014,
+"abbr": "bbr"
+},
+{
+"gid": "kdk5medm",
+"name": "BeamNG.drive",
+"year": 2015,
+"abbr": "beamngdrive"
+},
+{
+"gid": "9d3rv59d",
+"name": "Bee Movie Game (DS)",
+"year": 2007,
+"abbr": "bmg_ds"
+},
+{
+"gid": "o1yxkk6q",
+"name": "Bendy And The Ink Machine",
+"year": 2017,
+"abbr": "batim"
+},
+{
+"gid": "ldewnoxd",
+"name": "BFDI: Branches",
+"year": 2024,
+"abbr": "bfdibranches"
+},
+{
+"gid": "kdkzwqqd",
+"name": "Bhop GO",
+"year": 2018,
+"abbr": "bhop_go"
+},
+{
+"gid": "y65rm8e1",
+"name": "Big Scary",
+"year": 2023,
+"abbr": "Big_Scary"
+},
+{
+"gid": "369nl3dl",
+"name": "Bike Race",
+"year": 2012,
+"abbr": "bikerace"
+},
+{
+"gid": "v1poz768",
+"name": "BioShock",
+"year": 2007,
+"abbr": "bs1"
+},
+{
+"gid": "lde3yx63",
+"name": "BioShock Infinite",
+"year": 2013,
+"abbr": "bsi"
+},
+{
+"gid": "9doxy97d",
+"name": "Block Tales",
+"year": 2024,
+"abbr": "Block_Tales"
+},
+{
+"gid": "9d3kqg1l",
+"name": "Bloodborne",
+"year": 2015,
+"abbr": "bloodborne"
+},
+{
+"gid": "lde3z9l6",
+"name": "Bloodstained: Curse of the Moon",
+"year": 2018,
+"abbr": "bscotm"
+},
+{
+"gid": "9doxjr3d",
+"name": "Bloodthief",
+"year": 2023,
+"abbr": "Bloodthief"
+},
+{
+"gid": "3dxy5556",
+"name": "Blooket",
+"year": 2018,
+"abbr": "Blooket"
+},
+{
+"gid": "pd04k06e",
+"name": "Bloons Tower Defense 5",
+"year": 2011,
+"abbr": "btd5"
+},
+{
+"gid": "nd2er3ed",
+"name": "Bloons Tower Defense 6",
+"year": 2018,
+"abbr": "btd6"
+},
+{
+"gid": "369w253d",
+"name": "Blue Prince",
+"year": 2025,
+"abbr": "blue_prince"
+},
+{
+"gid": "4d799r17",
+"name": "Bomberman 64",
+"year": 1997,
+"abbr": "bm64"
+},
+{
+"gid": "76r3m746",
+"name": "BONELAB",
+"year": 2022,
+"abbr": "bonelab"
+},
+{
+"gid": "j1llkl41",
+"name": "BONEWORKS",
+"year": 2019,
+"abbr": "boneworks"
+},
+{
+"gid": "9do8ejm1",
+"name": "Boo Men",
+"year": 2022,
+"abbr": "boo_men"
+},
+{
+"gid": "76r35l68",
+"name": "Borderlands 2",
+"year": 2012,
+"abbr": "bl2"
+},
+{
+"gid": "j1lqnlj6",
+"name": "Boxel 3D",
+"year": 2020,
+"abbr": "boxel_3d"
+},
+{
+"gid": "m1mnngpd",
+"name": "Boxel Rebound",
+"year": 2017,
+"abbr": "boxel_rebound"
+},
+{
+"gid": "4d792pn1",
+"name": "BPM: Bullets Per Minute",
+"year": 2020,
+"abbr": "bpm_bullets_per_minute"
+},
+{
+"gid": "76rxovv6",
+"name": "Brawl Stars",
+"year": 2017,
+"abbr": "brawl_stars"
+},
+{
+"gid": "m1z73360",
+"name": "Brawlhalla",
+"year": 2015,
+"abbr": "brawlhalla"
+},
+{
+"gid": "xkdk5gdm",
+"name": "Broforce",
+"year": 2015,
+"abbr": "broforce"
+},
+{
+"gid": "o1yjm5o1",
+"name": "Brotato",
+"year": 2023,
+"abbr": "brotato"
+},
+{
+"gid": "yd4r0yw1",
+"name": "Buckshot Roulette",
+"year": 2023,
+"abbr": "Buckshot_Roulette"
+},
+{
+"gid": "v1po4z46",
+"name": "Bugsnax",
+"year": 2020,
+"abbr": "bugsnax"
+},
+{
+"gid": "l3dxqp1y",
+"name": "Bully: Scholarship Edition",
+"year": 2008,
+"abbr": "bullyse"
+},
+{
+"gid": "m1zn9m10",
+"name": "Burnout 3: Takedown",
+"year": 2004,
+"abbr": "b3t"
+},
+{
+"gid": "lde3wrn6",
+"name": "Burnout Paradise Remastered",
+"year": 2018,
+"abbr": "bpr"
+},
+{
+"gid": "3697r81l",
+"name": "Burnout Revenge",
+"year": 2005,
+"abbr": "br"
+},
+{
+"gid": "kdkz2edm",
+"name": "Call of Duty 4: Modern Warfare",
+"year": 2007,
+"abbr": "cod4"
+},
+{
+"gid": "46wroj31",
+"name": "Call of Duty: Black Ops 6 Zombies",
+"year": 2024,
+"abbr": "BO6Zombies"
+},
+{
+"gid": "46wrk371",
+"name": "Call of Duty: Black Ops 7 Zombies",
+"year": 2025,
+"abbr": "Bo7Zombies"
+},
+{
+"gid": "268ege56",
+"name": "Call of Duty: Black Ops Cold War",
+"year": 2020,
+"abbr": "bocw"
+},
+{
+"gid": "j1neozx1",
+"name": "Call of Duty: Black Ops Cold War Zombies",
+"year": 2020,
+"abbr": "bocwz"
+},
+{
+"gid": "4d7zzr67",
+"name": "Call of Duty: Black Ops II Zombies",
+"year": 2012,
+"abbr": "bo2zombies"
+},
+{
+"gid": "j1n27x1p",
+"name": "Call of Duty: Black Ops III",
+"year": 2015,
+"abbr": "bo3"
+},
+{
+"gid": "m1m2oxd2",
+"name": "Call of Duty: Black Ops III Zombies",
+"year": 2015,
+"abbr": "bo3zombies"
+},
+{
+"gid": "268ex4o6",
+"name": "Call of Duty: Black Ops IIII Zombies",
+"year": 2018,
+"abbr": "bo4zombies"
+},
+{
+"gid": "nd2ggq10",
+"name": "Call of Duty: Black Ops Zombies",
+"year": 2010,
+"abbr": "bozombies"
+},
+{
+"gid": "yd4oyw1e",
+"name": "Call of Duty: Ghosts",
+"year": 2013,
+"abbr": "codghosts"
+},
+{
+"gid": "m1zgg060",
+"name": "Call of Duty: Infinite Warfare Zombies",
+"year": 2016,
+"abbr": "iwzombies"
+},
+{
+"gid": "76r39rq6",
+"name": "Call Of Duty: Mobile",
+"year": 2019,
+"abbr": "codm"
+},
+{
+"gid": "lde3r2l6",
+"name": "Call of Duty: Modern Warfare (2019)",
+"year": 2019,
+"abbr": "mw2019"
+},
+{
+"gid": "y65420de",
+"name": "Call of Duty: Modern Warfare 2",
+"year": 2009,
+"abbr": "mw2"
+},
+{
+"gid": "w6jlw85d",
+"name": "Call of Duty: Modern Warfare 2 Remastered",
+"year": 2020,
+"abbr": "mw2r"
+},
+{
+"gid": "9dow271p",
+"name": "Call of Duty: Modern Warfare 3",
+"year": 2011,
+"abbr": "mw3"
+},
+{
+"gid": "yd4kjqg6",
+"name": "Call of Duty: Modern Warfare II",
+"year": 2022,
+"abbr": "mw2022"
+},
+{
+"gid": "ldeprl13",
+"name": "Call of Duty: Modern Warfare Remastered",
+"year": 2016,
+"abbr": "mwr"
+},
+{
+"gid": "lde32n63",
+"name": "Call of Duty: World at War",
+"year": 2008,
+"abbr": "cod5"
+},
+{
+"gid": "w6j5y41j",
+"name": "Call of Duty: World at War Zombies",
+"year": 2008,
+"abbr": "wawzombies"
+},
+{
+"gid": "o6glzxod",
+"name": "Call of Duty: WWII Zombies",
+"year": 2017,
+"abbr": "wwiizombies"
+},
+{
+"gid": "k6qokx1g",
+"name": "Candy Crush Saga",
+"year": 2012,
+"abbr": "candy_crush_saga"
+},
+{
+"gid": "4d7nzg67",
+"name": "Captain Toad: Treasure Tracker",
+"year": 2014,
+"abbr": "cttt"
+},
+{
+"gid": "k6qpy9dg",
+"name": "Cars",
+"year": 2006,
+"abbr": "cars"
+},
+{
+"gid": "yd4o9m51",
+"name": "CarX Drift Racing Online",
+"year": 2017,
+"abbr": "carx_drift_racing_online"
+},
+{
+"gid": "ldemmj13",
+"name": "Castle Crashers",
+"year": 2008,
+"abbr": "cc"
+},
+{
+"gid": "369go31l",
+"name": "Castlevania",
+"year": 1986,
+"abbr": "cv1"
+},
+{
+"gid": "3dx7np6y",
+"name": "Castlevania II: Simon's Quest",
+"year": 1987,
+"abbr": "cv2sq"
+},
+{
+"gid": "ldexqn63",
+"name": "Castlevania: Aria of Sorrow",
+"year": 2003,
+"abbr": "aos"
+},
+{
+"gid": "46wlwl1r",
+"name": "Castlevania: Symphony of the Night",
+"year": 1997,
+"abbr": "sotn"
+},
+{
+"gid": "268e3e96",
+"name": "Cat Bird",
+"year": 2017,
+"abbr": "cb"
+},
+{
+"gid": "4d74xld7",
+"name": "Cat Mario",
+"year": 2007,
+"abbr": "cm"
+},
+{
+"gid": "yd4owkp1",
+"name": "Cats are Liquid - A Better Place",
+"year": 2019,
+"abbr": "cats_are_liquid_a_better_place"
+},
+{
+"gid": "o1yjokr1",
+"name": "Cave Crawler",
+"year": 2022,
+"abbr": "cave_crawler"
+},
+{
+"gid": "o6gl5nd2",
+"name": "Cave Story",
+"year": 2004,
+"abbr": "cave_story"
+},
+{
+"gid": "76rxjrq6",
+"name": "Celebrating Garden Gnomes",
+"year": 2018,
+"abbr": "cgggd"
+},
+{
+"gid": "o1y9j9v6",
+"name": "Celeste",
+"year": 2018,
+"abbr": "celeste"
+},
+{
+"gid": "3dxy05v6",
+"name": "Celeste 64",
+"year": 2024,
+"abbr": "celeste64"
+},
+{
+"gid": "4d7e7z67",
+"name": "CELESTE Classic",
+"year": 2015,
+"abbr": "celestep8"
+},
+{
+"gid": "v1pon386",
+"name": "CELESTE Classic 2",
+"year": 2021,
+"abbr": "celeste_classic_2"
+},
+{
+"gid": "369pokl1",
+"name": "CELESTE Mods",
+"year": 2015,
+"abbr": "celestep8mods"
+},
+{
+"gid": "46wrw771",
+"name": "Chained Together",
+"year": 2024,
+"abbr": "Chained_Together"
+},
+{
+"gid": "w6j7gw46",
+"name": "Champion Island Games",
+"year": 2021,
+"abbr": "island_games"
+},
+{
+"gid": "j1n8q9l1",
+"name": "Charlie in the Moistverse of Madness",
+"year": 2022,
+"abbr": "charlie_in_the_moistverse_of_madness"
+},
+{
+"gid": "nd285qed",
+"name": "Cheese Escape",
+"year": 2020,
+"abbr": "cheese_escape"
+},
+{
+"gid": "k6qzrx6g",
+"name": "Chip 'n Dale Rescue Rangers 2",
+"year": 1993,
+"abbr": "chip_n_dale_rescue_rangers_2"
+},
+{
+"gid": "kdkz7ldm",
+"name": "Chip 'N Dale: Rescue Rangers",
+"year": 1990,
+"abbr": "chipndale"
+},
+{
+"gid": "36980g8d",
+"name": "Choo-Choo Charles",
+"year": 2022,
+"abbr": "choo_choo_charles"
+},
+{
+"gid": "j1ll8jv1",
+"name": "Choppy Orc",
+"year": 2018,
+"abbr": "choppy_orc"
+},
+{
+"gid": "j1l7pvdg",
+"name": "Chrono Trigger",
+"year": 1995,
+"abbr": "ct"
+},
+{
+"gid": "m1zp8060",
+"name": "Civilization VI",
+"year": 2016,
+"abbr": "civ6"
+},
+{
+"gid": "ldew5jnd",
+"name": "Clair Obscur: Expedition 33",
+"year": 2025,
+"abbr": "coe33"
+},
+{
+"gid": "y65lp31e",
+"name": "Clash of Clans",
+"year": 2012,
+"abbr": "coc"
+},
+{
+"gid": "j1lmjzdg",
+"name": "Clash Royale",
+"year": 2016,
+"abbr": "clashroyale"
+},
+{
+"gid": "j1n5yx1p",
+"name": "Cleaning Simulator",
+"year": 2017,
+"abbr": "rcsim"
+},
+{
+"gid": "3dx57v1y",
+"name": "Clicker Heroes",
+"year": 2014,
+"abbr": "ch1"
+},
+{
+"gid": "nd27mx51",
+"name": "Climbing Game",
+"year": 2025,
+"abbr": "Climbing_Game"
+},
+{
+"gid": "v1pr0p68",
+"name": "Clone Drone In The Danger Zone",
+"year": 2016,
+"abbr": "clone_drone_in_the_danger_zone"
+},
+{
+"gid": "3dxyovy6",
+"name": "CloverPit",
+"year": 2025,
+"abbr": "CloverPit"
+},
+{
+"gid": "k6q44pmd",
+"name": "Club Penguin",
+"year": 2005,
+"abbr": "cp"
+},
+{
+"gid": "w6jlkoed",
+"name": "Clubhouse Games: 51 Worldwide Classics",
+"year": 2020,
+"abbr": "chg51"
+},
+{
+"gid": "j1ljkjdg",
+"name": "Clustertruck",
+"year": 2016,
+"abbr": "clustertruck"
+},
+{
+"gid": "ldejlo51",
+"name": "Color or Die",
+"year": 2023,
+"abbr": "color_or_die"
+},
+{
+"gid": "lde5ljd3",
+"name": "Color Switch",
+"year": 2015,
+"abbr": "color_switch"
+},
+{
+"gid": "9doxjmmd",
+"name": "Combat Initiation",
+"year": 2023,
+"abbr": "Combat_Initiation"
+},
+{
+"gid": "y65zv36e",
+"name": "Conker's Bad Fur Day",
+"year": 2001,
+"abbr": "cbfd"
+},
+{
+"gid": "46wr391r",
+"name": "Contra",
+"year": 1988,
+"abbr": "contra"
+},
+{
+"gid": "ldeyzl13",
+"name": "Contra III: The Alien Wars",
+"year": 1992,
+"abbr": "contra3"
+},
+{
+"gid": "2689591p",
+"name": "Cookie Clicker",
+"year": 2013,
+"abbr": "cclicker"
+},
+{
+"gid": "268e7n76",
+"name": "Cooking Mama 2: Dinner With Friends",
+"year": 2007,
+"abbr": "cm2_dwf"
+},
+{
+"gid": "76r4lxl1",
+"name": "Counter-Strike 2",
+"year": 2023,
+"abbr": "cs2"
+},
+{
+"gid": "ldemjl13",
+"name": "Counter-Strike: Global Offensive",
+"year": 2012,
+"abbr": "csgo"
+},
+{
+"gid": "yd4k2yx6",
+"name": "Crab Champions",
+"year": 2023,
+"abbr": "crab_champions"
+},
+{
+"gid": "8nd2wvd0",
+"name": "Crash Bandicoot",
+"year": 1996,
+"abbr": "crash1"
+},
+{
+"gid": "n4d7pgd7",
+"name": "Crash Bandicoot 2: Cortex Strikes Back",
+"year": 1997,
+"abbr": "crash2"
+},
+{
+"gid": "29d37g6l",
+"name": "Crash Bandicoot 3: Warped",
+"year": 1998,
+"abbr": "crash3"
+},
+{
+"gid": "pdvzelk6",
+"name": "Crash Bandicoot 4: It's About Time",
+"year": 2020,
+"abbr": "crash4"
+},
+{
+"gid": "y657jede",
+"name": "Crash Bandicoot: N. Sane Trilogy",
+"year": 2017,
+"abbr": "crashnst"
+},
+{
+"gid": "jy65041e",
+"name": "Crash Bandicoot: The Wrath of Cortex",
+"year": 2001,
+"abbr": "crashtwoc"
+},
+{
+"gid": "yo1yq2dq",
+"name": "Crash Bash",
+"year": 2000,
+"abbr": "crashbash"
+},
+{
+"gid": "29d3w01l",
+"name": "Crash Team Racing",
+"year": 1999,
+"abbr": "ctr"
+},
+{
+"gid": "v1pov076",
+"name": "Crash Team Racing: Nitro-Fueled",
+"year": 2019,
+"abbr": "ctrnf"
+},
+{
+"gid": "j1n29w1p",
+"name": "Crossy Road",
+"year": 2014,
+"abbr": "crossy"
+},
+{
+"gid": "v1pxmg86",
+"name": "Cruelty Squad",
+"year": 2021,
+"abbr": "cruelty_squad"
+},
+{
+"gid": "j1llr41g",
+"name": "Cry of Fear",
+"year": 2013,
+"abbr": "cof"
+},
+{
+"gid": "y6554l46",
+"name": "CTGP Nitro",
+"year": 2021,
+"abbr": "ctgp_nitro"
+},
+{
+"gid": "9d3r3gdl",
+"name": "CTGP Revolution",
+"year": 2014,
+"abbr": "ctgp"
+},
+{
+"gid": "3dx2r341",
+"name": "CubeCraft Games",
+"year": 2012,
+"abbr": "cubecraft"
+},
+{
+"gid": "pd0wlz31",
+"name": "CubeCraft Parkour",
+"year": 2018,
+"abbr": "cubecraft_parkour"
+},
+{
+"gid": "yd4kq7x6",
+"name": "Cult of the Lamb",
+"year": 2022,
+"abbr": "cult_of_the_lamb"
+},
+{
+"gid": "w6jmm26j",
+"name": "Cuphead",
+"year": 2017,
+"abbr": "cuphead"
+},
+{
+"gid": "yd4y8kde",
+"name": "Cut the Rope",
+"year": 2010,
+"abbr": "cut_the_rope"
+},
+{
+"gid": "4d79wl31",
+"name": "Cyberpunk 2077",
+"year": 2020,
+"abbr": "cyberpunk_2077"
+},
+{
+"gid": "y654z07d",
+"name": "Dan the Man",
+"year": 2016,
+"abbr": "dantheman"
+},
+{
+"gid": "k6qpkjxd",
+"name": "Dandy's World",
+"year": 2024,
+"abbr": "DandysWorld"
+},
+{
+"gid": "kdkojg6m",
+"name": "Danganronpa: Trigger Happy Havoc",
+"year": 2010,
+"abbr": "drthh"
+},
+{
+"gid": "m1zjl7z6",
+"name": "Dark Deception",
+"year": 2018,
+"abbr": "dark_deception"
+},
+{
+"gid": "w6jve26j",
+"name": "Dark Souls",
+"year": 2011,
+"abbr": "darksouls"
+},
+{
+"gid": "m1zky010",
+"name": "Dark Souls II",
+"year": 2014,
+"abbr": "darksouls2"
+},
+{
+"gid": "y65lw01e",
+"name": "Dark Souls II: Scholar of the First Sin",
+"year": 2015,
+"abbr": "darksouls2sotfs"
+},
+{
+"gid": "k6qg0xdg",
+"name": "Dark Souls III",
+"year": 2016,
+"abbr": "darksouls3"
+},
+{
+"gid": "lde3woe6",
+"name": "Dark Souls Remastered",
+"year": 2018,
+"abbr": "darksoulsremastered"
+},
+{
+"gid": "4d732n17",
+"name": "Darkest Dungeon",
+"year": 2016,
+"abbr": "darkest_dungeon"
+},
+{
+"gid": "y655m86e",
+"name": "Darkwing Duck (NES)",
+"year": 1992,
+"abbr": "dwd"
+},
+{
+"gid": "m1mxvyx6",
+"name": "Data Wing",
+"year": 2017,
+"abbr": "data_wing"
+},
+{
+"gid": "9d3gjy6l",
+"name": "Dauntless",
+"year": 2019,
+"abbr": "dauntless"
+},
+{
+"gid": "k6qp89dg",
+"name": "David Crane's A Boy and His Blob: Trouble on Blobolonia",
+"year": 1989,
+"abbr": "blobnes"
+},
+{
+"gid": "yd4o0z51",
+"name": "Dead by Daylight",
+"year": 2016,
+"abbr": "dead_by_daylight"
+},
+{
+"gid": "nd2ee5ed",
+"name": "Dead Cells",
+"year": 2017,
+"abbr": "deadcells"
+},
+{
+"gid": "k6qpl8xd",
+"name": "Dead Rails",
+"year": 2025,
+"abbr": "dead_rails"
+},
+{
+"gid": "9d3wr91l",
+"name": "Dead Rising",
+"year": 2006,
+"abbr": "dr1"
+},
+{
+"gid": "3698g4ld",
+"name": "DEEEER Simulator",
+"year": 2019,
+"abbr": "deeeer_simulator"
+},
+{
+"gid": "o6gl7yod",
+"name": "Deep Rock Galactic",
+"year": 2018,
+"abbr": "deep_rock_galactic"
+},
+{
+"gid": "268weko6",
+"name": "Deepest Sword",
+"year": 2021,
+"abbr": "deepest_sword"
+},
+{
+"gid": "ldej43n1",
+"name": "Deepwoken",
+"year": 2021,
+"abbr": "deepwoken"
+},
+{
+"gid": "pdvznzr6",
+"name": "Deltarune",
+"year": 2018,
+"abbr": "deltarune"
+},
+{
+"gid": "xldevl13",
+"name": "Demon's Crest",
+"year": 1994,
+"abbr": "demons_crest"
+},
+{
+"gid": "m1mn8kd2",
+"name": "Demon's Souls",
+"year": 2009,
+"abbr": "demonssouls"
+},
+{
+"gid": "j1lln4z1",
+"name": "Descenders",
+"year": 2018,
+"abbr": "descenders"
+},
+{
+"gid": "y65r341e",
+"name": "Destiny",
+"year": 2014,
+"abbr": "destiny"
+},
+{
+"gid": "4d7y5zd7",
+"name": "Destiny 2",
+"year": 2017,
+"abbr": "destiny2"
+},
+{
+"gid": "268wy396",
+"name": "Destiny 2 Content Vault",
+"year": 2017,
+"abbr": "destiny2contentvault"
+},
+{
+"gid": "nd2853vd",
+"name": "Destiny 2 Lost Sectors",
+"year": 2017,
+"abbr": "destiny2sectors"
+},
+{
+"gid": "3dxynwv6",
+"name": "Destiny 2 Portal",
+"year": 2017,
+"abbr": "destiny2portal"
+},
+{
+"gid": "yd4or2x1",
+"name": "Destiny 2 Story",
+"year": 2017,
+"abbr": "destiny2story"
+},
+{
+"gid": "x369386l",
+"name": "Deus Ex",
+"year": 2000,
+"abbr": "dx"
+},
+{
+"gid": "xldegn13",
+"name": "Devil May Cry",
+"year": 2001,
+"abbr": "dmc"
+},
+{
+"gid": "nj1n3ydp",
+"name": "Devil May Cry 3: Special Edition",
+"year": 2006,
+"abbr": "dmc3se"
+},
+{
+"gid": "pdvnjv6w",
+"name": "Devil May Cry 4: Special Edition",
+"year": 2015,
+"abbr": "dmc4se"
+},
+{
+"gid": "46w3w331",
+"name": "Devil May Cry 5",
+"year": 2019,
+"abbr": "dmc5"
+},
+{
+"gid": "yd4opx1e",
+"name": "Diablo II: Lord of Destruction",
+"year": 2001,
+"abbr": "d2lod"
+},
+{
+"gid": "76r3jnq6",
+"name": "Diablo II: Resurrected",
+"year": 2021,
+"abbr": "d2r"
+},
+{
+"gid": "46w2z96r",
+"name": "Diablo III: Reaper of Souls",
+"year": 2014,
+"abbr": "d3_ros"
+},
+{
+"gid": "9dow7pk1",
+"name": "Dicey Dungeons",
+"year": 2019,
+"abbr": "dicey_dungeons"
+},
+{
+"gid": "pdv270r6",
+"name": "Dictators: No Peace",
+"year": 2019,
+"abbr": "dnp"
+},
+{
+"gid": "9dow9e1p",
+"name": "Diddy Kong Racing",
+"year": 1997,
+"abbr": "dkr"
+},
+{
+"gid": "ldenrjd3",
+"name": "Die Hard (NES)",
+"year": 1990,
+"abbr": "die_hard_nes"
+},
+{
+"gid": "w6jx45dj",
+"name": "Diep.io",
+"year": 2016,
+"abbr": "d_io"
+},
+{
+"gid": "j1njve6p",
+"name": "DiRT 3",
+"year": 2011,
+"abbr": "dirt_3"
+},
+{
+"gid": "3dxz351y",
+"name": "Dishonored",
+"year": 2012,
+"abbr": "dishonored"
+},
+{
+"gid": "2684podp",
+"name": "Dishonored 2",
+"year": 2016,
+"abbr": "dishonored_2"
+},
+{
+"gid": "9do8qo31",
+"name": "Disney Speedstorm",
+"year": 2023,
+"abbr": "disney_speedstorm"
+},
+{
+"gid": "v1pgom18",
+"name": "Disney's 102 Dalmatians: Puppies to the Rescue",
+"year": 2000,
+"abbr": "102dalmatians"
+},
+{
+"gid": "kdkzmxdm",
+"name": "Disney's Aladdin (SNES)",
+"year": 1993,
+"abbr": "aladdin_snes"
+},
+{
+"gid": "y65zrp86",
+"name": "Don't Sleep With The Fishes",
+"year": 2026,
+"abbr": "Dont_Sleep_With_The_Fishes"
+},
+{
+"gid": "o1yp7k1q",
+"name": "Don't Starve Together",
+"year": 2016,
+"abbr": "do_not_starve_together"
+},
+{
+"gid": "ldewrnd3",
+"name": "Donald Duck: Goin' Quackers",
+"year": 2000,
+"abbr": "ddgq"
+},
+{
+"gid": "9doye36p",
+"name": "Donkey Kong (NES)",
+"year": 1983,
+"abbr": "donkey_kong"
+},
+{
+"gid": "lder2l63",
+"name": "Donkey Kong 3",
+"year": 1986,
+"abbr": "donkey_kong_3"
+},
+{
+"gid": "9d385g1l",
+"name": "Donkey Kong 64",
+"year": 1999,
+"abbr": "dk64"
+},
+{
+"gid": "3dxy9e56",
+"name": "Donkey Kong Bananza",
+"year": 2025,
+"abbr": "dkb"
+},
+{
+"gid": "4pd03de5",
+"name": "Donkey Kong Country",
+"year": 1994,
+"abbr": "dkc"
+},
+{
+"gid": "xkdkmx1m",
+"name": "Donkey Kong Country 2: Diddy's Kong Quest",
+"year": 1995,
+"abbr": "dkc2"
+},
+{
+"gid": "nj1n4e6p",
+"name": "Donkey Kong Country 3: Dixie Kong's Double Trouble!",
+"year": 1996,
+"abbr": "dkc3"
+},
+{
+"gid": "nj1nnx1p",
+"name": "Donkey Kong Country Returns",
+"year": 2010,
+"abbr": "dkcr"
+},
+{
+"gid": "jy65301e",
+"name": "Donkey Kong Country: Tropical Freeze",
+"year": 2014,
+"abbr": "dkctf"
+},
+{
+"gid": "j1lz8z6g",
+"name": "Donkey Kong Jr. (NES)",
+"year": 1982,
+"abbr": "dkjr"
+},
+{
+"gid": "m1mxmrk6",
+"name": "Donut County",
+"year": 2018,
+"abbr": "donutcounty"
+},
+{
+"gid": "4d794qg1",
+"name": "Doodle Jump",
+"year": 2009,
+"abbr": "doodle_jump"
+},
+{
+"gid": "j1nrmwdp",
+"name": "DOOM",
+"year": 2016,
+"abbr": "d2016"
+},
+{
+"gid": "pd0ny8w1",
+"name": "Doom (Kex Port)",
+"year": 2024,
+"abbr": "Doom_Kex_Port"
+},
+{
+"gid": "m1mx0ox6",
+"name": "Doom (Unity Ports)",
+"year": 2019,
+"abbr": "doom_unity"
+},
+{
+"gid": "9d33nwdl",
+"name": "Doom 64",
+"year": 1997,
+"abbr": "doom_64"
+},
+{
+"gid": "o1y9we26",
+"name": "Doom 64 (2020)",
+"year": 2020,
+"abbr": "doom_64_2020"
+},
+{
+"gid": "9d3r97ed",
+"name": "DOOM Eternal",
+"year": 2020,
+"abbr": "doom_eternal"
+},
+{
+"gid": "9d3r9edl",
+"name": "Doritos Crash Course",
+"year": 2010,
+"abbr": "doritoscc"
+},
+{
+"gid": "j1nm8w6p",
+"name": "Dota 2",
+"year": 2013,
+"abbr": "dota_2"
+},
+{
+"gid": "46w99l1r",
+"name": "Double Dragon II: The Revenge",
+"year": 1990,
+"abbr": "doubledragon2"
+},
+{
+"gid": "nd27zm51",
+"name": "Dr Robotnik's Ring Racers",
+"year": 2024,
+"abbr": "ring_racers"
+},
+{
+"gid": "46w2l76r",
+"name": "Dr. Mario (NES)",
+"year": 1990,
+"abbr": "drmariones"
+},
+{
+"gid": "pd0wq901",
+"name": "Dragon Ball FighterZ",
+"year": 2018,
+"abbr": "dbfz"
+},
+{
+"gid": "nd20ke60",
+"name": "Dragon Ball Xenoverse 2",
+"year": 2016,
+"abbr": "dbxv2"
+},
+{
+"gid": "pdvxyv1w",
+"name": "Dragon Ball Z Dokkan Battle (Global)",
+"year": 2015,
+"abbr": "dragon_ball_z_dokkan_battle_global"
+},
+{
+"gid": "o6gywn62",
+"name": "Dragon Escape",
+"year": 2013,
+"abbr": "dragon_escape"
+},
+{
+"gid": "k6q2wx6g",
+"name": "Dragon Quest III",
+"year": 1996,
+"abbr": "dq3"
+},
+{
+"gid": "9d3yv06l",
+"name": "Dragon's Dogma: Dark Arisen",
+"year": 2012,
+"abbr": "ddda"
+},
+{
+"gid": "m1zkjzx1",
+"name": "Dream League Soccer",
+"year": 2011,
+"abbr": "dls"
+},
+{
+"gid": "9d38e2g1",
+"name": "Dribbling Challenge #2",
+"year": 2017,
+"abbr": "dribble2"
+},
+{
+"gid": "76rxr8q6",
+"name": "Drift86",
+"year": 2019,
+"abbr": "drift86"
+},
+{
+"gid": "46w2m496",
+"name": "Drive Mad",
+"year": 2018,
+"abbr": "drive_mad"
+},
+{
+"gid": "kdkrel6m",
+"name": "Duck Game",
+"year": 2014,
+"abbr": "duck_game"
+},
+{
+"gid": "y653w01e",
+"name": "Duck Hunt",
+"year": 1984,
+"abbr": "dh"
+},
+{
+"gid": "yd48w56e",
+"name": "Duck Life 1",
+"year": 2010,
+"abbr": "dl1"
+},
+{
+"gid": "369530dl",
+"name": "Duck Life 2",
+"year": 2010,
+"abbr": "dl2"
+},
+{
+"gid": "pdvrmo1w",
+"name": "Duck Life 3: Evolution",
+"year": 2011,
+"abbr": "dl3"
+},
+{
+"gid": "kdkm87g1",
+"name": "Duck Simulator 2",
+"year": 2021,
+"abbr": "duck_simulator_2"
+},
+{
+"gid": "nd28gvd0",
+"name": "DuckTales (NES)",
+"year": 1989,
+"abbr": "dt"
+},
+{
+"gid": "yd4k856e",
+"name": "DuckTales 2 (NES)",
+"year": 1993,
+"abbr": "dt2"
+},
+{
+"gid": "4d7q0367",
+"name": "DuckTales: Remastered",
+"year": 2013,
+"abbr": "ducktales_remastered"
+},
+{
+"gid": "268ykodp",
+"name": "DUSK",
+"year": 2018,
+"abbr": "dusk"
+},
+{
+"gid": "3698ngdl",
+"name": "Dustforce DX",
+"year": 2014,
+"abbr": "dustforce_dx"
+},
+{
+"gid": "o6gn52o1",
+"name": "Dwelling of Locks",
+"year": 2022,
+"abbr": "dol"
+},
+{
+"gid": "j1lnx46g",
+"name": "Dying Light",
+"year": 2015,
+"abbr": "dyinglight"
+},
+{
+"gid": "m1me4gjd",
+"name": "EA Sports FC 25",
+"year": 2024,
+"abbr": "EA_Sports_FC_25"
+},
+{
+"gid": "y655mne6",
+"name": "EA Sports FC Mobile",
+"year": 2016,
+"abbr": "EA_Sports_FC"
+},
+{
+"gid": "m1mxgp62",
+"name": "EarthBound",
+"year": 1994,
+"abbr": "earthbound"
+},
+{
+"gid": "o6gk79n1",
+"name": "easiest game on roblox",
+"year": 2024,
+"abbr": "easiest_game_ever"
+},
+{
+"gid": "9do8jwo1",
+"name": "Easy Obby!",
+"year": 2020,
+"abbr": "easy_obby"
+},
+{
+"gid": "nd28z0ed",
+"name": "Elden Ring",
+"year": 2022,
+"abbr": "eldenring"
+},
+{
+"gid": "w6jg0q76",
+"name": "Elden Ring Nightreign",
+"year": 2025,
+"abbr": "Elden_Ring_Nightreign"
+},
+{
+"gid": "k6qw0zx6",
+"name": "Ember Knights",
+"year": 2022,
+"abbr": "ember_knights"
+},
+{
+"gid": "o1y3mjr6",
+"name": "ENA: Dream BBQ",
+"year": 2025,
+"abbr": "dreambbq"
+},
+{
+"gid": "pdv22v46",
+"name": "ENDER LILIES: Quietus of the Knights",
+"year": 2021,
+"abbr": "enderlilies"
+},
+{
+"gid": "j1lm3edg",
+"name": "Enter the Gungeon",
+"year": 2016,
+"abbr": "enter_the_gungeon"
+},
+{
+"gid": "ldemznn1",
+"name": "erdetspill",
+"year": 2026,
+"abbr": "erdetspill"
+},
+{
+"gid": "k6qwq0m6",
+"name": "Escape Academy",
+"year": 2022,
+"abbr": "escape_academy"
+},
+{
+"gid": "o1y3j526",
+"name": "Escape From Lavender Island",
+"year": 2023,
+"abbr": "efli"
+},
+{
+"gid": "3dxkwoy1",
+"name": "Escape the Backrooms",
+"year": 2025,
+"abbr": "etb"
+},
+{
+"gid": "m1zkg5m1",
+"name": "Escape the Backrooms (Legacy)",
+"year": 2022,
+"abbr": "etblegacy"
+},
+{
+"gid": "v1pozgp6",
+"name": "Eternal Towers of Hell",
+"year": 2016,
+"abbr": "etoh"
+},
+{
+"gid": "k6qrq91g",
+"name": "Euro Truck Simulator 2",
+"year": 2013,
+"abbr": "ets2"
+},
+{
+"gid": "j1ne2w91",
+"name": "Evil Nun: The Horror's Creed",
+"year": 2018,
+"abbr": "evil_nun_1"
+},
+{
+"gid": "j1nrv9dp",
+"name": "Excitebike (NES)",
+"year": 1984,
+"abbr": "excitebike_nes"
+},
+{
+"gid": "9d3wmy1l",
+"name": "Exit Path",
+"year": 2010,
+"abbr": "ep1"
+},
+{
+"gid": "369p8k81",
+"name": "Exodus from the Earth",
+"year": 2008,
+"abbr": "efte"
+},
+{
+"gid": "j1lq9g76",
+"name": "Expedition Antarctica",
+"year": 2018,
+"abbr": "expedition_antarctica"
+},
+{
+"gid": "46w32k91",
+"name": "Extreme Power Pamplona",
+"year": 2007,
+"abbr": "extreme_power_pamplona"
+},
+{
+"gid": "m1zjnjx6",
+"name": "Eyes - The Horror Game",
+"year": 2013,
+"abbr": "eyes_the_horror_game"
+},
+{
+"gid": "qw6j726j",
+"name": "F-Zero",
+"year": 1990,
+"abbr": "fzsnes"
+},
+{
+"gid": "m1mengpd",
+"name": "F-Zero 99",
+"year": 2023,
+"abbr": "FZero99"
+},
+{
+"gid": "j1nej4y1",
+"name": "F1 2020",
+"year": 2020,
+"abbr": "f1_2020"
+},
+{
+"gid": "9d35xw1l",
+"name": "Factorio",
+"year": 2020,
+"abbr": "factorio"
+},
+{
+"gid": "ldewr7ed",
+"name": "Factorio: Space Age",
+"year": 2024,
+"abbr": "Space_Age"
+},
+{
+"gid": "pdv9vzr1",
+"name": "Fall Guys",
+"year": 2020,
+"abbr": "Fall_Guys"
+},
+{
+"gid": "v1pxv868",
+"name": "Fallout",
+"year": 1997,
+"abbr": "fallout"
+},
+{
+"gid": "o6gny512",
+"name": "Fallout 3",
+"year": 2008,
+"abbr": "fallout_3"
+},
+{
+"gid": "268k3o6p",
+"name": "Fallout 4",
+"year": 2015,
+"abbr": "fallout_4"
+},
+{
+"gid": "76r3vq68",
+"name": "Fallout: New Vegas",
+"year": 2010,
+"abbr": "fallout_nv"
+},
+{
+"gid": "v1pl9j46",
+"name": "FALLSTRUKTUR",
+"year": 2025,
+"abbr": "FALLSTRUKTUR"
+},
+{
+"gid": "yd4okqp1",
+"name": "Far Cry 5",
+"year": 2018,
+"abbr": "fc5"
+},
+{
+"gid": "9d3w7vw1",
+"name": "fast as duck",
+"year": 2023,
+"abbr": "fast_as_duck"
+},
+{
+"gid": "3dxkyog1",
+"name": "Fears to Fathom - Home Alone",
+"year": 2021,
+"abbr": "fears_to_fathom_home_alone"
+},
+{
+"gid": "yd4kgok6",
+"name": "FIFA 22",
+"year": 2021,
+"abbr": "fifa_22"
+},
+{
+"gid": "3698293d",
+"name": "Filtered Seed Glitchless",
+"year": 2021,
+"abbr": "fsg"
+},
+{
+"gid": "ldeyrj13",
+"name": "Final Fantasy",
+"year": 1987,
+"abbr": "ff1"
+},
+{
+"gid": "nd2n2qd0",
+"name": "Final Fantasy II",
+"year": 1988,
+"abbr": "ff2"
+},
+{
+"gid": "kdke0qdm",
+"name": "Final Fantasy III",
+"year": 1990,
+"abbr": "ff3"
+},
+{
+"gid": "k6qrrm1g",
+"name": "Final Fantasy IV",
+"year": 1991,
+"abbr": "ff4"
+},
+{
+"gid": "ldemon13",
+"name": "Final Fantasy IX",
+"year": 2000,
+"abbr": "ff9"
+},
+{
+"gid": "26825y6p",
+"name": "Final Fantasy Mystic Quest",
+"year": 1992,
+"abbr": "ffmq"
+},
+{
+"gid": "m1z5e010",
+"name": "Final Fantasy VI",
+"year": 1994,
+"abbr": "ff6"
+},
+{
+"gid": "kdkrvl6m",
+"name": "Final Fantasy VII",
+"year": 1997,
+"abbr": "ff7"
+},
+{
+"gid": "m1mxl7p6",
+"name": "Final Fantasy VII Remake",
+"year": 2020,
+"abbr": "ff7r"
+},
+{
+"gid": "76r98468",
+"name": "Final Fantasy VIII",
+"year": 1999,
+"abbr": "ff8"
+},
+{
+"gid": "w6j395dj",
+"name": "Final Fantasy X",
+"year": 2001,
+"abbr": "ffx"
+},
+{
+"gid": "268vgkdp",
+"name": "Final Fantasy X-2",
+"year": 2003,
+"abbr": "ffx_2"
+},
+{
+"gid": "ldep0513",
+"name": "Final Fantasy XIV: Dawntrail",
+"year": 2013,
+"abbr": "ffxiv"
+},
+{
+"gid": "46wy77dr",
+"name": "Final Fantasy XV",
+"year": 2016,
+"abbr": "ffxv"
+},
+{
+"gid": "j1n802x1",
+"name": "Final Fantasy XVI",
+"year": 2023,
+"abbr": "ff16"
+},
+{
+"gid": "m1zk7231",
+"name": "Find the Markers",
+"year": 2021,
+"abbr": "ftm"
+},
+{
+"gid": "j1lljn71",
+"name": "Fireboy & Watergirl: Elements",
+"year": 2019,
+"abbr": "faw5"
+},
+{
+"gid": "9dor97dp",
+"name": "Fireboy and Watergirl 1 - The Forest Temple",
+"year": 2009,
+"abbr": "faw1"
+},
+{
+"gid": "m1zv8260",
+"name": "Fireboy and Watergirl 2 - The Light Temple",
+"year": 2010,
+"abbr": "faw2"
+},
+{
+"gid": "kdkzovgd",
+"name": "Fishy",
+"year": 2019,
+"abbr": "fishy1"
+},
+{
+"gid": "w6jn7x1j",
+"name": "Five Nights at Freddy's",
+"year": 2014,
+"abbr": "fnaf1"
+},
+{
+"gid": "4d74qgd7",
+"name": "Five Nights at Freddy's 2",
+"year": 2014,
+"abbr": "fnaf2"
+},
+{
+"gid": "46w3ovl1",
+"name": "Five Nights at Freddy's VR: Help Wanted",
+"year": 2019,
+"abbr": "fnafvr_helpwanted"
+},
+{
+"gid": "ldewzjjd",
+"name": "Five Nights at Freddy's: Help Wanted 2",
+"year": 2023,
+"abbr": "Five_Nights_at_Freddys_Help_Wanted_2"
+},
+{
+"gid": "m1me24jd",
+"name": "Five Nights at Freddy's: Into the Pit",
+"year": 2024,
+"abbr": "Five_Nights_at_Freddys_Into_the_Pit"
+},
+{
+"gid": "9do8vzo1",
+"name": "Five Nights at Freddy's: Ruin",
+"year": 2023,
+"abbr": "fnafruin"
+},
+{
+"gid": "j1n4no96",
+"name": "Five Nights at Freddy's: Secret of the Mimic",
+"year": 2025,
+"abbr": "sotm"
+},
+{
+"gid": "m1zelx10",
+"name": "FlatOut 2",
+"year": 2006,
+"abbr": "flatout_2"
+},
+{
+"gid": "4d7xyvz1",
+"name": "Flipping Is Hard",
+"year": 2026,
+"abbr": "Flipping_Is_Hard"
+},
+{
+"gid": "46woj31r",
+"name": "Flow Free",
+"year": 2012,
+"abbr": "flow_free"
+},
+{
+"gid": "9d3vl96l",
+"name": "FNaF World",
+"year": 2016,
+"abbr": "fnafworld"
+},
+{
+"gid": "w6jglq56",
+"name": "Fortnite: Save The World",
+"year": 2017,
+"abbr": "Fortnite_Save_The_World"
+},
+{
+"gid": "369po531",
+"name": "Forza Horizon 4",
+"year": 2018,
+"abbr": "fh4"
+},
+{
+"gid": "yd4kgww6",
+"name": "Forza Horizon 5",
+"year": 2021,
+"abbr": "fh5"
+},
+{
+"gid": "w6jl20xd",
+"name": "Fourth of July 2019",
+"year": 2019,
+"abbr": "gdfoj"
+},
+{
+"gid": "76rqzvd8",
+"name": "Fractal Space: Pocket Edition",
+"year": 2016,
+"abbr": "fractal_space_pe"
+},
+{
+"gid": "46w33ln1",
+"name": "Freddy Fazbear's Pizzeria Simulator",
+"year": 2017,
+"abbr": "ffps"
+},
+{
+"gid": "qw6jw41j",
+"name": "Freedom Planet",
+"year": 2014,
+"abbr": "fp"
+},
+{
+"gid": "m1znkx10",
+"name": "Friday the 13th",
+"year": 1989,
+"abbr": "friday13"
+},
+{
+"gid": "kdkzrx2d",
+"name": "FrostRunner",
+"year": 2019,
+"abbr": "frostrunner"
+},
+{
+"gid": "o1yw9rdq",
+"name": "Furi",
+"year": 2016,
+"abbr": "furi"
+},
+{
+"gid": "pd0wk4w1",
+"name": "Galaxite",
+"year": 2020,
+"abbr": "galaxite"
+},
+{
+"gid": "9d37wyw6",
+"name": "Gamble With Your Friends",
+"year": 2026,
+"abbr": "Gamble_With_Your_Friends"
+},
+{
+"gid": "2685e76p",
+"name": "Game Dev Tycoon",
+"year": 2012,
+"abbr": "gdt"
+},
+{
+"gid": "o6gk2qx1",
+"name": "gameboysix's Nonogram",
+"year": 2025,
+"abbr": "gameboysixs_Nonogram"
+},
+{
+"gid": "pdv4qrdw",
+"name": "Gang Beasts",
+"year": 2014,
+"abbr": "gangbeasts"
+},
+{
+"gid": "m1m284d2",
+"name": "Garfield Kart",
+"year": 2013,
+"abbr": "gk"
+},
+{
+"gid": "lde3rpj6",
+"name": "Garfield Kart: Furious Racing",
+"year": 2019,
+"abbr": "gkfr"
+},
+{
+"gid": "9d38x4g1",
+"name": "Garten of Banban",
+"year": 2023,
+"abbr": "garten_banban"
+},
+{
+"gid": "3dx24841",
+"name": "Genshin Impact",
+"year": 2020,
+"abbr": "gi"
+},
+{
+"gid": "m1mnj2jd",
+"name": "GeoGuessr",
+"year": 2013,
+"abbr": "geoguessr"
+},
+{
+"gid": "o6gxkxd2",
+"name": "Geometry Dash",
+"year": 2013,
+"abbr": "gmd"
+},
+{
+"gid": "y65y90de",
+"name": "Geometry Dash Meltdown",
+"year": 2015,
+"abbr": "geometry_dash_meltdown"
+},
+{
+"gid": "v1pooq46",
+"name": "Geometry Dash SubZero",
+"year": 2017,
+"abbr": "geometry_dash_subzero"
+},
+{
+"gid": "pdveg46w",
+"name": "Geometry Dash World",
+"year": 2016,
+"abbr": "geometry_dash_world"
+},
+{
+"gid": "76r3po46",
+"name": "get a drink at 3 am",
+"year": 2021,
+"abbr": "gada3"
+},
+{
+"gid": "3698zl2d",
+"name": "get a snack at 4 am",
+"year": 2020,
+"abbr": "gasa4"
+},
+{
+"gid": "j1n8x2e1",
+"name": "get a snack at 4 am: SNACKCORE",
+"year": 2022,
+"abbr": "gasa4sc"
+},
+{
+"gid": "j1n4r0y6",
+"name": "Get to Work.",
+"year": 2024,
+"abbr": "Get_to_Work"
+},
+{
+"gid": "v1pxpr46",
+"name": "Getaway Shootout ",
+"year": 2018,
+"abbr": "getaway_shootout"
+},
+{
+"gid": "pd0wx9w1",
+"name": "Getting Over It",
+"year": 2017,
+"abbr": "goiwbf"
+},
+{
+"gid": "pdvzo8r6",
+"name": "Ghostrunner",
+"year": 2020,
+"abbr": "ghostrunner"
+},
+{
+"gid": "9do8oqo1",
+"name": "Ghostrunner: Kill Run Mode",
+"year": 2021,
+"abbr": "ghostrunnerkrm"
+},
+{
+"gid": "ldewmwjd",
+"name": "Gimkit: Don’t Look Down",
+"year": 2023,
+"abbr": "gimkit_dld"
+},
+{
+"gid": "j1l7ojdg",
+"name": "Give Up, Robot",
+"year": 2010,
+"abbr": "gur1"
+},
+{
+"gid": "v1por0p6",
+"name": "Glitch Runner: Endless Parkour",
+"year": 2020,
+"abbr": "glitch_runner_endless_parkour"
+},
+{
+"gid": "8m1zzm10",
+"name": "God of War",
+"year": 2005,
+"abbr": "gow"
+},
+{
+"gid": "9dowk8o1",
+"name": "God of War (2018)",
+"year": 2018,
+"abbr": "gow2018"
+},
+{
+"gid": "8nd2o560",
+"name": "God of War II",
+"year": 2007,
+"abbr": "gow2"
+},
+{
+"gid": "n4d7w367",
+"name": "God of War III",
+"year": 2010,
+"abbr": "gow3"
+},
+{
+"gid": "76ry7l18",
+"name": "Goime 500",
+"year": 2011,
+"abbr": "twow"
+},
+{
+"gid": "3dx29951",
+"name": "Goldeneye 007",
+"year": 1997,
+"abbr": "goldeneye_007_n64"
+},
+{
+"gid": "nj1ne1p4",
+"name": "GoldenEye 007 (1964)",
+"year": 1997,
+"abbr": "ge60fps"
+},
+{
+"gid": "m1mn9gxd",
+"name": "GoldenEye 007 (XBOX & NSO)",
+"year": 2023,
+"abbr": "goldeneye_007_xbox_and_nso"
+},
+{
+"gid": "369wk8dl",
+"name": "Golf (NES)",
+"year": 1984,
+"abbr": "golf"
+},
+{
+"gid": "nd28953d",
+"name": "Golf Gang",
+"year": 2022,
+"abbr": "golf_gang"
+},
+{
+"gid": "v1p4e418",
+"name": "Golf It!",
+"year": 2017,
+"abbr": "golf_it"
+},
+{
+"gid": "46w7zqdr",
+"name": "Golf With Your Friends",
+"year": 2020,
+"abbr": "gwyf"
+},
+{
+"gid": "y654r7ed",
+"name": "Golfing Over It with Alva Majo",
+"year": 2018,
+"abbr": "goiwam"
+},
+{
+"gid": "pdvzwek6",
+"name": "GommeHD.net",
+"year": 2012,
+"abbr": "gommehdnet"
+},
+{
+"gid": "46wryl1r",
+"name": "Gone Home",
+"year": 2013,
+"abbr": "gonehome"
+},
+{
+"gid": "y65lq71e",
+"name": "Goof Troop",
+"year": 1993,
+"abbr": "goof_troop"
+},
+{
+"gid": "369pxvg1",
+"name": "Google Minesweeper",
+"year": 2018,
+"abbr": "gm"
+},
+{
+"gid": "4d79rrr1",
+"name": "Google Solitaire",
+"year": 2016,
+"abbr": "gs"
+},
+{
+"gid": "4d79mmr1",
+"name": "Google Whirlybird",
+"year": 2019,
+"abbr": "gw"
+},
+{
+"gid": "ldejjmj1",
+"name": "Gorilla Tag",
+"year": 2021,
+"abbr": "gorillatag"
+},
+{
+"gid": "pd0qpl31",
+"name": "Gran Turismo 7",
+"year": 2022,
+"abbr": "gt7"
+},
+{
+"gid": "4d7x0g31",
+"name": "Granblue Fantasy: Relink",
+"year": 2024,
+"abbr": "Granblue_Fantasy_Relink"
+},
+{
+"gid": "n4d7r172",
+"name": "Grand Theft Auto III",
+"year": 2001,
+"abbr": "gtaiii"
+},
+{
+"gid": "o1yj0pr1",
+"name": "Grand Theft Auto III: Remastered",
+"year": 2011,
+"abbr": "gtaiii_remastered"
+},
+{
+"gid": "nj1nee1p",
+"name": "Grand Theft Auto IV",
+"year": 2008,
+"abbr": "gtaiv"
+},
+{
+"gid": "j1nqoy1p",
+"name": "Grand Theft Auto Online",
+"year": 2013,
+"abbr": "gtao"
+},
+{
+"gid": "om1mx362",
+"name": "Grand Theft Auto V",
+"year": 2013,
+"abbr": "gtav"
+},
+{
+"gid": "yo1yv1q5",
+"name": "Grand Theft Auto: San Andreas",
+"year": 2004,
+"abbr": "gtasa"
+},
+{
+"gid": "w6j7exe6",
+"name": "Grand Theft Auto: San Andreas Remastered",
+"year": 2013,
+"abbr": "gtasa_remastered"
+},
+{
+"gid": "29d30dlp",
+"name": "Grand Theft Auto: Vice City",
+"year": 2002,
+"abbr": "gtavc"
+},
+{
+"gid": "y655lg06",
+"name": "Grand Theft Auto: Vice City Remastered",
+"year": 2012,
+"abbr": "gtavc_remastered"
+},
+{
+"gid": "w6jl725d",
+"name": "Granny",
+"year": 2017,
+"abbr": "granny"
+},
+{
+"gid": "9d3rpowd",
+"name": "Granny (PC)",
+"year": 2018,
+"abbr": "granny_pc"
+},
+{
+"gid": "3dxy4my6",
+"name": "Granny Chapter Two: Enhanced",
+"year": 2025,
+"abbr": "granny_2_enhanced"
+},
+{
+"gid": "o1yjxjr1",
+"name": "Granny Remake",
+"year": 2022,
+"abbr": "granny_remake"
+},
+{
+"gid": "kdkz4v2d",
+"name": "Granny: Chapter Two",
+"year": 2019,
+"abbr": "granny_2"
+},
+{
+"gid": "ldej3kn1",
+"name": "Granny: Chapter Two (PC)",
+"year": 2019,
+"abbr": "granny_2_pc"
+},
+{
+"gid": "w6jg0ex6",
+"name": "Granny: Legacy",
+"year": 2025,
+"abbr": "Granny_Legacy"
+},
+{
+"gid": "4d7n3og6",
+"name": "Grapple (STEAM)",
+"year": 2024,
+"abbr": "grapple_steam"
+},
+{
+"gid": "pd0wjp21",
+"name": "Grey-Box Testing",
+"year": 2020,
+"abbr": "gbt"
+},
+{
+"gid": "j1new4x1",
+"name": "Grid Runners",
+"year": 2018,
+"abbr": "grid_runners"
+},
+{
+"gid": "4d79ejn1",
+"name": "GRIS",
+"year": 2018,
+"abbr": "gris"
+},
+{
+"gid": "w6jllg2d",
+"name": "Growtopia",
+"year": 2013,
+"abbr": "growtopia"
+},
+{
+"gid": "j1n89ry1",
+"name": "GTFO",
+"year": 2019,
+"abbr": "GTFO"
+},
+{
+"gid": "w6jp0x6j",
+"name": "Guild Wars 2",
+"year": 2012,
+"abbr": "gw2"
+},
+{
+"gid": "4d79l431",
+"name": "Guild Wars 2 Dungeons",
+"year": 2012,
+"abbr": "gw2d"
+},
+{
+"gid": "kdkmmke1",
+"name": "Guilty Gear Strive",
+"year": 2021,
+"abbr": "guilty_gear_strive"
+},
+{
+"gid": "kdkz53qd",
+"name": "Gunfire Reborn",
+"year": 2020,
+"abbr": "gunfire_reborn"
+},
+{
+"gid": "j1llye1g",
+"name": "Gunstar Heroes",
+"year": 1993,
+"abbr": "gheroes"
+},
+{
+"gid": "k6qpo40d",
+"name": "Guts & Blackpowder",
+"year": 2021,
+"abbr": "GutsAndBlackpowder"
+},
+{
+"gid": "o1y9okr6",
+"name": "Hades",
+"year": 2018,
+"abbr": "hades"
+},
+{
+"gid": "3dxy5vv6",
+"name": "Hades 2",
+"year": 2024,
+"abbr": "hades2"
+},
+{
+"gid": "k6qp05zd",
+"name": "Half Sword : Playtest",
+"year": 2024,
+"abbr": "Playtest"
+},
+{
+"gid": "n268nk6p",
+"name": "Half-Life",
+"year": 1998,
+"abbr": "hl1"
+},
+{
+"gid": "ok6q991g",
+"name": "Half-Life 2",
+"year": 2004,
+"abbr": "hl2"
+},
+{
+"gid": "nd2wg3ed",
+"name": "Half-Life 2 with HL1 Movement",
+"year": 2015,
+"abbr": "hl2hl1"
+},
+{
+"gid": "9d3l39dl",
+"name": "Half-Life 2: Lost Coast",
+"year": 2005,
+"abbr": "hl2lc"
+},
+{
+"gid": "ok6q001g",
+"name": "Half-Life: Opposing Force",
+"year": 1999,
+"abbr": "op4"
+},
+{
+"gid": "k6qlmz1g",
+"name": "Halloween 2016: Magic Cat Academy",
+"year": 2016,
+"abbr": "gdhw2016"
+},
+{
+"gid": "lde3v3x6",
+"name": "Halloween 2020: Magic Cat Academy 2",
+"year": 2020,
+"abbr": "gdhw2020"
+},
+{
+"gid": "3dx28w41",
+"name": "Halo 2",
+"year": 2004,
+"abbr": "halo2"
+},
+{
+"gid": "o1y9olo6",
+"name": "Halo 3",
+"year": 2007,
+"abbr": "halo3"
+},
+{
+"gid": "3dx2mly1",
+"name": "Halo 4",
+"year": 2012,
+"abbr": "halo4"
+},
+{
+"gid": "o6gl4w9d",
+"name": "Halo: Reach",
+"year": 2010,
+"abbr": "haloreach"
+},
+{
+"gid": "3dxl5ydy",
+"name": "Hanabi",
+"year": 2010,
+"abbr": "hanabi"
+},
+{
+"gid": "9dow4om1",
+"name": "Hand Simulator",
+"year": 2017,
+"abbr": "hand_simulator"
+},
+{
+"gid": "kdkokl6m",
+"name": "Happy Wheels",
+"year": 2010,
+"abbr": "hwh"
+},
+{
+"gid": "kdkq4v2d",
+"name": "HASTE: Broken Worlds",
+"year": 2025,
+"abbr": "HASTE_Broken_Worlds"
+},
+{
+"gid": "o6gmx562",
+"name": "Hearts of Iron IV",
+"year": 2016,
+"abbr": "hoi4"
+},
+{
+"gid": "o1y30ko6",
+"name": "HELLDIVERS 2",
+"year": 2024,
+"abbr": "Helldivers2"
+},
+{
+"gid": "j1n4z0w6",
+"name": "HELLMET",
+"year": 2023,
+"abbr": "HELLMET"
+},
+{
+"gid": "yd4jl5de",
+"name": "Hello Neighbor",
+"year": 2016,
+"abbr": "hn1"
+},
+{
+"gid": "kdkm2mg1",
+"name": "Hello Neighbor 2",
+"year": 2022,
+"abbr": "hn2"
+},
+{
+"gid": "pd0wj421",
+"name": "Helltaker",
+"year": 2020,
+"abbr": "helltaker"
+},
+{
+"gid": "4d722r67",
+"name": "Henry Stickmin: Breaking the Bank",
+"year": 2008,
+"abbr": "btb"
+},
+{
+"gid": "o1yx446q",
+"name": "Henry Stickmin: Escaping the Prison",
+"year": 2010,
+"abbr": "etp"
+},
+{
+"gid": "j1n2k91p",
+"name": "Henry Stickmin: Fleeing The Complex",
+"year": 2015,
+"abbr": "ftc"
+},
+{
+"gid": "9d3000dl",
+"name": "Henry Stickmin: Stealing the Diamond",
+"year": 2011,
+"abbr": "std"
+},
+{
+"gid": "k6qqom6g",
+"name": "Heroes of the Storm",
+"year": 2015,
+"abbr": "heroes_of_the_storm"
+},
+{
+"gid": "m1zkolm1",
+"name": "herr anwalt lawyers legacy",
+"year": 2022,
+"abbr": "herr_anwalt_lawyers_legacy"
+},
+{
+"gid": "nd2erm5d",
+"name": "Hill Climb Racing 2",
+"year": 2016,
+"abbr": "hcr2"
+},
+{
+"gid": "ldegvn13",
+"name": "Hitman (2016)",
+"year": 2016,
+"abbr": "hitman_2016"
+},
+{
+"gid": "4d7nxqn6",
+"name": "Hitman WoA: Elusive Targets",
+"year": 2018,
+"abbr": "hitman_woa_ets"
+},
+{
+"gid": "n4d78z67",
+"name": "Hitman: Absolution",
+"year": 2012,
+"abbr": "hitmanabsolution"
+},
+{
+"gid": "8nd20r60",
+"name": "Hitman: Blood Money",
+"year": 2006,
+"abbr": "hitmanbloodmoney"
+},
+{
+"gid": "j1ne5891",
+"name": "Hitman: World of Assassination",
+"year": 2021,
+"abbr": "hitman_woa"
+},
+{
+"gid": "76rqmld8",
+"name": "Hollow Knight",
+"year": 2017,
+"abbr": "hollowknight"
+},
+{
+"gid": "y65r7g81",
+"name": "Hollow Knight: Silksong",
+"year": 2025,
+"abbr": "silksong"
+},
+{
+"gid": "j1lqm0e6",
+"name": "HoloCure",
+"year": 2022,
+"abbr": "holocure"
+},
+{
+"gid": "m1mp9312",
+"name": "Home Alone (NES)",
+"year": 1991,
+"abbr": "home_alone_nes"
+},
+{
+"gid": "46w2qn96",
+"name": "Honkai: Star Rail",
+"year": 2023,
+"abbr": "honkai_star_rail"
+},
+{
+"gid": "m1m99362",
+"name": "Horizon Zero Dawn",
+"year": 2017,
+"abbr": "hzd"
+},
+{
+"gid": "v1px7pm6",
+"name": "Horror Noodles",
+"year": 2022,
+"abbr": "horror_noodles"
+},
+{
+"gid": "268ezok6",
+"name": "Hot Lava",
+"year": 2018,
+"abbr": "hot_lava"
+},
+{
+"gid": "o6gn7o12",
+"name": "Hotline Miami",
+"year": 2012,
+"abbr": "hotline_miami"
+},
+{
+"gid": "m1m3yk62",
+"name": "Hotline Miami 2: Wrong Number",
+"year": 2015,
+"abbr": "hm2"
+},
+{
+"gid": "369e88dl",
+"name": "House of Caravan",
+"year": 2015,
+"abbr": "house_of_caravan"
+},
+{
+"gid": "pdvgj4vd",
+"name": "How to Fish",
+"year": 2026,
+"abbr": "HowtoFish"
+},
+{
+"gid": "9d385vg1",
+"name": "How To Rob A Gas Station",
+"year": 2022,
+"abbr": "htrags"
+},
+{
+"gid": "k6qgnmdg",
+"name": "Human Fall Flat",
+"year": 2016,
+"abbr": "hff"
+},
+{
+"gid": "y65x541e",
+"name": "Hungry Pumkin",
+"year": 2006,
+"abbr": "pumkin"
+},
+{
+"gid": "pdv7wkdw",
+"name": "Hyper Light Drifter",
+"year": 2016,
+"abbr": "hld"
+},
+{
+"gid": "268eg076",
+"name": "Hyrule Warriors: Age of Calamity",
+"year": 2020,
+"abbr": "hwaoc"
+},
+{
+"gid": "k6qp8jxd",
+"name": "I Am Your Beast",
+"year": 2024,
+"abbr": "iayb"
+},
+{
+"gid": "k6q4w0zd",
+"name": "I Expect You To Die",
+"year": 2017,
+"abbr": "i_expect_you_to_die"
+},
+{
+"gid": "76r39vq6",
+"name": "I Expect You to Die 2: The Spy and the Liar",
+"year": 2021,
+"abbr": "i_expect_you_to_die_2"
+},
+{
+"gid": "k6q9qz1g",
+"name": "I Wanna Be The Boshy",
+"year": 2010,
+"abbr": "iwbtboshy"
+},
+{
+"gid": "46wjq3dr",
+"name": "I Wanna Be The Guy",
+"year": 2007,
+"abbr": "iwbtg"
+},
+{
+"gid": "o1yrkr6q",
+"name": "Ico",
+"year": 2001,
+"abbr": "ico"
+},
+{
+"gid": "y65z5306",
+"name": "IGTAP: an Incremental Game That's Also a Platformer",
+"year": 2026,
+"abbr": "IGTAP"
+},
+{
+"gid": "v1px4n76",
+"name": "In Sink: A Co-Op Escape Prologue",
+"year": 2023,
+"abbr": "in_sink_prologue"
+},
+{
+"gid": "9d3wlvg1",
+"name": "Indigo Park: Chapter 1",
+"year": 2024,
+"abbr": "Indigo_Park_Chapter_1"
+},
+{
+"gid": "w6jxv4dj",
+"name": "Initial D: Street Stage",
+"year": 2006,
+"abbr": "initial_d_street_stage"
+},
+{
+"gid": "3dxk35v1",
+"name": "Inscryption",
+"year": 2021,
+"abbr": "inscryption"
+},
+{
+"gid": "4d7l7n17",
+"name": "Inside",
+"year": 2016,
+"abbr": "inside"
+},
+{
+"gid": "j1n8rxe1",
+"name": "Inside the Backrooms",
+"year": 2022,
+"abbr": "inside_the_backrooms"
+},
+{
+"gid": "76r4l2q1",
+"name": "Interliminality",
+"year": 2023,
+"abbr": "Interliminality"
+},
+{
+"gid": "76r2evd8",
+"name": "IQ Ball",
+"year": 2010,
+"abbr": "iqball"
+},
+{
+"gid": "kdkm3re1",
+"name": "It Takes Two",
+"year": 2021,
+"abbr": "itt"
+},
+{
+"gid": "o1y35e46",
+"name": "item asylum",
+"year": 2020,
+"abbr": "item_asylum"
+},
+{
+"gid": "9dowook1",
+"name": "ItsJerryAndHarry Parkour",
+"year": 2012,
+"abbr": "jh"
+},
+{
+"gid": "kdkr3g6m",
+"name": "Jackal",
+"year": 1988,
+"abbr": "jackal"
+},
+{
+"gid": "nj1nww1p",
+"name": "Jak 3",
+"year": 2004,
+"abbr": "jak3"
+},
+{
+"gid": "xkdk4g1m",
+"name": "Jak and Daxter: The Precursor Legacy",
+"year": 2001,
+"abbr": "jak1"
+},
+{
+"gid": "ok6qlo1g",
+"name": "Jak II",
+"year": 2003,
+"abbr": "jak2"
+},
+{
+"gid": "xldeq5d3",
+"name": "Jak X: Combat Racing",
+"year": 2005,
+"abbr": "jakx"
+},
+{
+"gid": "pdv93v1w",
+"name": "Jaws",
+"year": 1987,
+"abbr": "jaws"
+},
+{
+"gid": "268wlo6p",
+"name": "Jazzpunk",
+"year": 2014,
+"abbr": "jazzpunk"
+},
+{
+"gid": "j1ne0jl1",
+"name": "Jelly Drift",
+"year": 2021,
+"abbr": "jelly_drift"
+},
+{
+"gid": "yd4kjzx6",
+"name": "JellyCar Worlds",
+"year": 2022,
+"abbr": "jcw"
+},
+{
+"gid": "jy6578de",
+"name": "Jet Set Radio",
+"year": 2000,
+"abbr": "jsr"
+},
+{
+"gid": "qw6jp56j",
+"name": "Jet Set Radio Future",
+"year": 2002,
+"abbr": "jsrf"
+},
+{
+"gid": "268ww856",
+"name": "Jetpack Joyride",
+"year": 2011,
+"abbr": "joyride"
+},
+{
+"gid": "m1mp8312",
+"name": "Job Simulator",
+"year": 2016,
+"abbr": "job_simulator"
+},
+{
+"gid": "yd4glxde",
+"name": "Johnny Upgrade",
+"year": 2012,
+"abbr": "johnny_upgrade"
+},
+{
+"gid": "ldempe13",
+"name": "Journey",
+"year": 2012,
+"abbr": "journey"
+},
+{
+"gid": "369p9o21",
+"name": "Jstris",
+"year": 2014,
+"abbr": "jstris"
+},
+{
+"gid": "m1zjoy26",
+"name": "Juice Galaxy",
+"year": 2020,
+"abbr": "juice_galaxy"
+},
+{
+"gid": "268ekxy6",
+"name": "Jump King",
+"year": 2019,
+"abbr": "jumpking"
+},
+{
+"gid": "k6q4ov9d",
+"name": "Jump Rope Challenge",
+"year": 2020,
+"abbr": "jrc"
+},
+{
+"gid": "369pwel1",
+"name": "Just One Boss",
+"year": 2018,
+"abbr": "just_one_boss"
+},
+{
+"gid": "9dowjl71",
+"name": "Just Shapes & Beats",
+"year": 2018,
+"abbr": "just_shapes_and_beats"
+},
+{
+"gid": "369v401l",
+"name": "Kao the Kangaroo Round 2",
+"year": 2003,
+"abbr": "kao2"
+},
+{
+"gid": "m1zjg926",
+"name": "Karlson (Itch.io)",
+"year": 2020,
+"abbr": "karlson_itch_io"
+},
+{
+"gid": "pdvzkx46",
+"name": "Karlson 2D",
+"year": 2019,
+"abbr": "karlson2d"
+},
+{
+"gid": "4d79e0l1",
+"name": "Katamari Damacy Reroll",
+"year": 2018,
+"abbr": "katamarireroll"
+},
+{
+"gid": "lde3nex6",
+"name": "Katana ZERO",
+"year": 2019,
+"abbr": "katana_zero"
+},
+{
+"gid": "j1lp2jdg",
+"name": "Keep Talking and Nobody Explodes",
+"year": 2015,
+"abbr": "ktane"
+},
+{
+"gid": "w6jnv51j",
+"name": "Kerbal Space Program",
+"year": 2011,
+"abbr": "ksp"
+},
+{
+"gid": "w6jln7dj",
+"name": "Kid Chameleon",
+"year": 1992,
+"abbr": "kidchameleon"
+},
+{
+"gid": "76rpml18",
+"name": "Kindergarten",
+"year": 2017,
+"abbr": "kindergarten"
+},
+{
+"gid": "946w836r",
+"name": "Kingdom Hearts",
+"year": 2002,
+"abbr": "kh1"
+},
+{
+"gid": "kdk5e2dm",
+"name": "Kingdom Hearts Birth by Sleep 0.2: A Fragmentary Passage",
+"year": 2017,
+"abbr": "khbbs02"
+},
+{
+"gid": "4pd0k21e",
+"name": "Kingdom Hearts Final Mix",
+"year": 2002,
+"abbr": "khfm"
+},
+{
+"gid": "x3690g6l",
+"name": "Kingdom Hearts II",
+"year": 2005,
+"abbr": "kh2"
+},
+{
+"gid": "4pdver6w",
+"name": "Kingdom Hearts II Final Mix",
+"year": 2007,
+"abbr": "kh2fm"
+},
+{
+"gid": "j1llyq71",
+"name": "Kingdom Hearts III",
+"year": 2019,
+"abbr": "kh3"
+},
+{
+"gid": "xlde55d3",
+"name": "Kingdom Hearts: Birth by Sleep Final Mix HD",
+"year": 2014,
+"abbr": "khbbsfmhd"
+},
+{
+"gid": "yd4krrg6",
+"name": "Kingdom Rush",
+"year": 2011,
+"abbr": "kr"
+},
+{
+"gid": "4pd00lde",
+"name": "Kirby & The Amazing Mirror",
+"year": 2004,
+"abbr": "katam"
+},
+{
+"gid": "946wq96r",
+"name": "Kirby 64: The Crystal Shards",
+"year": 2000,
+"abbr": "k64"
+},
+{
+"gid": "9j1lgzdg",
+"name": "Kirby Air Ride",
+"year": 2003,
+"abbr": "kar"
+},
+{
+"gid": "w6jgm776",
+"name": "Kirby Air Riders",
+"year": 2025,
+"abbr": "kars"
+},
+{
+"gid": "46w2wo76",
+"name": "Kirby and the Forgotten Land",
+"year": 2022,
+"abbr": "kfl"
+},
+{
+"gid": "l3dxny1y",
+"name": "Kirby Super Star",
+"year": 1996,
+"abbr": "kss"
+},
+{
+"gid": "8m1z8x10",
+"name": "Kirby Super Star Ultra",
+"year": 2008,
+"abbr": "kssu"
+},
+{
+"gid": "om1mkxd2",
+"name": "Kirby's Adventure",
+"year": 1993,
+"abbr": "ka"
+},
+{
+"gid": "m9do0odp",
+"name": "Kirby's Dream Land",
+"year": 1992,
+"abbr": "kdl"
+},
+{
+"gid": "8nd2v310",
+"name": "Kirby's Epic Yarn",
+"year": 2010,
+"abbr": "key"
+},
+{
+"gid": "n4d7yld7",
+"name": "Kirby's Return to Dream Land",
+"year": 2011,
+"abbr": "krtdl"
+},
+{
+"gid": "o6gn20n1",
+"name": "Kirby's Return to Dream Land Deluxe",
+"year": 2023,
+"abbr": "krtdldx"
+},
+{
+"gid": "576rzld8",
+"name": "Kirby: Nightmare in Dream Land",
+"year": 2002,
+"abbr": "knidl"
+},
+{
+"gid": "m1mgxp12",
+"name": "Kirby: Planet Robobot",
+"year": 2016,
+"abbr": "kpr"
+},
+{
+"gid": "j1ne4y91",
+"name": "Kirby: Star Allies",
+"year": 2018,
+"abbr": "ksa"
+},
+{
+"gid": "29d3z91l",
+"name": "Kirby: Triple Deluxe",
+"year": 2014,
+"abbr": "ktd"
+},
+{
+"gid": "4d7nx4g6",
+"name": "Krunker",
+"year": 2018,
+"abbr": "krunker"
+},
+{
+"gid": "yd4oex1e",
+"name": "Kung Fu",
+"year": 1985,
+"abbr": "kung_fu"
+},
+{
+"gid": "pd072l6e",
+"name": "Lawn Mower",
+"year": 2011,
+"abbr": "lawnmower"
+},
+{
+"gid": "268xm51p",
+"name": "League of Legends",
+"year": 2009,
+"abbr": "lol"
+},
+{
+"gid": "m1mjzx12",
+"name": "Learn to Fly",
+"year": 2009,
+"abbr": "ltf1"
+},
+{
+"gid": "pd0993de",
+"name": "Learn to Fly 3",
+"year": 2016,
+"abbr": "ltf3"
+},
+{
+"gid": "kdkm421m",
+"name": "Left 4 Dead",
+"year": 2008,
+"abbr": "l4d"
+},
+{
+"gid": "9dowpe1p",
+"name": "Left 4 Dead 2",
+"year": 2009,
+"abbr": "l4d2"
+},
+{
+"gid": "l3dxeg1y",
+"name": "LEGO Batman 2: DC Super Heroes",
+"year": 2012,
+"abbr": "lb2"
+},
+{
+"gid": "yd4wqg6e",
+"name": "LEGO Batman 3: Beyond Gotham",
+"year": 2014,
+"abbr": "lb3"
+},
+{
+"gid": "om1mpk12",
+"name": "LEGO Batman: The Videogame",
+"year": 2008,
+"abbr": "lb"
+},
+{
+"gid": "4d7x7317",
+"name": "LEGO City Undercover",
+"year": 2013,
+"abbr": "lcu"
+},
+{
+"gid": "kdkr5e6m",
+"name": "LEGO Indiana Jones 2: The Adventure Continues",
+"year": 2009,
+"abbr": "lij2"
+},
+{
+"gid": "pdv94r1w",
+"name": "LEGO Indiana Jones: The Original Adventures",
+"year": 2008,
+"abbr": "lij"
+},
+{
+"gid": "3dx3yydy",
+"name": "LEGO Pirates of the Caribbean: The Video Game",
+"year": 2011,
+"abbr": "potc"
+},
+{
+"gid": "3dx2251y",
+"name": "LEGO Star Wars II: The Original Trilogy",
+"year": 2006,
+"abbr": "lsw2"
+},
+{
+"gid": "lde0vn63",
+"name": "LEGO Star Wars III: The Clone Wars",
+"year": 2011,
+"abbr": "lsw3"
+},
+{
+"gid": "46w33l1r",
+"name": "LEGO Star Wars: The Complete Saga",
+"year": 2007,
+"abbr": "lswtcs"
+},
+{
+"gid": "o1yjnvr1",
+"name": "LEGO Star Wars: The Skywalker Saga",
+"year": 2022,
+"abbr": "tss"
+},
+{
+"gid": "yd4oog1e",
+"name": "LEGO Star Wars: The Video Game",
+"year": 2005,
+"abbr": "lsw"
+},
+{
+"gid": "369wyg0d",
+"name": "Lethal Company",
+"year": 2023,
+"abbr": "Lethal_Company"
+},
+{
+"gid": "o6gk3n81",
+"name": "Level Devil",
+"year": 2023,
+"abbr": "Level_Devil"
+},
+{
+"gid": "w6j9gjed",
+"name": "Librarian: Tidy Up the Arcane Library!",
+"year": 2026,
+"abbr": "Librarian_Tidy_Up_the_Arcane_Library"
+},
+{
+"gid": "ldeo0563",
+"name": "Lichess",
+"year": 2010,
+"abbr": "lichess"
+},
+{
+"gid": "4d7n7wl6",
+"name": "Lies of P",
+"year": 2023,
+"abbr": "lies_of_p"
+},
+{
+"gid": "nd2r5v60",
+"name": "Life Is Strange",
+"year": 2015,
+"abbr": "life_is_strange"
+},
+{
+"gid": "nd28r3ed",
+"name": "Lil Gator Game",
+"year": 2022,
+"abbr": "lgg"
+},
+{
+"gid": "o6glxod2",
+"name": "Limbo",
+"year": 2010,
+"abbr": "limbo"
+},
+{
+"gid": "j1lewj6g",
+"name": "Little Nightmares",
+"year": 2017,
+"abbr": "little_nightmares"
+},
+{
+"gid": "3dx2w9y1",
+"name": "Little Nightmares II",
+"year": 2021,
+"abbr": "little_nightmares_ii"
+},
+{
+"gid": "369pp31l",
+"name": "LittleBigPlanet",
+"year": 2008,
+"abbr": "lbp1"
+},
+{
+"gid": "4d79q9z1",
+"name": "Loomian Legacy: Veils of Shadow",
+"year": 2019,
+"abbr": "llvs"
+},
+{
+"gid": "268pwydp",
+"name": "LOVE",
+"year": 2014,
+"abbr": "love"
+},
+{
+"gid": "76r4xl18",
+"name": "Lovely Planet",
+"year": 2014,
+"abbr": "lopl"
+},
+{
+"gid": "3698y83d",
+"name": "Lufia II - Ancient Cave",
+"year": 1995,
+"abbr": "lufia2ac"
+},
+{
+"gid": "n268qy6p",
+"name": "Lufia II: Rise of the Sinistrals",
+"year": 1995,
+"abbr": "lufia2"
+},
+{
+"gid": "o1y9lk6q",
+"name": "Luigi's Mansion",
+"year": 2001,
+"abbr": "lm"
+},
+{
+"gid": "pd0w3qw1",
+"name": "Luigi's Mansion 3",
+"year": 2019,
+"abbr": "lm3"
+},
+{
+"gid": "kdkzxldm",
+"name": "Luigi's Mansion: Dark Moon",
+"year": 2013,
+"abbr": "lm2"
+},
+{
+"gid": "268we996",
+"name": "Lunch Lady",
+"year": 2021,
+"abbr": "lunch_lady"
+},
+{
+"gid": "k6qw2nz6",
+"name": "Lunistice",
+"year": 2022,
+"abbr": "lunistice"
+},
+{
+"gid": "pd0ejl1e",
+"name": "Mad Dex",
+"year": 2017,
+"abbr": "maddex"
+},
+{
+"gid": "yd4kyw6e",
+"name": "Madagascar",
+"year": 2005,
+"abbr": "madagascar"
+},
+{
+"gid": "v1po2p68",
+"name": "Mafia II",
+"year": 2010,
+"abbr": "mafia_2"
+},
+{
+"gid": "w6j7y76j",
+"name": "Mafia: The City of Lost Heaven",
+"year": 2002,
+"abbr": "mafia1"
+},
+{
+"gid": "lde25xd3",
+"name": "Maldita Castilla",
+"year": 2012,
+"abbr": "maldita"
+},
+{
+"gid": "o6gkg912",
+"name": "Marble Madness (NES)",
+"year": 1989,
+"abbr": "marblemadness"
+},
+{
+"gid": "yd4oxk1e",
+"name": "Mario & Luigi: Superstar Saga",
+"year": 2003,
+"abbr": "mlss"
+},
+{
+"gid": "76rg4l18",
+"name": "Mario & Sonic at the London 2012 Olympic Games (Wii)",
+"year": 2011,
+"abbr": "masatl2012wii"
+},
+{
+"gid": "o1y97wv6",
+"name": "Mario & Sonic at the Olympic Games Tokyo 2020",
+"year": 2019,
+"abbr": "mas2020"
+},
+{
+"gid": "o1y3qv6q",
+"name": "Mario & Sonic at the Olympic Winter Games",
+"year": 2009,
+"abbr": "masowg"
+},
+{
+"gid": "pd02yv1e",
+"name": "Mario & Sonic at the Olympic Winter Games (DS)",
+"year": 2010,
+"abbr": "Van10"
+},
+{
+"gid": "w6jjn56j",
+"name": "Mario Combat",
+"year": 2008,
+"abbr": "mario_combat"
+},
+{
+"gid": "y6555xe6",
+"name": "Mario Golf: Super Rush",
+"year": 2021,
+"abbr": "mgsr"
+},
+{
+"gid": "o1y594dq",
+"name": "Mario Golf: Toadstool Tour",
+"year": 2003,
+"abbr": "mgtt"
+},
+{
+"gid": "m9dok1pr",
+"name": "Mario Kart 64",
+"year": 1996,
+"abbr": "mk64"
+},
+{
+"gid": "pd0w2v1e",
+"name": "Mario Kart 7",
+"year": 2011,
+"abbr": "mk7"
+},
+{
+"gid": "kyd4pxde",
+"name": "Mario Kart 8",
+"year": 2014,
+"abbr": "mk8"
+},
+{
+"gid": "46w0n91r",
+"name": "Mario Kart 8 Deluxe",
+"year": 2017,
+"abbr": "mk8dx"
+},
+{
+"gid": "om1m5kd2",
+"name": "Mario Kart DS",
+"year": 2005,
+"abbr": "mkds"
+},
+{
+"gid": "l3dxogdy",
+"name": "Mario Kart Wii",
+"year": 2008,
+"abbr": "MKWii"
+},
+{
+"gid": "pd0nk7w1",
+"name": "Mario Kart World",
+"year": 2025,
+"abbr": "mkworld"
+},
+{
+"gid": "4pdvgodw",
+"name": "Mario Kart: Double Dash!!",
+"year": 2003,
+"abbr": "mkdd"
+},
+{
+"gid": "xv1pkmd8",
+"name": "Mario Kart: Super Circuit",
+"year": 2001,
+"abbr": "mksc"
+},
+{
+"gid": "76r3q468",
+"name": "Mario Party",
+"year": 1998,
+"abbr": "marioparty1"
+},
+{
+"gid": "j1n8ow1p",
+"name": "Mario Party 2",
+"year": 1999,
+"abbr": "marioparty2"
+},
+{
+"gid": "o6g329d2",
+"name": "Mario Party 3",
+"year": 2001,
+"abbr": "marioparty3"
+},
+{
+"gid": "o1y0wr6q",
+"name": "Mario Party 4",
+"year": 2002,
+"abbr": "marioparty4"
+},
+{
+"gid": "ldezond3",
+"name": "Mario Party 5",
+"year": 2003,
+"abbr": "marioparty5"
+},
+{
+"gid": "o1yz5kdq",
+"name": "Mario Party 6",
+"year": 2004,
+"abbr": "marioparty6"
+},
+{
+"gid": "yd4z7k6e",
+"name": "Mario Party 7",
+"year": 2005,
+"abbr": "marioparty7"
+},
+{
+"gid": "m1z3w2d0",
+"name": "Mario Party 8",
+"year": 2007,
+"abbr": "marioparty8"
+},
+{
+"gid": "j1lonz1g",
+"name": "Mario Party 9",
+"year": 2012,
+"abbr": "marioparty9"
+},
+{
+"gid": "ldez2xd3",
+"name": "Mario Party DS",
+"year": 2007,
+"abbr": "mariopartyds"
+},
+{
+"gid": "yd4kg7g6",
+"name": "Mario Party Superstars",
+"year": 2021,
+"abbr": "mariopartysuperstars"
+},
+{
+"gid": "m1zljmd0",
+"name": "Mario Sports Mix",
+"year": 2010,
+"abbr": "msm"
+},
+{
+"gid": "9do8p71p",
+"name": "Mario Super Sluggers",
+"year": 2008,
+"abbr": "mss"
+},
+{
+"gid": "v1pxy768",
+"name": "Mario Superstar Baseball",
+"year": 2005,
+"abbr": "mssb"
+},
+{
+"gid": "3dxkyy51",
+"name": "Marvel Contest of Champions",
+"year": 2014,
+"abbr": "mcoc"
+},
+{
+"gid": "j1lnrq46",
+"name": "Marvel Rivals",
+"year": 2024,
+"abbr": "marvelrivals"
+},
+{
+"gid": "pd0w2vw1",
+"name": "Marvel's Spider-Man",
+"year": 2018,
+"abbr": "sm2018"
+},
+{
+"gid": "lde3vxn6",
+"name": "Marvel's Spider-Man: Miles Morales",
+"year": 2020,
+"abbr": "smmm"
+},
+{
+"gid": "x369k8dl",
+"name": "Mass Effect",
+"year": 2007,
+"abbr": "me1"
+},
+{
+"gid": "m1zy3w36",
+"name": "Massive Multiplayer Platformer",
+"year": 2020,
+"abbr": "mmo_platformer"
+},
+{
+"gid": "k6qwn3z6",
+"name": "MCCI: To Get To The Other Side",
+"year": 2022,
+"abbr": "mcci_tgttos"
+},
+{
+"gid": "yd4o4yx1",
+"name": "McDonalds eCDP",
+"year": 2010,
+"abbr": "mcdonalds_ecdp"
+},
+{
+"gid": "o1y9xwk6",
+"name": "McPlayHD",
+"year": 2015,
+"abbr": "mcplayhd"
+},
+{
+"gid": "76r48418",
+"name": "Mega Man",
+"year": 1987,
+"abbr": "mm1"
+},
+{
+"gid": "kdkqm5gd",
+"name": "Mega Man 2",
+"year": 1988,
+"abbr": "Mega_Man_2"
+},
+{
+"gid": "nd25n3d0",
+"name": "Mega Man 3",
+"year": 1990,
+"abbr": "mm3"
+},
+{
+"gid": "yd4ozgk1",
+"name": "Mega Man Legacy Collection 1 + 2",
+"year": 2015,
+"abbr": "mmlc"
+},
+{
+"gid": "pdv95o1w",
+"name": "Mega Man X",
+"year": 1993,
+"abbr": "mmx"
+},
+{
+"gid": "76rxgk56",
+"name": "Mega Man X Legacy Collection",
+"year": 2018,
+"abbr": "mmxlc"
+},
+{
+"gid": "o1yjko1q",
+"name": "Mega Man X2",
+"year": 1994,
+"abbr": "mmx2"
+},
+{
+"gid": "3dxzjy1y",
+"name": "Mega Man X3",
+"year": 1995,
+"abbr": "mmx3"
+},
+{
+"gid": "w6jvv26j",
+"name": "Mega Man X4",
+"year": 1997,
+"abbr": "mmx4"
+},
+{
+"gid": "946wm3dr",
+"name": "Mega Man X6",
+"year": 2001,
+"abbr": "mmx6"
+},
+{
+"gid": "nd27qqq1",
+"name": "Metal Eden",
+"year": 2025,
+"abbr": "metal_eden"
+},
+{
+"gid": "3dxkp41y",
+"name": "Metal Gear Rising: Revengeance",
+"year": 2013,
+"abbr": "mgrr"
+},
+{
+"gid": "46wr4n1r",
+"name": "Metal Gear Solid",
+"year": 1998,
+"abbr": "mgs1"
+},
+{
+"gid": "y65ly41e",
+"name": "Metal Gear Solid 2: HD Edition",
+"year": 2011,
+"abbr": "mgs2hd"
+},
+{
+"gid": "kdkzoyld",
+"name": "Metal Gear Solid 2: Substance",
+"year": 2002,
+"abbr": "mgs2sub"
+},
+{
+"gid": "46wy4ndr",
+"name": "Metal Gear Solid 3 HD Edition",
+"year": 2011,
+"abbr": "mgs3hd"
+},
+{
+"gid": "k6qp929d",
+"name": "Metal Gear Solid 3: Snake Eater",
+"year": 2004,
+"abbr": "mgs3ps2"
+},
+{
+"gid": "m1zkzm10",
+"name": "Metal Gear Solid V: Ground Zeroes",
+"year": 2014,
+"abbr": "mgsvgz"
+},
+{
+"gid": "j1nylx6p",
+"name": "Metal Gear Solid V: The Phantom Pain",
+"year": 2015,
+"abbr": "mgsvtpp"
+},
+{
+"gid": "76r4wl18",
+"name": "Metal Slug",
+"year": 1996,
+"abbr": "mslug"
+},
+{
+"gid": "j1l7kedg",
+"name": "Metal Slug 3",
+"year": 2000,
+"abbr": "mslug3"
+},
+{
+"gid": "pd05m01e",
+"name": "Metal Slug X",
+"year": 1999,
+"abbr": "mslugx"
+},
+{
+"gid": "m1zyvm06",
+"name": "Metal Slug: Awakening",
+"year": 2024,
+"abbr": "Metal_Slug_Awakening"
+},
+{
+"gid": "9d38n4g1",
+"name": "Metel (Mobile)",
+"year": 2020,
+"abbr": "metel_mobile"
+},
+{
+"gid": "o1yjjpo1",
+"name": "Metel (PC)",
+"year": 2020,
+"abbr": "metel"
+},
+{
+"gid": "lde3m2x6",
+"name": "Meteor 60 Seconds!!",
+"year": 2018,
+"abbr": "m6s"
+},
+{
+"gid": "m1me9kd2",
+"name": "Metroid",
+"year": 1986,
+"abbr": "metroid_nes"
+},
+{
+"gid": "3dxkz0v1",
+"name": "Metroid Dread",
+"year": 2021,
+"abbr": "mdread"
+},
+{
+"gid": "4d70zr17",
+"name": "Metroid Fusion",
+"year": 2002,
+"abbr": "fusion"
+},
+{
+"gid": "yd40gg1e",
+"name": "Metroid Prime",
+"year": 2002,
+"abbr": "mp"
+},
+{
+"gid": "3dx305dy",
+"name": "Metroid Prime 2: Echoes",
+"year": 2004,
+"abbr": "mp2_echoes"
+},
+{
+"gid": "m1zjpm60",
+"name": "Metroid: Zero Mission",
+"year": 2004,
+"abbr": "mzm"
+},
+{
+"gid": "nd284pvd",
+"name": "Michael's Zombies",
+"year": 2021,
+"abbr": "michaels_zombies"
+},
+{
+"gid": "m1zmv060",
+"name": "Microsoft Minesweeper",
+"year": 2012,
+"abbr": "win8mine"
+},
+{
+"gid": "4d7x04g1",
+"name": "Midnight Fuel & Midnight Invasion",
+"year": 2023,
+"abbr": "rmfmi"
+},
+{
+"gid": "pd05xl1e",
+"name": "Mike Tyson's Punch-Out!!",
+"year": 1987,
+"abbr": "mtpo"
+},
+{
+"gid": "76rxe8q6",
+"name": "Milkman Karlson",
+"year": 2020,
+"abbr": "milkman_karlson"
+},
+{
+"gid": "k6q474zd",
+"name": "Minecraft (Classic)",
+"year": 2009,
+"abbr": "mcc"
+},
+{
+"gid": "k6q4520d",
+"name": "Minecraft 4K",
+"year": 2009,
+"abbr": "minecraft_4k"
+},
+{
+"gid": "o6glg48d",
+"name": "Minecraft Dungeons",
+"year": 2020,
+"abbr": "mcd"
+},
+{
+"gid": "3dx2oz41",
+"name": "Minecraft Education",
+"year": 2016,
+"abbr": "mcedu"
+},
+{
+"gid": "k6qwrgz6",
+"name": "Minecraft: April Fools'",
+"year": 2013,
+"abbr": "mc_af"
+},
+{
+"gid": "yd4ovvg1",
+"name": "Minecraft: Bedrock Edition",
+"year": 2011,
+"abbr": "mcbe"
+},
+{
+"gid": "9d38ko91",
+"name": "Minecraft: Bedrock Edition Perfect Seeds",
+"year": 2021,
+"abbr": "mcbeps"
+},
+{
+"gid": "m1mxk2k6",
+"name": "Minecraft: Datapack & Modded CE",
+"year": 2020,
+"abbr": "mc_dmce"
+},
+{
+"gid": "j1npme6p",
+"name": "Minecraft: Java Edition",
+"year": 2011,
+"abbr": "mc"
+},
+{
+"gid": "yd478gde",
+"name": "Minecraft: Legacy Console Edition",
+"year": 2012,
+"abbr": "mce"
+},
+{
+"gid": "v1pl0246",
+"name": "Minecraft: NetEase Edition",
+"year": 2017,
+"abbr": "Minecraft_NetEase_Edition"
+},
+{
+"gid": "46w382n1",
+"name": "Minecraft: Pocket Edition Lite",
+"year": 2012,
+"abbr": "mcpe_lite"
+},
+{
+"gid": "9dol8edp",
+"name": "Minecraft: Terra Swoop Force",
+"year": 2016,
+"abbr": "minecraft_terra_swoop_force"
+},
+{
+"gid": "v1pgyz18",
+"name": "Minesweeper",
+"year": 1990,
+"abbr": "minesweeper"
+},
+{
+"gid": "m1zrv3d0",
+"name": "MineZ",
+"year": 2012,
+"abbr": "minez"
+},
+{
+"gid": "369pyp21",
+"name": "Minit",
+"year": 2018,
+"abbr": "minit"
+},
+{
+"gid": "yo1yyr1q",
+"name": "Mirror's Edge",
+"year": 2008,
+"abbr": "me"
+},
+{
+"gid": "m1mgl312",
+"name": "Mirror's Edge Catalyst",
+"year": 2016,
+"abbr": "mec"
+},
+{
+"gid": "9doxo0od",
+"name": "MiSide",
+"year": 2024,
+"abbr": "MiSide"
+},
+{
+"gid": "76r49wl1",
+"name": "mo.co",
+"year": 2025,
+"abbr": "moco"
+},
+{
+"gid": "w6jl3ked",
+"name": "Modded Celeste",
+"year": 2018,
+"abbr": "modded_celeste"
+},
+{
+"gid": "4d7onz17",
+"name": "Momodora: Reverie Under the Moonlight",
+"year": 2016,
+"abbr": "momo4"
+},
+{
+"gid": "2689jwo1",
+"name": "Mongraal Edit Course",
+"year": 2018,
+"abbr": "mongraal"
+},
+{
+"gid": "pdvvo4dw",
+"name": "Monster Hunter Generations",
+"year": 2015,
+"abbr": "mhx"
+},
+{
+"gid": "pdvzyqv6",
+"name": "Monster Hunter Rise",
+"year": 2021,
+"abbr": "mhr"
+},
+{
+"gid": "pdv9m291",
+"name": "Monster Hunter Wilds",
+"year": 2025,
+"abbr": "mhwilds"
+},
+{
+"gid": "369p9x01",
+"name": "Monster Hunter World: Iceborne (Console)",
+"year": 2019,
+"abbr": "mhwib"
+},
+{
+"gid": "9d3rq4wd",
+"name": "Monster Hunter World: Iceborne (PC)",
+"year": 2020,
+"abbr": "mhwibpc"
+},
+{
+"gid": "m1m9qx62",
+"name": "Monster Hunter XX",
+"year": 2017,
+"abbr": "mhxx"
+},
+{
+"gid": "46w33wn1",
+"name": "Monster Hunter: World (Console)",
+"year": 2018,
+"abbr": "mhw"
+},
+{
+"gid": "268zok6p",
+"name": "Mortal Kombat (2011)",
+"year": 2011,
+"abbr": "mk9"
+},
+{
+"gid": "o1y9nxr6",
+"name": "Mortal Kombat 11",
+"year": 2019,
+"abbr": "mk11"
+},
+{
+"gid": "m1znjx10",
+"name": "Mortal Kombat Shaolin Monks",
+"year": 2005,
+"abbr": "mksm"
+},
+{
+"gid": "9do5ym1p",
+"name": "Moto X3M",
+"year": 2015,
+"abbr": "moto_x3m"
+},
+{
+"gid": "k6qwyym6",
+"name": "Moto X3M Spooky Land",
+"year": 2019,
+"abbr": "moto_x3m_spookyland"
+},
+{
+"gid": "9dow0lm1",
+"name": "Moto X3M Winter",
+"year": 2017,
+"abbr": "motox3mwinter"
+},
+{
+"gid": "pd0wj5w1",
+"name": "Moving Out",
+"year": 2020,
+"abbr": "moving_out"
+},
+{
+"gid": "pd0qq4v1",
+"name": "Muck",
+"year": 2021,
+"abbr": "muck"
+},
+{
+"gid": "268wpx96",
+"name": "MX Bikes",
+"year": 2019,
+"abbr": "mx_bikes"
+},
+{
+"gid": "m1zjoo06",
+"name": "MX vs. ATV Reflex",
+"year": 2009,
+"abbr": "mxvsatvreflex"
+},
+{
+"gid": "pd0wyk01",
+"name": "My Friend Pedro",
+"year": 2019,
+"abbr": "myfriendpedro"
+},
+{
+"gid": "o6gep812",
+"name": "My Summer Car",
+"year": 2016,
+"abbr": "my_summer_car"
+},
+{
+"gid": "46w38o31",
+"name": "Nameless Cat",
+"year": 2019,
+"abbr": "nc"
+},
+{
+"gid": "w6jzz21j",
+"name": "Naruto Shippuden: Ultimate Ninja Storm 4",
+"year": 2016,
+"abbr": "nsuns4"
+},
+{
+"gid": "4d708n17",
+"name": "Need for Speed: Carbon",
+"year": 2006,
+"abbr": "nfsc"
+},
+{
+"gid": "pd0w3r31",
+"name": "Need for Speed: Heat",
+"year": 2019,
+"abbr": "nfsheat"
+},
+{
+"gid": "lde0pn63",
+"name": "Need for Speed: Hot Pursuit (2010)",
+"year": 2010,
+"abbr": "nfshp2010"
+},
+{
+"gid": "m1zjzn26",
+"name": "Need for Speed: Hot Pursuit Remastered",
+"year": 2020,
+"abbr": "nfshpremastered"
+},
+{
+"gid": "268p89dp",
+"name": "Need for Speed: Most Wanted (2005)",
+"year": 2005,
+"abbr": "nfsmw05"
+},
+{
+"gid": "m1mzq4d2",
+"name": "Need for Speed: Most Wanted (2012)",
+"year": 2012,
+"abbr": "nfsmw12"
+},
+{
+"gid": "46wy8qdr",
+"name": "Need for Speed: Underground 2",
+"year": 2004,
+"abbr": "nfsu2"
+},
+{
+"gid": "k6qpjkzd",
+"name": "NEED MORE HEAT",
+"year": 2023,
+"abbr": "robloxnmh"
+},
+{
+"gid": "268ek976",
+"name": "Neon Beats",
+"year": 2019,
+"abbr": "neon_beats"
+},
+{
+"gid": "369p9231",
+"name": "Neon Boost",
+"year": 2019,
+"abbr": "neonboost"
+},
+{
+"gid": "pdv27nv6",
+"name": "Neon White",
+"year": 2022,
+"abbr": "neon_white"
+},
+{
+"gid": "j1lqq076",
+"name": "NERTS! Online",
+"year": 2021,
+"abbr": "nerts"
+},
+{
+"gid": "9d3wgy1l",
+"name": "New Super Luigi U",
+"year": 2013,
+"abbr": "nslu"
+},
+{
+"gid": "3dxz7p1y",
+"name": "New Super Mario Bros.",
+"year": 2006,
+"abbr": "nsmbds"
+},
+{
+"gid": "pd0ngw1e",
+"name": "New Super Mario Bros. 2",
+"year": 2012,
+"abbr": "nsmb2"
+},
+{
+"gid": "o1y3l46q",
+"name": "New Super Mario Bros. U",
+"year": 2012,
+"abbr": "nsmbu"
+},
+{
+"gid": "76rxy346",
+"name": "New Super Mario Bros. U Deluxe",
+"year": 2019,
+"abbr": "nsmbudx"
+},
+{
+"gid": "9do8mm1p",
+"name": "New Super Mario Bros. Wii",
+"year": 2009,
+"abbr": "nsmbw"
+},
+{
+"gid": "o6gnxp91",
+"name": "New World",
+"year": 2021,
+"abbr": "new_world"
+},
+{
+"gid": "76rkwed8",
+"name": "NieR: Automata",
+"year": 2017,
+"abbr": "na"
+},
+{
+"gid": "o1yjyqk1",
+"name": "Nine Sols",
+"year": 2024,
+"abbr": "nine_sols"
+},
+{
+"gid": "lde39l63",
+"name": "Ninja Gaiden (NES)",
+"year": 1988,
+"abbr": "ngnes"
+},
+{
+"gid": "268e3y6p",
+"name": "Ninja Gaiden II: The Dark Sword of Chaos",
+"year": 1990,
+"abbr": "ng2nes"
+},
+{
+"gid": "k6q44mdg",
+"name": "Ninja Gaiden III: The Ancient Ship of Doom",
+"year": 1991,
+"abbr": "ng3nes"
+},
+{
+"gid": "w6j74qe6",
+"name": "Nintendo Switch Sports",
+"year": 2022,
+"abbr": "nss"
+},
+{
+"gid": "yd4ryvg1",
+"name": "Nintendo World Championships: NES Edition",
+"year": 2024,
+"abbr": "nwcnes"
+},
+{
+"gid": "lde3xx63",
+"name": "Nitronic Rush",
+"year": 2011,
+"abbr": "nrush"
+},
+{
+"gid": "yd4on3g1",
+"name": "Noita",
+"year": 2019,
+"abbr": "noita"
+},
+{
+"gid": "pdvwr96w",
+"name": "Notoriety ",
+"year": 2014,
+"abbr": "notoriety"
+},
+{
+"gid": "j1ln2ve6",
+"name": "NSMB - Mario vs Luigi Online",
+"year": 2022,
+"abbr": "mvlo"
+},
+{
+"gid": "pd0lq2de",
+"name": "Nuclear Throne",
+"year": 2015,
+"abbr": "nuclear_throne"
+},
+{
+"gid": "k6qp43md",
+"name": "Obby But You're on a Bike",
+"year": 2023,
+"abbr": "Obby_But_Youre_on_a_Bike"
+},
+{
+"gid": "268eqy6p",
+"name": "Octodad: Dadliest Catch",
+"year": 2014,
+"abbr": "odc"
+},
+{
+"gid": "kdkx7l6m",
+"name": "Octopath Traveler",
+"year": 2018,
+"abbr": "octopath"
+},
+{
+"gid": "v1pxkkz6",
+"name": "OCTOPATH TRAVELER II",
+"year": 2023,
+"abbr": "octopath2"
+},
+{
+"gid": "w6j7546j",
+"name": "Okami",
+"year": 2006,
+"abbr": "okami"
+},
+{
+"gid": "268zqo6p",
+"name": "Old School RuneScape",
+"year": 2013,
+"abbr": "osrs"
+},
+{
+"gid": "o6glwx8d",
+"name": "OMORI",
+"year": 2020,
+"abbr": "omori"
+},
+{
+"gid": "369pgml1",
+"name": "One Trick Mage",
+"year": 2018,
+"abbr": "one_trick_mage"
+},
+{
+"gid": "pd0qjl21",
+"name": "One-armed Cook",
+"year": 2022,
+"abbr": "oac"
+},
+{
+"gid": "o1y3q3v6",
+"name": "One-Armed Robber",
+"year": 2023,
+"abbr": "oar"
+},
+{
+"gid": "o1y7q41q",
+"name": "OneShot",
+"year": 2016,
+"abbr": "oneshot16"
+},
+{
+"gid": "w6jg0y56",
+"name": "Onikura",
+"year": 2024,
+"abbr": "Onikura"
+},
+{
+"gid": "pd0qonv1",
+"name": "Only Up!",
+"year": 2023,
+"abbr": "only_up"
+},
+{
+"gid": "k6qpm4md",
+"name": "OnlyUp Fortnite!",
+"year": 2023,
+"abbr": "onlyup_fortnite"
+},
+{
+"gid": "v1pk27d8",
+"name": "Ooh, Aah & You: Fetch-A-Fruit",
+"year": 2005,
+"abbr": "fetchafruit"
+},
+{
+"gid": "nd28x9qd",
+"name": "OpenGOAL: Jak 1",
+"year": 2022,
+"abbr": "jak1og"
+},
+{
+"gid": "y65rqj01",
+"name": "Operators",
+"year": 2024,
+"abbr": "Operators"
+},
+{
+"gid": "k6qpz2md",
+"name": "Opposite Day",
+"year": 2021,
+"abbr": "Opposite_Day"
+},
+{
+"gid": "9dor8odp",
+"name": "Ori and the Blind Forest",
+"year": 2015,
+"abbr": "ori"
+},
+{
+"gid": "v1pwgmd8",
+"name": "Ori and the Blind Forest Definitive Edition",
+"year": 2016,
+"abbr": "ori_de"
+},
+{
+"gid": "m1zjgy36",
+"name": "Ori and the Will of the Wisps",
+"year": 2020,
+"abbr": "ori_wotw"
+},
+{
+"gid": "kdkn7xdm",
+"name": "osu!",
+"year": 2007,
+"abbr": "osu"
+},
+{
+"gid": "nd2nr3d0",
+"name": "Out There Somewhere",
+"year": 2014,
+"abbr": "ots"
+},
+{
+"gid": "j1n5e91p",
+"name": "Outer Wilds",
+"year": 2019,
+"abbr": "outer_wilds"
+},
+{
+"gid": "76r43l18",
+"name": "Outlast",
+"year": 2013,
+"abbr": "outlast"
+},
+{
+"gid": "w6j0k2dj",
+"name": "Outlast 2",
+"year": 2017,
+"abbr": "outlast2"
+},
+{
+"gid": "o6gnz4n1",
+"name": "Outriders",
+"year": 2021,
+"abbr": "outriders"
+},
+{
+"gid": "46w3yxn1",
+"name": "Overcooked! 2",
+"year": 2018,
+"abbr": "overcooked_2"
+},
+{
+"gid": "kdkpol1m",
+"name": "Overwatch",
+"year": 2016,
+"abbr": "overwatch"
+},
+{
+"gid": "9do8nnk1",
+"name": "Overwatch (2026)",
+"year": 2022,
+"abbr": "overwatch2026"
+},
+{
+"gid": "m1zjml06",
+"name": "OvO",
+"year": 2018,
+"abbr": "ovo"
+},
+{
+"gid": "76rmo418",
+"name": "Pac-Man",
+"year": 1980,
+"abbr": "pacman"
+},
+{
+"gid": "yd4o9x1e",
+"name": "Pac-Man World 2",
+"year": 2002,
+"abbr": "pmw2"
+},
+{
+"gid": "kdkzkeld",
+"name": "Pacify",
+"year": 2019,
+"abbr": "pacify"
+},
+{
+"gid": "kdk5gldm",
+"name": "Paint the Town Red",
+"year": 2015,
+"abbr": "pttr"
+},
+{
+"gid": "k6qwwm6g",
+"name": "Pajama Sam: No Need to Hide When it's Dark Outside",
+"year": 1996,
+"abbr": "pjsam1"
+},
+{
+"gid": "9doxrged",
+"name": "Palia",
+"year": 2023,
+"abbr": "Palia"
+},
+{
+"gid": "9doxrwod",
+"name": "Palworld",
+"year": 2024,
+"abbr": "Palworld"
+},
+{
+"gid": "w6jl7o5d",
+"name": "Papa's Burgeria",
+"year": 2010,
+"abbr": "papas_burgeria"
+},
+{
+"gid": "k6q4wmxd",
+"name": "Papa's Freezeria",
+"year": 2011,
+"abbr": "papas_freezeria"
+},
+{
+"gid": "j1lkjz6g",
+"name": "Papa's Pizzeria",
+"year": 2007,
+"abbr": "papas_pizzeria"
+},
+{
+"gid": "pdvzq96w",
+"name": "Paper Mario",
+"year": 2000,
+"abbr": "pm64"
+},
+{
+"gid": "pd0wvl21",
+"name": "Paper Mario: The Origami King",
+"year": 2020,
+"abbr": "pmtok"
+},
+{
+"gid": "m1zjo360",
+"name": "Paper Mario: The Thousand-Year Door",
+"year": 2004,
+"abbr": "ttyd"
+},
+{
+"gid": "pd0wg921",
+"name": "Paper Minecraft",
+"year": 2014,
+"abbr": "paper_mc"
+},
+{
+"gid": "4d7rml17",
+"name": "Paper.io",
+"year": 2016,
+"abbr": "paperio1"
+},
+{
+"gid": "y654o37d",
+"name": "Paper.io 2",
+"year": 2018,
+"abbr": "paperio2"
+},
+{
+"gid": "46wjgqdr",
+"name": "Papers, Please",
+"year": 2013,
+"abbr": "papers_please"
+},
+{
+"gid": "4d75x367",
+"name": "PaRappa the Rapper 2",
+"year": 2001,
+"abbr": "parappa2"
+},
+{
+"gid": "j1lk5v6g",
+"name": "Path of Exile",
+"year": 2013,
+"abbr": "poe"
+},
+{
+"gid": "j1llm971",
+"name": "Payback 2",
+"year": 2012,
+"abbr": "payback2"
+},
+{
+"gid": "m1mm7x12",
+"name": "PAYDAY 2",
+"year": 2013,
+"abbr": "pd2"
+},
+{
+"gid": "3dxykv46",
+"name": "Payday 3",
+"year": 2023,
+"abbr": "pd3"
+},
+{
+"gid": "m1zqq010",
+"name": "PAYDAY: The Heist",
+"year": 2011,
+"abbr": "pdth"
+},
+{
+"gid": "kdkqn3qd",
+"name": "PEAK",
+"year": 2025,
+"abbr": "PEAK"
+},
+{
+"gid": "y65rz341",
+"name": "Peaks of Yore",
+"year": 2023,
+"abbr": "Peaks_of_Yore"
+},
+{
+"gid": "9doromdp",
+"name": "Peggle Deluxe",
+"year": 2007,
+"abbr": "peggle_deluxe"
+},
+{
+"gid": "o1yrjk6q",
+"name": "Peggle Extreme",
+"year": 2007,
+"abbr": "peggleex"
+},
+{
+"gid": "pd07z36e",
+"name": "Peggle Nights",
+"year": 2008,
+"abbr": "pegglen"
+},
+{
+"gid": "yo1ykodq",
+"name": "Penumbra: Black Plague",
+"year": 2008,
+"abbr": "pbp"
+},
+{
+"gid": "j1nekx1p",
+"name": "Pepsiman",
+"year": 1999,
+"abbr": "pepsiman"
+},
+{
+"gid": "xldej13p",
+"name": "Perfect Dark",
+"year": 2000,
+"abbr": "perfect_dark"
+},
+{
+"gid": "k6qwmx6g",
+"name": "Perfect Dark XBLA",
+"year": 2010,
+"abbr": "perfect_dark_xbla"
+},
+{
+"gid": "9domw36p",
+"name": "Persona 5",
+"year": 2016,
+"abbr": "p5"
+},
+{
+"gid": "nd288o5d",
+"name": "Phantom Abyss",
+"year": 2021,
+"abbr": "phantom_abyss"
+},
+{
+"gid": "m1zjpl36",
+"name": "Phasmophobia",
+"year": 2020,
+"abbr": "phasmophobia"
+},
+{
+"gid": "lde5y5d3",
+"name": "Piano Tiles 2",
+"year": 2015,
+"abbr": "pt2"
+},
+{
+"gid": "kdkrne6m",
+"name": "Pico's School",
+"year": 1999,
+"abbr": "picosschool"
+},
+{
+"gid": "m1zyjx60",
+"name": "Pikmin",
+"year": 2001,
+"abbr": "pikmin1"
+},
+{
+"gid": "pdv9zv1w",
+"name": "Pikmin 2",
+"year": 2004,
+"abbr": "pikmin2"
+},
+{
+"gid": "76rxq246",
+"name": "Pikmin 3 Deluxe",
+"year": 2020,
+"abbr": "pikmin3dx"
+},
+{
+"gid": "m1zk9901",
+"name": "Pikmin 4",
+"year": 2023,
+"abbr": "pikmin4"
+},
+{
+"gid": "pdvz55k6",
+"name": "Pikuniku",
+"year": 2019,
+"abbr": "pikuniku"
+},
+{
+"gid": "9d38z5e1",
+"name": "Pineapple on pizza",
+"year": 2023,
+"abbr": "pineapple_on_pizza"
+},
+{
+"gid": "v1pxg546",
+"name": "Pixel Speedrun",
+"year": 2021,
+"abbr": "pixel_speedrun"
+},
+{
+"gid": "o6gnpox1",
+"name": "Pizza Tower",
+"year": 2023,
+"abbr": "pizza_tower"
+},
+{
+"gid": "v1pyjp18",
+"name": "Plague Inc.",
+"year": 2012,
+"abbr": "plague_inc"
+},
+{
+"gid": "9d33xedl",
+"name": "Plague Inc: Evolved",
+"year": 2014,
+"abbr": "pie"
+},
+{
+"gid": "yd487k6e",
+"name": "Plants vs. Zombies",
+"year": 2009,
+"abbr": "pvz"
+},
+{
+"gid": "m1mx4036",
+"name": "Plants vs. Zombies: Battle for Neighborville",
+"year": 2019,
+"abbr": "pvz_bfn"
+},
+{
+"gid": "369p7531",
+"name": "Plants vs. Zombies: Garden Warfare",
+"year": 2014,
+"abbr": "pvz_gw"
+},
+{
+"gid": "9do00kdp",
+"name": "Plants vs. Zombies: Garden Warfare 2",
+"year": 2016,
+"abbr": "pvzgw2"
+},
+{
+"gid": "yd4kq3k6",
+"name": "PlateUp!",
+"year": 2022,
+"abbr": "plateup"
+},
+{
+"gid": "369pm421",
+"name": "POD: Planet of Death",
+"year": 1997,
+"abbr": "pod_planet_of_death"
+},
+{
+"gid": "j1ne5zy1",
+"name": "PogLoot",
+"year": 2021,
+"abbr": "mc_pogloot"
+},
+{
+"gid": "76r3rx56",
+"name": "Pogworld",
+"year": 2022,
+"abbr": "mc_pogworld"
+},
+{
+"gid": "k6qw2706",
+"name": "Pokémon Brilliant Diamond/Shining Pearl",
+"year": 2021,
+"abbr": "pkmnbdsp"
+},
+{
+"gid": "o1yjjv1q",
+"name": "Pokémon Emerald",
+"year": 2004,
+"abbr": "pkmnemerald"
+},
+{
+"gid": "w6j7726j",
+"name": "Pokémon FireRed/LeafGreen",
+"year": 2004,
+"abbr": "pkmnfrlg"
+},
+{
+"gid": "369883dl",
+"name": "Pokémon Gold/Silver",
+"year": 1999,
+"abbr": "pkmngoldsilver"
+},
+{
+"gid": "o6gnre51",
+"name": "Pokémon Legends: Arceus",
+"year": 2022,
+"abbr": "pkmnla"
+},
+{
+"gid": "j1llzoz1",
+"name": "Pokémon Let's Go Pikachu/Eevee",
+"year": 2018,
+"abbr": "pkmnletsgo"
+},
+{
+"gid": "k6qwpm6g",
+"name": "Pokémon Mystery Dungeon: Red/Blue Rescue Team",
+"year": 2005,
+"abbr": "pmdredblue"
+},
+{
+"gid": "nd288qd0",
+"name": "Pokémon Omega Ruby/Alpha Sapphire",
+"year": 2014,
+"abbr": "pkmnoras"
+},
+{
+"gid": "268e0o6p",
+"name": "Pokémon Puzzle League",
+"year": 2000,
+"abbr": "pokemon_puzzle_league"
+},
+{
+"gid": "9d3r3xed",
+"name": "Pokémon Quest",
+"year": 2018,
+"abbr": "pokemonquest"
+},
+{
+"gid": "46w22l6r",
+"name": "Pokémon Red/Blue",
+"year": 1996,
+"abbr": "pkmnredblue"
+},
+{
+"gid": "9d38801l",
+"name": "Pokémon Ruby/Sapphire",
+"year": 2002,
+"abbr": "pkmnrubysapphire"
+},
+{
+"gid": "j1lqx5j6",
+"name": "Pokémon Scarlet/Violet",
+"year": 2022,
+"abbr": "pkmnscarletviolet"
+},
+{
+"gid": "j1lqqj6g",
+"name": "Pokémon Snap",
+"year": 1999,
+"abbr": "pkmnsnap"
+},
+{
+"gid": "o6gnn812",
+"name": "Pokémon Stadium",
+"year": 1999,
+"abbr": "pkmnstadium"
+},
+{
+"gid": "4d79o2g1",
+"name": "Pokémon Sword/Shield",
+"year": 2019,
+"abbr": "pkmnswordshield"
+},
+{
+"gid": "pd0qq31e",
+"name": "Pokémon Trading Card Game",
+"year": 1998,
+"abbr": "pkmntcg"
+},
+{
+"gid": "v1pxlkm6",
+"name": "Pokémon UNITE",
+"year": 2021,
+"abbr": "pkmn_unite"
+},
+{
+"gid": "76r33v68",
+"name": "Pokémon Yellow",
+"year": 1998,
+"abbr": "pkmnyellow"
+},
+{
+"gid": "pd0qn31e",
+"name": "PokéPark Wii: Pikachu's Adventure",
+"year": 2009,
+"abbr": "pkmnparkpa"
+},
+{
+"gid": "w6j7ml76",
+"name": "PolyTrack",
+"year": 2022,
+"abbr": "polytrack"
+},
+{
+"gid": "w6j7vpx6",
+"name": "Poppy Playtime: Chapter 1",
+"year": 2021,
+"abbr": "ppt_c1"
+},
+{
+"gid": "4d7nqx36",
+"name": "Poppy Playtime: Chapter 2",
+"year": 2022,
+"abbr": "ppt_c2"
+},
+{
+"gid": "w6jge376",
+"name": "Poppy Playtime: Chapter 3",
+"year": 2024,
+"abbr": "ppt_c3"
+},
+{
+"gid": "v1pl8ep6",
+"name": "Poppy Playtime: Chapter 4",
+"year": 2025,
+"abbr": "ppt_c4"
+},
+{
+"gid": "w6j9lr5d",
+"name": "Poppy Playtime: Chapter 5",
+"year": 2026,
+"abbr": "ppt_c5"
+},
+{
+"gid": "4pd0n31e",
+"name": "Portal",
+"year": 2007,
+"abbr": "portal"
+},
+{
+"gid": "om1mw4d2",
+"name": "Portal 2",
+"year": 2011,
+"abbr": "portal_2"
+},
+{
+"gid": "lde3eme6",
+"name": "Portal 2 Speedrun Mod",
+"year": 2019,
+"abbr": "p2sm"
+},
+{
+"gid": "yd4km2k6",
+"name": "Portal Reloaded",
+"year": 2021,
+"abbr": "p2reloaded"
+},
+{
+"gid": "yd4r4x1e",
+"name": "Postal 2",
+"year": 2003,
+"abbr": "postal2"
+},
+{
+"gid": "m1mn344d",
+"name": "POSTAL: Brain Damaged",
+"year": 2022,
+"abbr": "postal_bd"
+},
+{
+"gid": "ldelvl63",
+"name": "Pou",
+"year": 2012,
+"abbr": "pou"
+},
+{
+"gid": "4d7x72l1",
+"name": "Pou 3D",
+"year": 2025,
+"abbr": "pou_3d"
+},
+{
+"gid": "9do887e1",
+"name": "PowerWash Simulator",
+"year": 2021,
+"abbr": "powerwash_simulator"
+},
+{
+"gid": "3dx9g5dy",
+"name": "Prey (2017)",
+"year": 2017,
+"abbr": "prey2017"
+},
+{
+"gid": "o1y3re46",
+"name": "Prince of Persia: The Lost Crown",
+"year": 2024,
+"abbr": "pop_tlc"
+},
+{
+"gid": "w6jp3e6j",
+"name": "Pringles",
+"year": 2009,
+"abbr": "pringles"
+},
+{
+"gid": "j1n48l6p",
+"name": "Project M",
+"year": 2011,
+"abbr": "project_m"
+},
+{
+"gid": "ldej8jn1",
+"name": "Pseudoregalia",
+"year": 2023,
+"abbr": "pseudoregalia"
+},
+{
+"gid": "j1ne8e1p",
+"name": "Psychonauts",
+"year": 2005,
+"abbr": "psychonauts"
+},
+{
+"gid": "9d37o96l",
+"name": "Punch-Out!!",
+"year": 2009,
+"abbr": "powii"
+},
+{
+"gid": "kdkevldm",
+"name": "Purble Place",
+"year": 2007,
+"abbr": "purble_place"
+},
+{
+"gid": "76r3xl68",
+"name": "Putt-Putt Saves the Zoo",
+"year": 1995,
+"abbr": "puttzoo"
+},
+{
+"gid": "pdvy2odw",
+"name": "Puyo Puyo Tetris",
+"year": 2014,
+"abbr": "puyo_puyo_tetris"
+},
+{
+"gid": "nd2e7qd0",
+"name": "Quake",
+"year": 1996,
+"abbr": "quake"
+},
+{
+"gid": "o1yjro21",
+"name": "Quake Enhanced",
+"year": 2021,
+"abbr": "quake_enhanced"
+},
+{
+"gid": "pdv9no1w",
+"name": "Quake III Arena",
+"year": 1999,
+"abbr": "quake_3_arena"
+},
+{
+"gid": "k6q49vod",
+"name": "Quickie World",
+"year": 2018,
+"abbr": "quickie_world"
+},
+{
+"gid": "j1neqpl1",
+"name": "Quickie World 2",
+"year": 2019,
+"abbr": "quickieworld2"
+},
+{
+"gid": "3dxkxk41",
+"name": "Quiplash",
+"year": 2015,
+"abbr": "quiplash"
+},
+{
+"gid": "w6j72l76",
+"name": "Quiplash 2 InterLASHional",
+"year": 2020,
+"abbr": "q2i"
+},
+{
+"gid": "j1n3mwdp",
+"name": "QWOP",
+"year": 2008,
+"abbr": "qwop"
+},
+{
+"gid": "w6jgkv46",
+"name": "R.E.P.O.",
+"year": 2025,
+"abbr": "REPO"
+},
+{
+"gid": "k6qj89dg",
+"name": "R4: Ridge Racer Type 4",
+"year": 1998,
+"abbr": "rrt4"
+},
+{
+"gid": "j1n4yqe6",
+"name": "Rabbit & Steel",
+"year": 2024,
+"abbr": "Rabbit__Steel"
+},
+{
+"gid": "pd0w2731",
+"name": "Raft",
+"year": 2018,
+"abbr": "raft"
+},
+{
+"gid": "j1nonldp",
+"name": "Rain World",
+"year": 2017,
+"abbr": "rain_world"
+},
+{
+"gid": "268wl9k6",
+"name": "Rain World: Downpour",
+"year": 2023,
+"abbr": "rain_world_downpour"
+},
+{
+"gid": "pdv2lmv6",
+"name": "Raldi's Crackhouse",
+"year": 2023,
+"abbr": "raldis_crackhouse"
+},
+{
+"gid": "9dokee1p",
+"name": "Ratatouille (Asobo)",
+"year": 2007,
+"abbr": "ratatouille_asobo"
+},
+{
+"gid": "y655j36e",
+"name": "Ratchet & Clank",
+"year": 2002,
+"abbr": "rac1"
+},
+{
+"gid": "9d3q0g1l",
+"name": "Ratchet & Clank (PS4)",
+"year": 2016,
+"abbr": "racps4"
+},
+{
+"gid": "w6j7046j",
+"name": "Ratchet & Clank: Going Commando",
+"year": 2003,
+"abbr": "rac2"
+},
+{
+"gid": "kdkm921m",
+"name": "Ratchet & Clank: Up Your Arsenal",
+"year": 2004,
+"abbr": "rac3"
+},
+{
+"gid": "k6qwo06g",
+"name": "Ratchet: Deadlocked",
+"year": 2005,
+"abbr": "rac4"
+},
+{
+"gid": "pdvz2k6w",
+"name": "Rayman",
+"year": 1995,
+"abbr": "rayman_1"
+},
+{
+"gid": "3dx2y51y",
+"name": "Rayman 3: Hoodlum Havoc",
+"year": 2003,
+"abbr": "r3"
+},
+{
+"gid": "m1zjk060",
+"name": "Rayman Legends",
+"year": 2013,
+"abbr": "rayman_legends"
+},
+{
+"gid": "v1pg5418",
+"name": "Rayman Origins",
+"year": 2011,
+"abbr": "rayman_origins"
+},
+{
+"gid": "9dowp2o1",
+"name": "RE7: Banned Footage DLC",
+"year": 2017,
+"abbr": "re7bfdlc"
+},
+{
+"gid": "nd2e323d",
+"name": "RE7: Not a Hero",
+"year": 2017,
+"abbr": "re7nah"
+},
+{
+"gid": "k6q4lv9d",
+"name": "RE:RUN",
+"year": 2020,
+"abbr": "rerun"
+},
+{
+"gid": "9d3w3r91",
+"name": "Ready or Not",
+"year": 2023,
+"abbr": "ready_or_not"
+},
+{
+"gid": "3dxk5941",
+"name": "Ready or Not - Early Access",
+"year": 2021,
+"abbr": "ready_or_not_early_access"
+},
+{
+"gid": "lde4el13",
+"name": "Realm of the Mad God",
+"year": 2011,
+"abbr": "rotmg"
+},
+{
+"gid": "v1poo046",
+"name": "Rec Room",
+"year": 2016,
+"abbr": "rec_room"
+},
+{
+"gid": "j1llwz1g",
+"name": "Red Ball",
+"year": 2009,
+"abbr": "redball1"
+},
+{
+"gid": "pd0wol1e",
+"name": "Red Ball 2",
+"year": 2009,
+"abbr": "redball2"
+},
+{
+"gid": "369pj21l",
+"name": "Red Ball 3",
+"year": 2011,
+"abbr": "redball3"
+},
+{
+"gid": "y65ej76e",
+"name": "Red Ball 4 (Mobile)",
+"year": 2014,
+"abbr": "redball4"
+},
+{
+"gid": "pdvz4v6w",
+"name": "Red Ball 4 Vol.1",
+"year": 2012,
+"abbr": "redball4v1"
+},
+{
+"gid": "9d3qj01l",
+"name": "Red Ball 4 Vol.2",
+"year": 2013,
+"abbr": "redball4v2"
+},
+{
+"gid": "o1y7kv1q",
+"name": "Red Ball 4 Vol.3",
+"year": 2013,
+"abbr": "redball4v3"
+},
+{
+"gid": "29d3ny1l",
+"name": "Red Dead Redemption",
+"year": 2010,
+"abbr": "rdr"
+},
+{
+"gid": "46w35xn1",
+"name": "Red Dead Redemption 2",
+"year": 2018,
+"abbr": "rdr2"
+},
+{
+"gid": "9dogpo6p",
+"name": "Red Plumber Adventure Obby!",
+"year": 2008,
+"abbr": "robloxrpao"
+},
+{
+"gid": "nd22xvd0",
+"name": "Refunct",
+"year": 2015,
+"abbr": "refunct"
+},
+{
+"gid": "369wpz3d",
+"name": "Remnant II",
+"year": 2023,
+"abbr": "Remnant_II"
+},
+{
+"gid": "m1zklz10",
+"name": "Resident Evil",
+"year": 1996,
+"abbr": "residentevil"
+},
+{
+"gid": "76r3le68",
+"name": "Resident Evil (Remake)",
+"year": 2002,
+"abbr": "remake_hd"
+},
+{
+"gid": "m1zjmz60",
+"name": "Resident Evil 2",
+"year": 1998,
+"abbr": "re2"
+},
+{
+"gid": "m1zjlkm6",
+"name": "Resident Evil 2 (2019)",
+"year": 2019,
+"abbr": "re2remake"
+},
+{
+"gid": "pdvzk5r6",
+"name": "Resident Evil 3 (2020)",
+"year": 2020,
+"abbr": "re3r"
+},
+{
+"gid": "j1lq8v6g",
+"name": "Resident Evil 3: Nemesis",
+"year": 1999,
+"abbr": "re3"
+},
+{
+"gid": "o1yjv5o1",
+"name": "Resident Evil 4 (2023)",
+"year": 2023,
+"abbr": "re4r"
+},
+{
+"gid": "o1y9yr6q",
+"name": "Resident Evil 4 (Console)",
+"year": 2005,
+"abbr": "re4console"
+},
+{
+"gid": "j1nem5x1",
+"name": "Resident Evil 4 (Steam)",
+"year": 2014,
+"abbr": "re4steam"
+},
+{
+"gid": "268wkj56",
+"name": "Resident Evil 5 (Console)",
+"year": 2009,
+"abbr": "re5console"
+},
+{
+"gid": "369po01l",
+"name": "Resident Evil 5 (Steam)",
+"year": 2009,
+"abbr": "re5steam"
+},
+{
+"gid": "pdv2p46w",
+"name": "Resident Evil 6",
+"year": 2012,
+"abbr": "re6"
+},
+{
+"gid": "v1prkz68",
+"name": "Resident Evil 7: Biohazard",
+"year": 2017,
+"abbr": "re7"
+},
+{
+"gid": "nd285w3d",
+"name": "Resident Evil HD Remaster (Console)",
+"year": 2014,
+"abbr": "resident_evil_hd_remaster_console"
+},
+{
+"gid": "m1zkl3x1",
+"name": "Resident Evil HD Remaster (Steam)",
+"year": 2015,
+"abbr": "resident_evil_hd_remaster_steam"
+},
+{
+"gid": "9dokwk31",
+"name": "Resident Evil Requiem",
+"year": 2026,
+"abbr": "RE9"
+},
+{
+"gid": "ldej39j1",
+"name": "Resident Evil Village",
+"year": 2021,
+"abbr": "re8"
+},
+{
+"gid": "nd285vd0",
+"name": "Resident Evil: Code: Veronica X",
+"year": 2000,
+"abbr": "cvx"
+},
+{
+"gid": "nd28yed0",
+"name": "Resident Evil: Outbreak",
+"year": 2003,
+"abbr": "reobf1"
+},
+{
+"gid": "y655e06e",
+"name": "Resident Evil: Revelations",
+"year": 2012,
+"abbr": "rerev"
+},
+{
+"gid": "m1zk2gm1",
+"name": "Retro Bowl",
+"year": 2020,
+"abbr": "retro_bowl"
+},
+{
+"gid": "y65or81e",
+"name": "Rhythm Heaven Fever",
+"year": 2011,
+"abbr": "rhythm_heaven_fever"
+},
+{
+"gid": "j1lml4dg",
+"name": "Riddle School",
+"year": 2006,
+"abbr": "rs1"
+},
+{
+"gid": "3694p81l",
+"name": "Riddle School 3",
+"year": 2008,
+"abbr": "rs3"
+},
+{
+"gid": "lde39q56",
+"name": "Rider",
+"year": 2017,
+"abbr": "rider"
+},
+{
+"gid": "v1powyp6",
+"name": "Ring Fit Adventure",
+"year": 2019,
+"abbr": "rfa"
+},
+{
+"gid": "k6q49mdg",
+"name": "Risk of Rain",
+"year": 2013,
+"abbr": "ror"
+},
+{
+"gid": "4d793jg1",
+"name": "Risk of Rain 2",
+"year": 2019,
+"abbr": "ror2"
+},
+{
+"gid": "ldepme13",
+"name": "Rivals of Aether",
+"year": 2017,
+"abbr": "rivalsofaether"
+},
+{
+"gid": "ldewejed",
+"name": "Rivals of Aether II",
+"year": 2024,
+"abbr": "Rivals_of_Aether_II"
+},
+{
+"gid": "268wwry6",
+"name": "Roboquest",
+"year": 2023,
+"abbr": "roboquest"
+},
+{
+"gid": "76rx9le6",
+"name": "Robot 64",
+"year": 2018,
+"abbr": "robot64"
+},
+{
+"gid": "4d7eyz67",
+"name": "Rocket League",
+"year": 2015,
+"abbr": "rocketleague"
+},
+{
+"gid": "o1yj5rk1",
+"name": "Rocket League Sideswipe",
+"year": 2021,
+"abbr": "rls"
+},
+{
+"gid": "9doxkvod",
+"name": "Rocket Racing",
+"year": 2023,
+"abbr": "Rocket_Racing"
+},
+{
+"gid": "v1plyq86",
+"name": "Rooftops & Alleys",
+"year": 2024,
+"abbr": "Rooftops_and_Alleys"
+},
+{
+"gid": "nd2erv5d",
+"name": "Rotate",
+"year": 2018,
+"abbr": "rotate"
+},
+{
+"gid": "k6qzlz6g",
+"name": "Run",
+"year": 2008,
+"abbr": "run1"
+},
+{
+"gid": "9dowj31p",
+"name": "Run 2",
+"year": 2011,
+"abbr": "run2"
+},
+{
+"gid": "2680l51p",
+"name": "Run 3",
+"year": 2014,
+"abbr": "run3"
+},
+{
+"gid": "j1n23e1p",
+"name": "RWBY: Grimm Eclipse",
+"year": 2016,
+"abbr": "rwby_ge"
+},
+{
+"gid": "o6gw9n12",
+"name": "Rygar (NES)",
+"year": 1987,
+"abbr": "rygar"
+},
+{
+"gid": "m1m32j62",
+"name": "S.T.A.L.K.E.R.: Shadow of Chernobyl",
+"year": 2007,
+"abbr": "shoc"
+},
+{
+"gid": "j1nevzx1",
+"name": "Sackboy: A Big Adventure",
+"year": 2020,
+"abbr": "saba"
+},
+{
+"gid": "pdv78vdw",
+"name": "Salt and Sanctuary",
+"year": 2016,
+"abbr": "salt_and_sanctuary"
+},
+{
+"gid": "46w3wol1",
+"name": "Satisfactory",
+"year": 2019,
+"abbr": "satisfactory"
+},
+{
+"gid": "46wrngl1",
+"name": "Schedule I",
+"year": 2025,
+"abbr": "Schedule_I"
+},
+{
+"gid": "nd2722q1",
+"name": "Schoolboy Runaway (Mobile)",
+"year": 2024,
+"abbr": "sbra"
+},
+{
+"gid": "9dox22kd",
+"name": "Schoolboy Runaway (PC)",
+"year": 2024,
+"abbr": "sbra_pc"
+},
+{
+"gid": "76r38468",
+"name": "Scooby-Doo! Night of 100 Frights",
+"year": 2002,
+"abbr": "n100f"
+},
+{
+"gid": "pd0w8xv1",
+"name": "Scott Pilgrim vs. The World: The Game - Complete Edition",
+"year": 2021,
+"abbr": "scott_pilgrim_vs_the_world_the_game_complete_edition"
+},
+{
+"gid": "nd22ved0",
+"name": "SCP Containment Breach",
+"year": 2012,
+"abbr": "scpcb"
+},
+{
+"gid": "w6jlg8ed",
+"name": "SCP Secret Laboratory",
+"year": 2017,
+"abbr": "scpsl"
+},
+{
+"gid": "m1mxo2j6",
+"name": "Sea of Thieves",
+"year": 2018,
+"abbr": "sea_of_thieves"
+},
+{
+"gid": "k6q4mwmd",
+"name": "Sega Rally Championship 1995",
+"year": 1995,
+"abbr": "sega_rally_championship_1995"
+},
+{
+"gid": "o1y9zk26",
+"name": "Sekiro: Shadows Die Twice",
+"year": 2019,
+"abbr": "sekiro"
+},
+{
+"gid": "kdkmvg21",
+"name": "SELF",
+"year": 2021,
+"abbr": "self"
+},
+{
+"gid": "vo6g4962",
+"name": "Serious Sam: The First Encounter",
+"year": 2001,
+"abbr": "sstfe"
+},
+{
+"gid": "pdv5gr6w",
+"name": "Sesame Street Fighter",
+"year": 2014,
+"abbr": "sesame_street_fighter"
+},
+{
+"gid": "v1plw986",
+"name": "Shadow Generations",
+"year": 2024,
+"abbr": "shadow_generations"
+},
+{
+"gid": "9j1l8v6g",
+"name": "Shadow of the Colossus",
+"year": 2005,
+"abbr": "sotc"
+},
+{
+"gid": "y6545p8d",
+"name": "Shadow of the Colossus (2018)",
+"year": 2018,
+"abbr": "sotc_2018"
+},
+{
+"gid": "y654em3d",
+"name": "Shady Knight Demos",
+"year": 2019,
+"abbr": "shady_knight_demos"
+},
+{
+"gid": "pd02m01e",
+"name": "Shantae and the Pirate's Curse",
+"year": 2014,
+"abbr": "satpc"
+},
+{
+"gid": "ldeqpld3",
+"name": "Shantae: Half-Genie Hero",
+"year": 2016,
+"abbr": "shantae_hgh"
+},
+{
+"gid": "o6gkx051",
+"name": "Sheepy: A Short Adventure",
+"year": 2024,
+"abbr": "sheepy_a_short_adventure"
+},
+{
+"gid": "pd0nn8l1",
+"name": "Shotgun Mario 64",
+"year": 2023,
+"abbr": "Shotgun_Mario_64"
+},
+{
+"gid": "kdkmwg1m",
+"name": "Shovel Knight",
+"year": 2014,
+"abbr": "shovelknight"
+},
+{
+"gid": "l3dxrgdy",
+"name": "Shrek 2",
+"year": 2004,
+"abbr": "shrek_2"
+},
+{
+"gid": "yd4kzy56",
+"name": "Sifu",
+"year": 2022,
+"abbr": "sifu"
+},
+{
+"gid": "xkdko26m",
+"name": "Silent Hill",
+"year": 1999,
+"abbr": "sh1"
+},
+{
+"gid": "9dox757d",
+"name": "Silent Hill 2 (2024 remake)",
+"year": 2024,
+"abbr": "sh2r"
+},
+{
+"gid": "qw6j841j",
+"name": "Silent Hill 2 (PC)",
+"year": 2001,
+"abbr": "sh2pc"
+},
+{
+"gid": "nj1nxxdp",
+"name": "Silent Hill 3 (PC)",
+"year": 2003,
+"abbr": "sh3pc"
+},
+{
+"gid": "76r3z246",
+"name": "Sker Ritual",
+"year": 2022,
+"abbr": "sker_ritual"
+},
+{
+"gid": "76rx8jq6",
+"name": "Skul: The Hero Slayer",
+"year": 2021,
+"abbr": "skul_the_hero_slayer"
+},
+{
+"gid": "w6jlx57d",
+"name": "Sky: Children of the Light",
+"year": 2019,
+"abbr": "thatskygame"
+},
+{
+"gid": "y65jv7de",
+"name": "Skylanders: Giants",
+"year": 2012,
+"abbr": "skylanders_giants"
+},
+{
+"gid": "9d3vjg6l",
+"name": "Skylanders: Spyro's Adventure (Wii/WiiU)",
+"year": 2011,
+"abbr": "skylanders_spyros_adventure"
+},
+{
+"gid": "j1l754dg",
+"name": "Skylanders: Trap Team",
+"year": 2014,
+"abbr": "skylanders_trap_team"
+},
+{
+"gid": "4d7xq3r1",
+"name": "Slash/Jump",
+"year": 2024,
+"abbr": "SlashJump"
+},
+{
+"gid": "j1llqye1",
+"name": "Slay the Spire",
+"year": 2017,
+"abbr": "slay_the_spire"
+},
+{
+"gid": "kdkvmqq1",
+"name": "Slay the Spire 2",
+"year": 2026,
+"abbr": "Slay_the_Spire_2"
+},
+{
+"gid": "76rlz568",
+"name": "Slender: The Arrival",
+"year": 2013,
+"abbr": "slender_the_arrival"
+},
+{
+"gid": "pd0w79v1",
+"name": "Slendrina: The Cellar",
+"year": 2014,
+"abbr": "slendrina_the_cellar"
+},
+{
+"gid": "o6glq08d",
+"name": "Slendytubbies",
+"year": 2012,
+"abbr": "slendytubbies"
+},
+{
+"gid": "9do79k6p",
+"name": "Slime Rancher",
+"year": 2017,
+"abbr": "slime_rancher"
+},
+{
+"gid": "y65ex46e",
+"name": "Slither.io",
+"year": 2016,
+"abbr": "slitherio"
+},
+{
+"gid": "yd4r0nw1",
+"name": "Slope",
+"year": 2014,
+"abbr": "Slope"
+},
+{
+"gid": "4d79zg17",
+"name": "Sly 2: Band of Thieves",
+"year": 2004,
+"abbr": "sly2"
+},
+{
+"gid": "9d3rkgdl",
+"name": "Sly 3: Honor Among Thieves",
+"year": 2005,
+"abbr": "sly3"
+},
+{
+"gid": "nd2egvd0",
+"name": "Sly Cooper and the Thievius Raccoonus",
+"year": 2002,
+"abbr": "sly1"
+},
+{
+"gid": "o1y994r6",
+"name": "SM64 Sapphire",
+"year": 2017,
+"abbr": "sm64sapphire"
+},
+{
+"gid": "268gw5dp",
+"name": "Smash Hit",
+"year": 2014,
+"abbr": "smashhit"
+},
+{
+"gid": "yd4vlpde",
+"name": "Smite",
+"year": 2014,
+"abbr": "smite"
+},
+{
+"gid": "j1ne0rw1",
+"name": "Smol Ame",
+"year": 2021,
+"abbr": "smol_ame"
+},
+{
+"gid": "2687m7dp",
+"name": "Snail Bob 1",
+"year": 2017,
+"abbr": "sb1"
+},
+{
+"gid": "xv1pz8d8",
+"name": "Sonic & All-Stars Racing Transformed",
+"year": 2012,
+"abbr": "asrt"
+},
+{
+"gid": "j1lmkjdg",
+"name": "Sonic & SEGA All-Stars Racing",
+"year": 2010,
+"abbr": "ssasr"
+},
+{
+"gid": "yo1yo26q",
+"name": "Sonic 1 (2013)",
+"year": 2013,
+"abbr": "s12013"
+},
+{
+"gid": "om1mz4d2",
+"name": "Sonic 2 (2013)",
+"year": 2013,
+"abbr": "s22013"
+},
+{
+"gid": "n4d74gd7",
+"name": "Sonic 3 & Knuckles",
+"year": 1994,
+"abbr": "s3k"
+},
+{
+"gid": "m1mx0ek6",
+"name": "Sonic 3: Angel Island Revisited",
+"year": 2019,
+"abbr": "s3air"
+},
+{
+"gid": "v1px8p46",
+"name": "Sonic Adventure",
+"year": 1998,
+"abbr": "sa1"
+},
+{
+"gid": "l3dx0vdy",
+"name": "Sonic Adventure 2",
+"year": 2001,
+"abbr": "sa2b"
+},
+{
+"gid": "xv1pg718",
+"name": "Sonic Adventure DX: Director's Cut",
+"year": 2003,
+"abbr": "sadx"
+},
+{
+"gid": "946w576r",
+"name": "Sonic CD (2011)",
+"year": 2011,
+"abbr": "scd11"
+},
+{
+"gid": "v1pxp046",
+"name": "Sonic Colors: Ultimate",
+"year": 2021,
+"abbr": "sonic_colors_ultimate"
+},
+{
+"gid": "m1zj20m6",
+"name": "Sonic Forces",
+"year": 2017,
+"abbr": "sonicforces"
+},
+{
+"gid": "k6qwoez6",
+"name": "Sonic Frontiers",
+"year": 2022,
+"abbr": "sonicfrontiers"
+},
+{
+"gid": "946wy7dr",
+"name": "Sonic Generations",
+"year": 2011,
+"abbr": "sonic_generations"
+},
+{
+"gid": "3dxy7np6",
+"name": "Sonic Generations (2024)",
+"year": 2024,
+"abbr": "Sonic_Generations_2024"
+},
+{
+"gid": "kyd4g5de",
+"name": "Sonic Heroes",
+"year": 2003,
+"abbr": "sonicheroes"
+},
+{
+"gid": "268yw5dp",
+"name": "Sonic Mania",
+"year": 2017,
+"abbr": "sonic_mania"
+},
+{
+"gid": "pd0q9g01",
+"name": "Sonic Origins",
+"year": 2022,
+"abbr": "sonic_origins"
+},
+{
+"gid": "4d7924z1",
+"name": "Sonic Project 06",
+"year": 2019,
+"abbr": "sonic_project_06"
+},
+{
+"gid": "4pd04v6e",
+"name": "Sonic R",
+"year": 1997,
+"abbr": "sonicr"
+},
+{
+"gid": "o1y3epk6",
+"name": "Sonic Racing: CrossWorlds",
+"year": 2025,
+"abbr": "srcw"
+},
+{
+"gid": "n268856p",
+"name": "Sonic Riders",
+"year": 2006,
+"abbr": "sonicriders"
+},
+{
+"gid": "v1pokp86",
+"name": "Sonic Riders Tournament Edition",
+"year": 2006,
+"abbr": "sonic_riders_tournament_edition"
+},
+{
+"gid": "76ryx418",
+"name": "Sonic Robo Blast 2",
+"year": 1998,
+"abbr": "srb2"
+},
+{
+"gid": "m1zk7ym1",
+"name": "Sonic Speed Simulator",
+"year": 2022,
+"abbr": "sonic_speed_simulator"
+},
+{
+"gid": "369wwg0d",
+"name": "Sonic Superstars",
+"year": 2023,
+"abbr": "Sonic_Superstars"
+},
+{
+"gid": "4pdv0o1w",
+"name": "Sonic the Hedgehog",
+"year": 1991,
+"abbr": "s1"
+},
+{
+"gid": "l3dx5v1y",
+"name": "Sonic the Hedgehog (2006)",
+"year": 2006,
+"abbr": "sonic06"
+},
+{
+"gid": "8nd2gv10",
+"name": "Sonic the Hedgehog 2",
+"year": 1992,
+"abbr": "s2"
+},
+{
+"gid": "576rge18",
+"name": "Sonic Unleashed",
+"year": 2008,
+"abbr": "sonicunleashed"
+},
+{
+"gid": "k6qw7vm6",
+"name": "Sons of the Forest",
+"year": 2023,
+"abbr": "sotf"
+},
+{
+"gid": "y654rped",
+"name": "Soul Knight",
+"year": 2017,
+"abbr": "soul_knight"
+},
+{
+"gid": "y65zg06e",
+"name": "South Park: The Stick of Truth",
+"year": 2014,
+"abbr": "sp_sot"
+},
+{
+"gid": "y6553z86",
+"name": "Spaceflight simulator ",
+"year": 2017,
+"abbr": "spaceflight_simulator"
+},
+{
+"gid": "y655oy46",
+"name": "Speed Jump: Rings 3 ",
+"year": 2019,
+"abbr": "rings3"
+},
+{
+"gid": "369yel1l",
+"name": "SpeedRunners",
+"year": 2013,
+"abbr": "sr"
+},
+{
+"gid": "2685ok6p",
+"name": "Spelunky",
+"year": 2013,
+"abbr": "spelunky"
+},
+{
+"gid": "369p0r31",
+"name": "Spelunky 2",
+"year": 2020,
+"abbr": "spelunky2"
+},
+{
+"gid": "yd4g8gde",
+"name": "Spider Solitaire",
+"year": 1998,
+"abbr": "spidersolitaire"
+},
+{
+"gid": "y654y0de",
+"name": "Spider-Man (2000)",
+"year": 2000,
+"abbr": "sm2000"
+},
+{
+"gid": "9do4e76p",
+"name": "Splatoon",
+"year": 2015,
+"abbr": "Splatoon1"
+},
+{
+"gid": "o6gmpx62",
+"name": "Splatoon 2",
+"year": 2017,
+"abbr": "Splatoon2"
+},
+{
+"gid": "9dow9gk1",
+"name": "Splatoon 2: Octo Expansion",
+"year": 2018,
+"abbr": "OctoExpansion"
+},
+{
+"gid": "kdkmg7e1",
+"name": "Splatoon 3",
+"year": 2022,
+"abbr": "Splatoon3"
+},
+{
+"gid": "k6qp2pmd",
+"name": "Splatoon 3: Side Order",
+"year": 2024,
+"abbr": "SideOrder"
+},
+{
+"gid": "369yyvl1",
+"name": "Splatoon Raiders",
+"year": 2026,
+"abbr": "Raiders"
+},
+{
+"gid": "y65rj741",
+"name": "Split Fiction",
+"year": 2025,
+"abbr": "splitfiction"
+},
+{
+"gid": "m1zg3360",
+"name": "Split/Second",
+"year": 2010,
+"abbr": "splitsecond"
+},
+{
+"gid": "9do8xn71",
+"name": "Splitgate",
+"year": 2019,
+"abbr": "splitgate"
+},
+{
+"gid": "m1mxx362",
+"name": "SpongeBob SquarePants: Battle for Bikini Bottom",
+"year": 2003,
+"abbr": "bfbb"
+},
+{
+"gid": "yd4ojjg1",
+"name": "SpongeBob SquarePants: Battle for Bikini Bottom – Rehydrated",
+"year": 2020,
+"abbr": "rehydrated"
+},
+{
+"gid": "k6qzkm6g",
+"name": "Spooky's Jump Scare Mansion",
+"year": 2015,
+"abbr": "sjsm"
+},
+{
+"gid": "w6jpve6j",
+"name": "Spooky's Jumpscare Mansion HD Renovation",
+"year": 2017,
+"abbr": "sjsmhd"
+},
+{
+"gid": "76r70q18",
+"name": "Spore",
+"year": 2008,
+"abbr": "spore"
+},
+{
+"gid": "9j1l9v1g",
+"name": "Spyro 2: Ripto's Rage!",
+"year": 1999,
+"abbr": "spyro2"
+},
+{
+"gid": "o1y9r9k6",
+"name": "Spyro Reignited Trilogy (Console & Time Trials)",
+"year": 2018,
+"abbr": "spyrortconsoletimetrials"
+},
+{
+"gid": "m1mx0y46",
+"name": "Spyro Reignited Trilogy (PC)",
+"year": 2019,
+"abbr": "spyrortpc"
+},
+{
+"gid": "576rje18",
+"name": "Spyro the Dragon",
+"year": 1998,
+"abbr": "spyro1"
+},
+{
+"gid": "x369701l",
+"name": "Spyro: Enter the Dragonfly",
+"year": 2002,
+"abbr": "spyroetd"
+},
+{
+"gid": "4pd02v1e",
+"name": "Spyro: Year of the Dragon",
+"year": 2000,
+"abbr": "spyro3"
+},
+{
+"gid": "k6qwy96g",
+"name": "SSX 3",
+"year": 2003,
+"abbr": "ssx3"
+},
+{
+"gid": "o6g38od2",
+"name": "SSX Tricky",
+"year": 2001,
+"abbr": "ssxtricky"
+},
+{
+"gid": "369prg1l",
+"name": "Star Fox 64",
+"year": 1997,
+"abbr": "sf64"
+},
+{
+"gid": "pd0wx8l1",
+"name": "Star Wars Battlefront II (2017)",
+"year": 2017,
+"abbr": "star_wars_battlefront_ii_2017"
+},
+{
+"gid": "m1mmex12",
+"name": "Star Wars Episode I: Racer",
+"year": 1999,
+"abbr": "swe1r"
+},
+{
+"gid": "v1pxe868",
+"name": "Star Wars Jedi Knight: Jedi Academy",
+"year": 2003,
+"abbr": "jka"
+},
+{
+"gid": "pdvvjrdw",
+"name": "Star Wars: Battlefront (2015)",
+"year": 2015,
+"abbr": "swb_2015"
+},
+{
+"gid": "j1neg91p",
+"name": "Star Wars: Battlefront II",
+"year": 2005,
+"abbr": "swbf2"
+},
+{
+"gid": "m1mg4x12",
+"name": "Star Wars: The Old Republic",
+"year": 2011,
+"abbr": "swtor"
+},
+{
+"gid": "9d3q7e1l",
+"name": "Stardew Valley",
+"year": 2016,
+"abbr": "stardew_valley"
+},
+{
+"gid": "j1lqvwe6",
+"name": "steal a bank to get some beans",
+"year": 2020,
+"abbr": "sbtgsb"
+},
+{
+"gid": "pdv2e7v6",
+"name": "STEEP STEPS",
+"year": 2022,
+"abbr": "steep_steps"
+},
+{
+"gid": "j1lq4ye6",
+"name": "Stick War: Legacy",
+"year": 2016,
+"abbr": "swl"
+},
+{
+"gid": "kdkmnve1",
+"name": "Strawberry Jam Collab",
+"year": 2023,
+"abbr": "sj_collab"
+},
+{
+"gid": "3dxkx0g1",
+"name": "Stray",
+"year": 2022,
+"abbr": "stray"
+},
+{
+"gid": "3698l7ld",
+"name": "Street Fighter 6",
+"year": 2023,
+"abbr": "sf6"
+},
+{
+"gid": "yd4nyk6e",
+"name": "Street Fighter V: Champion Edition",
+"year": 2016,
+"abbr": "sfv"
+},
+{
+"gid": "3dxy23v6",
+"name": "STREETS",
+"year": 2023,
+"abbr": "STREETS"
+},
+{
+"gid": "o6gk8o12",
+"name": "Streets of Rage",
+"year": 1991,
+"abbr": "sor1"
+},
+{
+"gid": "j1lnpv6g",
+"name": "Streets of Rage 2",
+"year": 1992,
+"abbr": "sor2"
+},
+{
+"gid": "76rxmxq6",
+"name": "Streets of Rage 4",
+"year": 2020,
+"abbr": "sor4"
+},
+{
+"gid": "y65v88de",
+"name": "Streets of Rogue",
+"year": 2017,
+"abbr": "streets_of_rogue"
+},
+{
+"gid": "4d79jz17",
+"name": "Strider (NES)",
+"year": 1989,
+"abbr": "stridernes"
+},
+{
+"gid": "46wry8q1",
+"name": "Stumble Guys",
+"year": 2020,
+"abbr": "stumbleguys"
+},
+{
+"gid": "9dom836p",
+"name": "Subnautica",
+"year": 2018,
+"abbr": "subnautica"
+},
+{
+"gid": "v1pple81",
+"name": "Subnautica 2",
+"year": 2026,
+"abbr": "Subnautica_2"
+},
+{
+"gid": "o1yrj9v6",
+"name": "Subway Surfers City",
+"year": 2026,
+"abbr": "subsurfcity"
+},
+{
+"gid": "9d3rrxyd",
+"name": "Super Bear Adventure",
+"year": 2017,
+"abbr": "sba"
+},
+{
+"gid": "369pmgg1",
+"name": "Super Bernie World",
+"year": 2020,
+"abbr": "super_bernie_world"
+},
+{
+"gid": "k6q4jxod",
+"name": "Super Blocky Ball",
+"year": 2014,
+"abbr": "rblxsbb"
+},
+{
+"gid": "76rxgye6",
+"name": "Super Bunny Man",
+"year": 2017,
+"abbr": "super_bunny_man"
+},
+{
+"gid": "o1y32k6q",
+"name": "Super C",
+"year": 1990,
+"abbr": "super_c"
+},
+{
+"gid": "4d70jn17",
+"name": "Super Castlevania IV",
+"year": 1991,
+"abbr": "scv4"
+},
+{
+"gid": "j1lvy7dg",
+"name": "Super Dangerous Dungeons",
+"year": 2015,
+"abbr": "sdd"
+},
+{
+"gid": "76r4vq18",
+"name": "Super Dodge Ball",
+"year": 1989,
+"abbr": "superdodgeball"
+},
+{
+"gid": "j1nnoe1p",
+"name": "Super Fun And Short Obby",
+"year": 2015,
+"abbr": "super_fun_and_short_obby"
+},
+{
+"gid": "o1y9v46q",
+"name": "Super Ghouls 'n Ghosts",
+"year": 1991,
+"abbr": "super_ghouls_n_ghosts"
+},
+{
+"gid": "m1zj4406",
+"name": "Super Mario 3D All-Stars",
+"year": 2020,
+"abbr": "sm3das"
+},
+{
+"gid": "y65r7e1e",
+"name": "Super Mario 3D Land",
+"year": 2011,
+"abbr": "sm3dl"
+},
+{
+"gid": "369png1l",
+"name": "Super Mario 3D World",
+"year": 2013,
+"abbr": "sm3dw"
+},
+{
+"gid": "pdvzywv6",
+"name": "Super Mario 3D World + Bowser's Fury",
+"year": 2021,
+"abbr": "sm3dw_bf"
+},
+{
+"gid": "kdkvl21m",
+"name": "Super Mario 63",
+"year": 2009,
+"abbr": "sm63"
+},
+{
+"gid": "o1y9wo6q",
+"name": "Super Mario 64",
+"year": 1996,
+"abbr": "sm64"
+},
+{
+"gid": "k6q4x0od",
+"name": "Super Mario 64 (PC)",
+"year": 2020,
+"abbr": "sm64pcport"
+},
+{
+"gid": "j1lqzpv6",
+"name": "Super Mario 64 Co-Op (PC)",
+"year": 2020,
+"abbr": "sm64coop"
+},
+{
+"gid": "9d3rnedl",
+"name": "Super Mario 64 DS",
+"year": 2004,
+"abbr": "sm64ds"
+},
+{
+"gid": "4d77gld7",
+"name": "Super Mario 64 Online",
+"year": 2017,
+"abbr": "sm64o"
+},
+{
+"gid": "9d3r20wd",
+"name": "Super Mario 64 Randomizer",
+"year": 2019,
+"abbr": "sm64rando"
+},
+{
+"gid": "76r30956",
+"name": "Super Mario 64: Odyssey Mario's Moveset Co-Op (PC)",
+"year": 2023,
+"abbr": "omm_rebirth"
+},
+{
+"gid": "o6gwjn12",
+"name": "Super Mario 64: The Green Stars",
+"year": 2013,
+"abbr": "sm64tgs"
+},
+{
+"gid": "y65z836e",
+"name": "Super Mario 74",
+"year": 2011,
+"abbr": "sm74"
+},
+{
+"gid": "v1ppk418",
+"name": "Super Mario Advance 2: Super Mario World",
+"year": 2001,
+"abbr": "sma2"
+},
+{
+"gid": "46w3jl1r",
+"name": "Super Mario All-Stars",
+"year": 1993,
+"abbr": "smas"
+},
+{
+"gid": "om1m3625",
+"name": "Super Mario Bros.",
+"year": 1985,
+"abbr": "smb1"
+},
+{
+"gid": "kyd4gde4",
+"name": "Super Mario Bros. 2",
+"year": 1988,
+"abbr": "smb2"
+},
+{
+"gid": "l3dx51yv",
+"name": "Super Mario Bros. 3",
+"year": 1988,
+"abbr": "smb3"
+},
+{
+"gid": "2689w5k1",
+"name": "Super Mario Bros. Wonder",
+"year": 2023,
+"abbr": "smbw"
+},
+{
+"gid": "xv1pzd8r",
+"name": "Super Mario Bros.: The Lost Levels",
+"year": 1986,
+"abbr": "smbtll"
+},
+{
+"gid": "pd0wg21e",
+"name": "Super Mario Galaxy",
+"year": 2007,
+"abbr": "smg1"
+},
+{
+"gid": "kdkzlgdm",
+"name": "Super Mario Galaxy 2",
+"year": 2010,
+"abbr": "smg2"
+},
+{
+"gid": "vo6g8128",
+"name": "Super Mario Kart",
+"year": 1992,
+"abbr": "smk"
+},
+{
+"gid": "m1mxoj62",
+"name": "Super Mario Land",
+"year": 1989,
+"abbr": "sml1"
+},
+{
+"gid": "3dxkk51y",
+"name": "Super Mario Land 2: 6 Golden Coins",
+"year": 1992,
+"abbr": "sml2"
+},
+{
+"gid": "pd0lowde",
+"name": "Super Mario Maker",
+"year": 2015,
+"abbr": "smm"
+},
+{
+"gid": "m1mx2qj6",
+"name": "Super Mario Maker 2",
+"year": 2019,
+"abbr": "smm2"
+},
+{
+"gid": "lde53nd3",
+"name": "Super Mario Maker for Nintendo 3DS",
+"year": 2016,
+"abbr": "smm3ds"
+},
+{
+"gid": "76r55vd8",
+"name": "Super Mario Odyssey",
+"year": 2017,
+"abbr": "smo"
+},
+{
+"gid": "kdkmo0x1",
+"name": "Super Mario Odyssey Online Multiplayer",
+"year": 2022,
+"abbr": "smoo"
+},
+{
+"gid": "369p5ml1",
+"name": "Super Mario Party",
+"year": 2018,
+"abbr": "supermarioparty"
+},
+{
+"gid": "j1lnm8z6",
+"name": "Super Mario Party Jamboree",
+"year": 2024,
+"abbr": "supermariopartyjamboree"
+},
+{
+"gid": "j1n8xy1p",
+"name": "Super Mario RPG: Legend of the Seven Stars",
+"year": 1996,
+"abbr": "smrpg"
+},
+{
+"gid": "y658876e",
+"name": "Super Mario Run",
+"year": 2016,
+"abbr": "smr"
+},
+{
+"gid": "j1np0w6p",
+"name": "Super Mario Star Road",
+"year": 2011,
+"abbr": "smsr"
+},
+{
+"gid": "v1pxjz68",
+"name": "Super Mario Sunshine",
+"year": 2002,
+"abbr": "sms"
+},
+{
+"gid": "pd0wq31e",
+"name": "Super Mario World",
+"year": 1990,
+"abbr": "smw"
+},
+{
+"gid": "o6gnxo12",
+"name": "Super Mario World 2: Yoshi's Island",
+"year": 1995,
+"abbr": "yi"
+},
+{
+"gid": "268n5y6p",
+"name": "Super Mario World Extra Categories",
+"year": 1990,
+"abbr": "smwext"
+},
+{
+"gid": "v1pxxz68",
+"name": "Super Meat Boy",
+"year": 2010,
+"abbr": "smb"
+},
+{
+"gid": "k6qp3emd",
+"name": "Super Meat Boy 3D",
+"year": 2026,
+"abbr": "SMB_3D"
+},
+{
+"gid": "m1zoemd0",
+"name": "Super Metroid",
+"year": 1994,
+"abbr": "supermetroid"
+},
+{
+"gid": "pd0wlq21",
+"name": "Super Metroid ROM Hacks",
+"year": 2004,
+"abbr": "supermetroidhacks"
+},
+{
+"gid": "m1zjnz60",
+"name": "Super Monkey Ball",
+"year": 2001,
+"abbr": "supermonkeyball"
+},
+{
+"gid": "nd2ervd0",
+"name": "Super Monkey Ball 2",
+"year": 2002,
+"abbr": "supermonkeyball2"
+},
+{
+"gid": "m1mn373d",
+"name": "Super Monkey Ball: Banana Mania",
+"year": 2021,
+"abbr": "smbbm"
+},
+{
+"gid": "nd2eqrd0",
+"name": "Super Paper Mario",
+"year": 2007,
+"abbr": "spm"
+},
+{
+"gid": "j1n8m5w1",
+"name": "Super Pickleball Adventure",
+"year": 2022,
+"abbr": "super_pickleball_adventure"
+},
+{
+"gid": "nd2wk3d0",
+"name": "Super Punch-Out!!",
+"year": 1994,
+"abbr": "spo"
+},
+{
+"gid": "j1lmgedg",
+"name": "Super Smash Bros.",
+"year": 1999,
+"abbr": "ssb64"
+},
+{
+"gid": "k6qwkz6g",
+"name": "Super Smash Bros. Brawl",
+"year": 2008,
+"abbr": "ssbb"
+},
+{
+"gid": "kdkqwgdm",
+"name": "Super Smash Bros. for 3DS",
+"year": 2014,
+"abbr": "ssb3ds"
+},
+{
+"gid": "yd4kqp6e",
+"name": "Super Smash Bros. for Wii U",
+"year": 2014,
+"abbr": "ssbwiiu"
+},
+{
+"gid": "j1np4l6p",
+"name": "Super Smash Bros. Melee",
+"year": 2001,
+"abbr": "ssbm"
+},
+{
+"gid": "kdkzrkxd",
+"name": "Super Smash Bros. Ultimate",
+"year": 2018,
+"abbr": "ssbu"
+},
+{
+"gid": "pdvvl4dw",
+"name": "Super Smash Flash 2",
+"year": 2009,
+"abbr": "ssf2"
+},
+{
+"gid": "w6jjqe6j",
+"name": "Super Smash TV",
+"year": 1992,
+"abbr": "super_smash_tv"
+},
+{
+"gid": "9dok331p",
+"name": "SUPERHOT",
+"year": 2016,
+"abbr": "superhot"
+},
+{
+"gid": "3dxeo51y",
+"name": "SUPERHOT VR",
+"year": 2016,
+"abbr": "shvr"
+},
+{
+"gid": "pd0w3vv1",
+"name": "Superliminal",
+"year": 2019,
+"abbr": "superliminal"
+},
+{
+"gid": "o6gk4xn1",
+"name": "Superstar Racers",
+"year": 2024,
+"abbr": "Superstar_Racers"
+},
+{
+"gid": "9d358y1l",
+"name": "SuperTux",
+"year": 2003,
+"abbr": "st"
+},
+{
+"gid": "9do803e1",
+"name": "Supra Mayro 64",
+"year": 2020,
+"abbr": "SupraMayro64FM"
+},
+{
+"gid": "j1lqqpe6",
+"name": "Supreme Duelist Stickman",
+"year": 2018,
+"abbr": "sds"
+},
+{
+"gid": "j1ljpzdg",
+"name": "Sven Co-op",
+"year": 1999,
+"abbr": "sven_coop"
+},
+{
+"gid": "4d7n9r36",
+"name": "Swammys AOT Fan Game",
+"year": 2021,
+"abbr": "swammys_aot_fan_game"
+},
+{
+"gid": "ldevkn13",
+"name": "Sword With Sauce",
+"year": 2017,
+"abbr": "sws"
+},
+{
+"gid": "9do7m76p",
+"name": "Swords and Sandals II: Emperor's Reign",
+"year": 2007,
+"abbr": "sas2_er"
+},
+{
+"gid": "369w5r8d",
+"name": "Sworn",
+"year": 2024,
+"abbr": "Sworn"
+},
+{
+"gid": "o1yn5kdq",
+"name": "Syobon Action",
+"year": 2007,
+"abbr": "syobonaction"
+},
+{
+"gid": "yd4o9l51",
+"name": "Tap Tap Speedrun",
+"year": 2020,
+"abbr": "tts"
+},
+{
+"gid": "o1ym8k1q",
+"name": "Tattletail",
+"year": 2016,
+"abbr": "tattletail"
+},
+{
+"gid": "v1ppq818",
+"name": "Team Fortress 2",
+"year": 2007,
+"abbr": "tf2"
+},
+{
+"gid": "o1y9vrr6",
+"name": "Teardown",
+"year": 2020,
+"abbr": "teardown"
+},
+{
+"gid": "lde3v563",
+"name": "Teenage Mutant Ninja Turtles",
+"year": 1989,
+"abbr": "tmnt1"
+},
+{
+"gid": "kdk9826m",
+"name": "Teenage Mutant Ninja Turtles - Arcade 1989",
+"year": 1989,
+"abbr": "tmnt1989arcade"
+},
+{
+"gid": "j1l9nz1g",
+"name": "Teenage Mutant Ninja Turtles IV: Turtles in Time",
+"year": 1991,
+"abbr": "teenage_mutant_ninja_turtles_iv_turtles_in_time"
+},
+{
+"gid": "9d38q3y1",
+"name": "Teenage Mutant Ninja Turtles: Shredder's Revenge",
+"year": 2022,
+"abbr": "shredders_revenge"
+},
+{
+"gid": "yd4v5gde",
+"name": "Teenage Mutant Ninja Turtles: The Hyperstone Heist",
+"year": 1992,
+"abbr": "teenage_mutant_ninja_turtles_the_hyperstone_heist"
+},
+{
+"gid": "3dxn5p1y",
+"name": "Tekken 7",
+"year": 2017,
+"abbr": "tekken7"
+},
+{
+"gid": "9do0qkdp",
+"name": "Temple Run",
+"year": 2011,
+"abbr": "temple_run"
+},
+{
+"gid": "m1mky3d2",
+"name": "Temple Run 2",
+"year": 2013,
+"abbr": "temple_run_2"
+},
+{
+"gid": "pd0oo3de",
+"name": "Tengen Tetris (NES)",
+"year": 1989,
+"abbr": "tengen_tetris"
+},
+{
+"gid": "kdk4e21m",
+"name": "Terraria",
+"year": 2011,
+"abbr": "terraria"
+},
+{
+"gid": "m1mnmykd",
+"name": "territorial.io",
+"year": 2021,
+"abbr": "territorialio"
+},
+{
+"gid": "k6q4xw9d",
+"name": "Tetr.io",
+"year": 2020,
+"abbr": "tetr_io"
+},
+{
+"gid": "pd0jev6e",
+"name": "Tetris (Game Boy)",
+"year": 1989,
+"abbr": "tetrisgb"
+},
+{
+"gid": "3dxzqv1y",
+"name": "Tetris (NES)",
+"year": 1989,
+"abbr": "tetrisnes"
+},
+{
+"gid": "j1ne3ql1",
+"name": "Tetris 99",
+"year": 2019,
+"abbr": "tetris99"
+},
+{
+"gid": "lde3ee63",
+"name": "Tetris Attack",
+"year": 1996,
+"abbr": "tetris_attack"
+},
+{
+"gid": "ldeok563",
+"name": "Tetris DX",
+"year": 1998,
+"abbr": "tetris_dx"
+},
+{
+"gid": "o1y9oov6",
+"name": "Tetris Effect: Connected",
+"year": 2018,
+"abbr": "tetriseffect"
+},
+{
+"gid": "j1nex4w1",
+"name": "Tetris The Grand Master 3: Terror-Instinct",
+"year": 2005,
+"abbr": "tgm3"
+},
+{
+"gid": "3dxky8v1",
+"name": "The Baby In Yellow",
+"year": 2020,
+"abbr": "the_baby_in_yellow"
+},
+{
+"gid": "j1lnopv6",
+"name": "THE BACKROOMS REDACTED",
+"year": 2022,
+"abbr": "TBR"
+},
+{
+"gid": "v1polv86",
+"name": "The Battle Cats",
+"year": 2014,
+"abbr": "the_battle_cats"
+},
+{
+"gid": "j1nvve6p",
+"name": "The Battle of Polytopia",
+"year": 2016,
+"abbr": "the_battle_of_polytopia"
+},
+{
+"gid": "lden7ed3",
+"name": "The Binding of Isaac: Afterbirth",
+"year": 2015,
+"abbr": "afterbirth"
+},
+{
+"gid": "w6j5e41j",
+"name": "The Binding of Isaac: Afterbirth+",
+"year": 2017,
+"abbr": "afterbirthplus"
+},
+{
+"gid": "3dx2k51y",
+"name": "The Binding of Isaac: Rebirth",
+"year": 2014,
+"abbr": "isaacrebirth"
+},
+{
+"gid": "3dxkj5p1",
+"name": "The Binding of Isaac: Repentance",
+"year": 2021,
+"abbr": "repentance"
+},
+{
+"gid": "m1mn304d",
+"name": "The Disney Afternoon Collection",
+"year": 2017,
+"abbr": "the_disney_afternoon_collection"
+},
+{
+"gid": "268m2ydp",
+"name": "The Division",
+"year": 2016,
+"abbr": "the_division"
+},
+{
+"gid": "o1y9zw26",
+"name": "The Division 2",
+"year": 2019,
+"abbr": "the_division_2"
+},
+{
+"gid": "946wxq1r",
+"name": "The Elder Scrolls IV: Oblivion",
+"year": 2006,
+"abbr": "oblivion"
+},
+{
+"gid": "n4d7jzd7",
+"name": "The Elder Scrolls V: Skyrim",
+"year": 2011,
+"abbr": "skyrim"
+},
+{
+"gid": "pd089w1e",
+"name": "The End Is Nigh",
+"year": 2017,
+"abbr": "tein"
+},
+{
+"gid": "m1m3rk62",
+"name": "The Escapists",
+"year": 2015,
+"abbr": "the_escapists"
+},
+{
+"gid": "y65px8de",
+"name": "The Escapists 2",
+"year": 2017,
+"abbr": "the_escapists_2"
+},
+{
+"gid": "2689pl71",
+"name": "The Exit 8",
+"year": 2023,
+"abbr": "The_Exit_8"
+},
+{
+"gid": "v1po0468",
+"name": "The Fancy Pants Adventures: World 1",
+"year": 2006,
+"abbr": "fpa1"
+},
+{
+"gid": "9doxj27d",
+"name": "The Finals",
+"year": 2023,
+"abbr": "The_Finals"
+},
+{
+"gid": "w6j5341j",
+"name": "The Forest",
+"year": 2014,
+"abbr": "the_forest"
+},
+{
+"gid": "nd28q8ed",
+"name": "The Glitched Attraction",
+"year": 2022,
+"abbr": "fnaf_tga"
+},
+{
+"gid": "9d3rn00d",
+"name": "The Henry Stickmin Collection",
+"year": 2020,
+"abbr": "thsc"
+},
+{
+"gid": "9d3r49dl",
+"name": "The Hobbit",
+"year": 2003,
+"abbr": "hobbit"
+},
+{
+"gid": "j1nqml1p",
+"name": "The Impossible Quiz",
+"year": 2007,
+"abbr": "the_impossible_quiz"
+},
+{
+"gid": "v1px2p68",
+"name": "The Last of Us",
+"year": 2013,
+"abbr": "tlou"
+},
+{
+"gid": "yd4oj3k1",
+"name": "The Last of Us Part II",
+"year": 2020,
+"abbr": "the_last_of_us_part_ii"
+},
+{
+"gid": "ldenm5d3",
+"name": "The Last of Us: Left Behind",
+"year": 2014,
+"abbr": "tloulb"
+},
+{
+"gid": "369p0g1l",
+"name": "The Legend of Zelda",
+"year": 1986,
+"abbr": "the_legend_of_zelda"
+},
+{
+"gid": "46w9291r",
+"name": "The Legend of Zelda: A Link Between Worlds",
+"year": 2013,
+"abbr": "albw"
+},
+{
+"gid": "9d3rr0dl",
+"name": "The Legend of Zelda: A Link to the Past",
+"year": 1991,
+"abbr": "alttp"
+},
+{
+"gid": "76rqjqd8",
+"name": "The Legend of Zelda: Breath of the Wild",
+"year": 2017,
+"abbr": "botw"
+},
+{
+"gid": "v1pl77z6",
+"name": "The Legend of Zelda: Echoes of Wisdom",
+"year": 2024,
+"abbr": "eow"
+},
+{
+"gid": "3697821l",
+"name": "The Legend of Zelda: Link's Awakening",
+"year": 1993,
+"abbr": "la"
+},
+{
+"gid": "yd4o32w1",
+"name": "The Legend of Zelda: Link's Awakening (2019)",
+"year": 2019,
+"abbr": "las"
+},
+{
+"gid": "pdvj2vdw",
+"name": "The Legend of Zelda: Link's Awakening DX",
+"year": 1998,
+"abbr": "ladx"
+},
+{
+"gid": "268zey6p",
+"name": "The Legend of Zelda: Majora's Mask",
+"year": 2000,
+"abbr": "mm"
+},
+{
+"gid": "j1l9qz1g",
+"name": "The Legend of Zelda: Ocarina of Time",
+"year": 1998,
+"abbr": "oot"
+},
+{
+"gid": "268vqkdp",
+"name": "The Legend of Zelda: Ocarina of Time 3D",
+"year": 2011,
+"abbr": "oot3d"
+},
+{
+"gid": "3dx07vdy",
+"name": "The Legend of Zelda: Skyward Sword",
+"year": 2011,
+"abbr": "lozss"
+},
+{
+"gid": "m1zkyy01",
+"name": "The Legend of Zelda: Skyward Sword HD",
+"year": 2021,
+"abbr": "sshd"
+},
+{
+"gid": "v1px9276",
+"name": "The Legend of Zelda: Tears of the Kingdom",
+"year": 2023,
+"abbr": "totk"
+},
+{
+"gid": "w6jvl56j",
+"name": "The Legend of Zelda: The Minish Cap",
+"year": 2004,
+"abbr": "tmc"
+},
+{
+"gid": "4d709l17",
+"name": "The Legend of Zelda: The Wind Waker",
+"year": 2002,
+"abbr": "tww"
+},
+{
+"gid": "76rljl68",
+"name": "The Legend of Zelda: The Wind Waker HD",
+"year": 2013,
+"abbr": "twwhd"
+},
+{
+"gid": "j1n97wdp",
+"name": "The Legend of Zelda: Twilight Princess",
+"year": 2006,
+"abbr": "tp"
+},
+{
+"gid": "m1zx70d0",
+"name": "The Legend of Zelda: Twilight Princess HD",
+"year": 2016,
+"abbr": "tphd"
+},
+{
+"gid": "o1y3v46q",
+"name": "The Lion King (SNES)",
+"year": 1994,
+"abbr": "lionkingsnes"
+},
+{
+"gid": "y65457de",
+"name": "The Little Mermaid",
+"year": 1991,
+"abbr": "littlemermaidnes"
+},
+{
+"gid": "4pdv79dw",
+"name": "The Magical Quest Starring Mickey Mouse",
+"year": 1992,
+"abbr": "magicalquest"
+},
+{
+"gid": "lde3k956",
+"name": "The Messenger",
+"year": 2018,
+"abbr": "the_messenger"
+},
+{
+"gid": "w6jkq21j",
+"name": "The Oregon Trail (DOS)",
+"year": 1990,
+"abbr": "the_oregon_trail_dos"
+},
+{
+"gid": "y65rol71",
+"name": "The Outlast Trials",
+"year": 2024,
+"abbr": "The_Outlast_Trials"
+},
+{
+"gid": "m1zkrkz1",
+"name": "The Outlast Trials (Early Access)",
+"year": 2023,
+"abbr": "outlast_trials"
+},
+{
+"gid": "m9dok31p",
+"name": "The Simpsons: Hit & Run",
+"year": 2003,
+"abbr": "shar"
+},
+{
+"gid": "268zv96p",
+"name": "The Sims 4",
+"year": 2014,
+"abbr": "ts4"
+},
+{
+"gid": "9d3rvwdl",
+"name": "The SpongeBob SquarePants Movie",
+"year": 2004,
+"abbr": "tssm"
+},
+{
+"gid": "9d38w01l",
+"name": "The Stanley Parable",
+"year": 2013,
+"abbr": "tsp"
+},
+{
+"gid": "ldejn5n1",
+"name": "The Stanley Parable: Ultra Deluxe",
+"year": 2022,
+"abbr": "tspud"
+},
+{
+"gid": "m1z3kxd0",
+"name": "The Talos Principle",
+"year": 2014,
+"abbr": "talos_principle"
+},
+{
+"gid": "nd28pevd",
+"name": "The Texas Chain Saw Massacre",
+"year": 2023,
+"abbr": "the_texas_chain_saw_massacre"
+},
+{
+"gid": "kdkzoxed",
+"name": "THE Tower of Hell",
+"year": 2019,
+"abbr": "robloxthetoh"
+},
+{
+"gid": "76rj3l18",
+"name": "The Very Organized Thief",
+"year": 2013,
+"abbr": "tvot"
+},
+{
+"gid": "k6qre01g",
+"name": "The Witcher 3: Wild Hunt",
+"year": 2015,
+"abbr": "the_witcher_3_wild_hunt"
+},
+{
+"gid": "ldegnl13",
+"name": "The Witness",
+"year": 2016,
+"abbr": "thewitness"
+},
+{
+"gid": "4d7zpl67",
+"name": "The World's Hardest Game",
+"year": 2007,
+"abbr": "whg1"
+},
+{
+"gid": "nd2z5qd0",
+"name": "There Is No Game",
+"year": 2015,
+"abbr": "ting"
+},
+{
+"gid": "m1zjo9z6",
+"name": "There Is No Game : Wrong Dimension",
+"year": 2020,
+"abbr": "tingwd"
+},
+{
+"gid": "9doxp7dp",
+"name": "This Is The Only Level",
+"year": 2009,
+"abbr": "titol1"
+},
+{
+"gid": "369p7081",
+"name": "Timberman VS",
+"year": 2018,
+"abbr": "timberman_vs"
+},
+{
+"gid": "k6qwqzx6",
+"name": "Time Runners",
+"year": 2023,
+"abbr": "timerunners"
+},
+{
+"gid": "o1yj2k1q",
+"name": "TimeSplitters 2",
+"year": 2002,
+"abbr": "ts2"
+},
+{
+"gid": "pdv04r1w",
+"name": "Titan Souls",
+"year": 2015,
+"abbr": "titan_souls"
+},
+{
+"gid": "o6gen512",
+"name": "Titanfall 2",
+"year": 2016,
+"abbr": "titanfall_2"
+},
+{
+"gid": "y65ky86e",
+"name": "Tom Clancy's Rainbow Six Siege",
+"year": 2015,
+"abbr": "r6_siege"
+},
+{
+"gid": "4d790zr1",
+"name": "Tomb of the Mask",
+"year": 2016,
+"abbr": "totm"
+},
+{
+"gid": "xkdk2edm",
+"name": "Tomb Raider",
+"year": 1996,
+"abbr": "tr1"
+},
+{
+"gid": "576rvq18",
+"name": "Tomb Raider (2013)",
+"year": 2013,
+"abbr": "tr2013"
+},
+{
+"gid": "9d3wkvw1",
+"name": "Tomb Raider I-III Remastered Starring Lara Croft",
+"year": 2024,
+"abbr": "tr123_remastered"
+},
+{
+"gid": "ok6qkz6g",
+"name": "Tomb Raider II",
+"year": 1997,
+"abbr": "tr2"
+},
+{
+"gid": "jy65g3de",
+"name": "Tony Hawk's Pro Skater",
+"year": 1999,
+"abbr": "thps1"
+},
+{
+"gid": "369pxn01",
+"name": "Tony Hawk's Pro Skater 1+2",
+"year": 2020,
+"abbr": "thps12"
+},
+{
+"gid": "n2680o1p",
+"name": "Tony Hawk's Underground",
+"year": 2003,
+"abbr": "thug1"
+},
+{
+"gid": "ok6qq06g",
+"name": "Tony Hawk's Underground 2",
+"year": 2004,
+"abbr": "thug2"
+},
+{
+"gid": "nd2zw3d0",
+"name": "Toontown Rewritten",
+"year": 2013,
+"abbr": "ttr"
+},
+{
+"gid": "lde3xml6",
+"name": "Toontown: Corporate Clash",
+"year": 2018,
+"abbr": "ttcc"
+},
+{
+"gid": "ldejz2x1",
+"name": "Toree 2",
+"year": 2021,
+"abbr": "toree_2"
+},
+{
+"gid": "3698z38d",
+"name": "Toree 3D",
+"year": 2021,
+"abbr": "toree_3d"
+},
+{
+"gid": "pd08701e",
+"name": "Totally Accurate Battle Simulator",
+"year": 2017,
+"abbr": "tabs"
+},
+{
+"gid": "nd2822qd",
+"name": "Touhou Fumo Racing",
+"year": 2022,
+"abbr": "touhou_fumo_racing"
+},
+{
+"gid": "268e2e76",
+"name": "Touhou Luna Nights",
+"year": 2019,
+"abbr": "tln"
+},
+{
+"gid": "y65rzve1",
+"name": "Tower Defense X",
+"year": 2023,
+"abbr": "tdx"
+},
+{
+"gid": "w6jng51j",
+"name": "Toy Story 2: Buzz Lightyear to the Rescue",
+"year": 1999,
+"abbr": "toys2"
+},
+{
+"gid": "ldexxj63",
+"name": "Toy Story 3: The Video Game",
+"year": 2010,
+"abbr": "toystory3legacy"
+},
+{
+"gid": "kdkz4zed",
+"name": "Trackmania (2020)",
+"year": 2020,
+"abbr": "tm"
+},
+{
+"gid": "j1n4el6p",
+"name": "TrackMania Nations Forever",
+"year": 2008,
+"abbr": "tmnf"
+},
+{
+"gid": "w6jlx4dj",
+"name": "TrackMania² Stadium",
+"year": 2013,
+"abbr": "tm2stadium"
+},
+{
+"gid": "j1np48e6",
+"name": "Trees Hate You",
+"year": 2025,
+"abbr": "Trees_Hate_You"
+},
+{
+"gid": "k6q45e9d",
+"name": "TriPeaks",
+"year": 2012,
+"abbr": "tripeaks"
+},
+{
+"gid": "9dokjzm1",
+"name": "TUNG",
+"year": 2026,
+"abbr": "TUNG"
+},
+{
+"gid": "9d383qw1",
+"name": "Tunic",
+"year": 2022,
+"abbr": "tunic"
+},
+{
+"gid": "pd0qxo31",
+"name": "Turnip Boy Commits Tax Evasion",
+"year": 2021,
+"abbr": "tbcte"
+},
+{
+"gid": "k6q4399d",
+"name": "Two Player Games: The Challenge",
+"year": 2019,
+"abbr": "2pgtc"
+},
+{
+"gid": "m1zjx260",
+"name": "Ty the Tasmanian Tiger",
+"year": 2002,
+"abbr": "ty1"
+},
+{
+"gid": "v1pl7876",
+"name": "UFO 50",
+"year": 2024,
+"abbr": "UFO_50"
+},
+{
+"gid": "pd0w2o21",
+"name": "Ultimate Custom Night",
+"year": 2018,
+"abbr": "ucn"
+},
+{
+"gid": "3dxzxp1y",
+"name": "Ultimate Doom",
+"year": 1993,
+"abbr": "doom1"
+},
+{
+"gid": "j1n8jx1p",
+"name": "Ultra Street Fighter IV",
+"year": 2014,
+"abbr": "usfiv"
+},
+{
+"gid": "369p3p81",
+"name": "ULTRAKILL",
+"year": 2019,
+"abbr": "ultrakill"
+},
+{
+"gid": "m1zk4310",
+"name": "Uncharted: Drake's Fortune",
+"year": 2007,
+"abbr": "uncharted1"
+},
+{
+"gid": "4d73n317",
+"name": "Undertale",
+"year": 2015,
+"abbr": "undertale"
+},
+{
+"gid": "m1me3ojd",
+"name": "Undertale Yellow",
+"year": 2023,
+"abbr": "UTY"
+},
+{
+"gid": "kdkq7jed",
+"name": "Unfair Flips",
+"year": 2025,
+"abbr": "unfairflips"
+},
+{
+"gid": "26894ny1",
+"name": "Unleashed Recompiled",
+"year": 2025,
+"abbr": "unleashed_recompiled"
+},
+{
+"gid": "4d79xvg1",
+"name": "UNO (Ubisoft)",
+"year": 2016,
+"abbr": "uno_ubisoft"
+},
+{
+"gid": "j1nevwl1",
+"name": "Unrailed!",
+"year": 2020,
+"abbr": "unrailed"
+},
+{
+"gid": "3dx2mg41",
+"name": "Untitled Goose Game",
+"year": 2019,
+"abbr": "goose"
+},
+{
+"gid": "w6jev51j",
+"name": "Unturned",
+"year": 2014,
+"abbr": "unturned"
+},
+{
+"gid": "yd4kmnp6",
+"name": "Valheim",
+"year": 2021,
+"abbr": "valheim"
+},
+{
+"gid": "k6qwp296",
+"name": "VALORANT",
+"year": 2020,
+"abbr": "valorant"
+},
+{
+"gid": "j1n8y7w1",
+"name": "Vampire Survivors",
+"year": 2021,
+"abbr": "vampiresurvivors"
+},
+{
+"gid": "pdv9x241",
+"name": "Van Wheel Gone",
+"year": 2025,
+"abbr": "Van_Wheel_Gone"
+},
+{
+"gid": "9do9jedp",
+"name": "Vector",
+"year": 2012,
+"abbr": "vector"
+},
+{
+"gid": "nd2jmv10",
+"name": "Vex 3",
+"year": 2014,
+"abbr": "vex_3"
+},
+{
+"gid": "k6qwep96",
+"name": "Viewfinder",
+"year": 2023,
+"abbr": "viewfinder"
+},
+{
+"gid": "pd0qj2w1",
+"name": "Voxyl Network",
+"year": 2020,
+"abbr": "voxyl_network"
+},
+{
+"gid": "j1nenx1p",
+"name": "VVVVVV",
+"year": 2010,
+"abbr": "vvvvvv"
+},
+{
+"gid": "j1n8p0l1",
+"name": "War Thunder",
+"year": 2012,
+"abbr": "war_thunder"
+},
+{
+"gid": "v1pgmm18",
+"name": "Warframe",
+"year": 2013,
+"abbr": "wf"
+},
+{
+"gid": "268e9x56",
+"name": "Warhammer: Vermintide 2",
+"year": 2018,
+"abbr": "wv2"
+},
+{
+"gid": "y655346e",
+"name": "Wave Race 64",
+"year": 1996,
+"abbr": "wr64"
+},
+{
+"gid": "4d7mv3d7",
+"name": "We Become What We Behold",
+"year": 2016,
+"abbr": "wbwwb"
+},
+{
+"gid": "m1m97462",
+"name": "We Were Here",
+"year": 2017,
+"abbr": "we_were_here"
+},
+{
+"gid": "9doxkeed",
+"name": "weird strict dad",
+"year": 2023,
+"abbr": "wsd"
+},
+{
+"gid": "4d7eog67",
+"name": "Where's Waldo?",
+"year": 1991,
+"abbr": "wwnes"
+},
+{
+"gid": "76r4nee1",
+"name": "White Knuckle",
+"year": 2025,
+"abbr": "White_Knuckle"
+},
+{
+"gid": "o1y7pv1q",
+"name": "White Tiles 4: Piano Master 2",
+"year": 2014,
+"abbr": "whitetiles4"
+},
+{
+"gid": "v1py3p18",
+"name": "Wii Fit (Plus)",
+"year": 2009,
+"abbr": "wii_fit_plus"
+},
+{
+"gid": "m1m7g412",
+"name": "Wii Party",
+"year": 2010,
+"abbr": "wii_party"
+},
+{
+"gid": "j1lkq46g",
+"name": "Wii Party U",
+"year": 2013,
+"abbr": "wpu"
+},
+{
+"gid": "w6j0ledj",
+"name": "Wii Play",
+"year": 2006,
+"abbr": "wii_play"
+},
+{
+"gid": "76rxz468",
+"name": "Wii Sports",
+"year": 2006,
+"abbr": "wiisports"
+},
+{
+"gid": "ldewjld3",
+"name": "Wii Sports Resort",
+"year": 2009,
+"abbr": "wsr"
+},
+{
+"gid": "kdkmy721",
+"name": "Will You Snail?",
+"year": 2022,
+"abbr": "wys"
+},
+{
+"gid": "m1mx3nx6",
+"name": "Wizard of Legend",
+"year": 2018,
+"abbr": "wizard_of_legend"
+},
+{
+"gid": "2688gk6p",
+"name": "Wizard101",
+"year": 2008,
+"abbr": "wizard101"
+},
+{
+"gid": "76r3gwl6",
+"name": "Wobbly Life",
+"year": 2020,
+"abbr": "wobbly_life"
+},
+{
+"gid": "k6q9701g",
+"name": "Wolfenstein 3D",
+"year": 1992,
+"abbr": "wolf3d"
+},
+{
+"gid": "m1zjp806",
+"name": "World // Zero",
+"year": 2019,
+"abbr": "world_zero"
+},
+{
+"gid": "4pd03wde",
+"name": "World of Illusion Starring Mickey Mouse and Donald Duck",
+"year": 1992,
+"abbr": "world_of_illusion"
+},
+{
+"gid": "k6qpp8zd",
+"name": "World of Warcraft Battle for Azeroth: Archive",
+"year": 2018,
+"abbr": "wowbfaarchive"
+},
+{
+"gid": "j1lljpz1",
+"name": "World of Warcraft Classic Era",
+"year": 2019,
+"abbr": "wowclassicera"
+},
+{
+"gid": "j1n44qy6",
+"name": "World of Warcraft Shadowlands: Archive",
+"year": 2020,
+"abbr": "wowshadowlandsarchive"
+},
+{
+"gid": "9d3l59dl",
+"name": "World of Warcraft: Retail — Leveling",
+"year": 2026,
+"abbr": "wow"
+},
+{
+"gid": "268ekzy6",
+"name": "World War Z",
+"year": 2019,
+"abbr": "world_war_z"
+},
+{
+"gid": "268r4y1p",
+"name": "Wreckfest",
+"year": 2014,
+"abbr": "wreckfest"
+},
+{
+"gid": "m1ml7p62",
+"name": "Wubbzy's Amazing Adventure",
+"year": 2006,
+"abbr": "waa"
+},
+{
+"gid": "o6gjwo62",
+"name": "Wynncraft",
+"year": 2013,
+"abbr": "wynncraft"
+},
+{
+"gid": "pd08pw1e",
+"name": "Xenoblade Chronicles 2",
+"year": 2017,
+"abbr": "xc2"
+},
+{
+"gid": "m1zz5210",
+"name": "Yooka-Laylee",
+"year": 2017,
+"abbr": "yl"
+},
+{
+"gid": "nd280rd0",
+"name": "Yoshi's Story",
+"year": 1997,
+"abbr": "yoshis_story"
+},
+{
+"gid": "v1poq468",
+"name": "You Have to Burn the Rope",
+"year": 2008,
+"abbr": "yhtbtr"
+},
+{
+"gid": "4d798z17",
+"name": "You Have To Win The Game",
+"year": 2014,
+"abbr": "yhtwtgsteam"
+},
+{
+"gid": "n268x51p",
+"name": "Yu-Gi-Oh! Forbidden Memories",
+"year": 1999,
+"abbr": "yugiohfm"
+},
+{
+"gid": "y6557e6e",
+"name": "Yume Nikki",
+"year": 2004,
+"abbr": "yumenikki"
+},
+{
+"gid": "pd0wk21e",
+"name": "Zelda II: The Adventure of Link",
+"year": 1987,
+"abbr": "zelda_ii_the_adventure_of_link"
+},
+{
+"gid": "nd272vr1",
+"name": "Zenless Zone Zero",
+"year": 2024,
+"abbr": "zzzero"
+},
+{
+"gid": "w6jx27dj",
+"name": "Zuma's Revenge",
+"year": 2009,
+"abbr": "zumas_revenge"
+},
+{
+"gid": "j1lnqov6",
+"name": "Übercat Overdrive",
+"year": 2023,
+"abbr": "Ubercat_Overdrive"
+}
+]

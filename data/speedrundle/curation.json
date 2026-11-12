@@ -1,0 +1,28 @@
+{
+  "minSeconds": 10,
+  "junkGame": "hypixel|craftrise|seterra|google (snake|dino|feud|quick draw|santa)|\\bdemo\\b|minigame|server|category extension|^(multiple|minor|other) |\\bmisc\\b|scratch|ketamine|glock|pencil sharpening|chess\\.com|blockerman",
+  "junkCategory": "co-?op|\\b[2-9] ?players?\\b|multiplayer|meme|sex%|category extension|\\btas\\b|segmented|any% ?\\(?seeded|all achievements|trophies",
+  "junkRunner": "^(\\[[^\\]]*\\])?n/?a$",
+  "subKeep": "credits warp|glitchless|no major glitches|\\bnmg\\b|glitched|unrestricted|restricted|random seed|set seed|no ace|no srm|no wrong warp|no oob|warpless|first quest|second quest|hard|difficult|easy|legendary|heroic",
+  "platformCategories": ["SNES", "PC", "PS2", "PS1", "PSX Disc", "PSX Digital", "HD Console", "English", "Japanese", "EMU", "PlayStation", "GCN", "PS", "DSI"],
+  "labels": {
+    "The Legend of Zelda: A Link to the Past|No Major Glitches": "Any% No Major Glitches",
+    "Elden Ring|Any%": "Any% Glitchless",
+    "Sonic the Hedgehog|Beat The Game": "Any% (glitched)",
+    "Super Mario Bros. 3|Any% Warpless": "Any% Warpless",
+    "Cuphead|Version 1.1+": "Any%",
+    "Half-Life 2|New Engine": "Any% No Voidclip",
+    "Castlevania: Symphony of the Night|Alucard": "Any% (Alucard)",
+    "Neon White|New Game": "Any%",
+    "Half-Life|Steam": "Any% Scriptless",
+    "Kirby's Dream Land|Normal Mode": "Any%",
+    "Terraria|Moon Lord": "Any% (Moon Lord)",
+    "Chrono Trigger|SNES Save Corruption": "Any% Save Corruption",
+    "Chrono Trigger|SNES Glitchless": "100% Glitchless",
+    "Wolfenstein 3D|Episode 1: Escape from Wolfenstein": "Episode 1 · Glitchless",
+    "Wolfenstein 3D|Episode 2: Operation: Eisenfaust": "Episode 2 · Glitchless",
+    "Wolfenstein 3D|Episode 3: Die, Fuhrer, Die!": "Episode 3 · Glitchless"
+  },
+  "drop": ["Kingdom Hearts|Cutscene Remover (E)", "Super Mario Galaxy|Any%", "Super Mario Galaxy|120 Stars"],
+  "note": "Edit this file to change what the weekly refresh keeps. Keys are 'Game name|Category name' using names from games.json."
+}
