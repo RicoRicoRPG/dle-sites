@@ -1,0 +1,18 @@
+{
+  "name": "speedrundle",
+  "title": "Speedrundle",
+  "url": "https://speedrundle.pages.dev",
+  "cloudflareProject": "speedrundle",
+  "epoch": "2026-11-12",
+  "tagline": "Pick the faster speedrun world record. Ten pairs a day.",
+  "description": "A daily guessing game: two speedrun categories, one question. Which world record is faster? Ten pairs a day, getting closer as you go.",
+  "themeColor": "#6aaa64",
+  "icon": "⏱",
+  "operator": "Rico Rico RPG",
+  "contact": "",
+  "adsense": {
+    "client": "",
+    "slots": { "results": "", "footer": "" }
+  },
+  "puzzles": { "noRepeatDays": 30, "noRepeatBy": "key" }
+}
