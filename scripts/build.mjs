@@ -135,15 +135,16 @@ ${how}
 <h2>Where the data comes from</h2>
 <p>World records come from the <a href="https://www.speedrun.com" target="_blank" rel="noopener">speedrun.com</a> leaderboards through its public API and are refreshed weekly, so a record broken this week can show the old time for a few days. Each reveal links to the run or the leaderboard. Speedrundle isn't affiliated with speedrun.com; credit for every run belongs to its runner.</p>
 ${contact}
-<p class="quiet">Made by ${esc(site.operator)}.</p>` : `<h1>About Peakdle</h1>
+<p class="quiet">Made by ${esc(site.operator)}.</p>` : `<h1>About ${esc(site.title)}</h1>
+<p>CCU means concurrent users: how many people are playing a game at the same moment.</p>
 <p>${esc(site.description)}</p>
 ${how}
 <h2>Live</h2>
 <p>Live compares each game's peak on one UTC day: the most people playing it at the same moment, from hourly samples of Steam's own player counts. Because players around the world start each day at different times, a puzzle uses the day that finished two days before it, and the question names that day.</p>
 <h2>All-Time</h2>
-<p>All-Time compares the highest peak Peakdle has recorded for each game since it started tracking. It opens once there are ${esc(site.alltime.minTrackedDays)} days of history.</p>
+<p>All-Time compares the highest peak ${esc(site.title)} has recorded for each game since it started tracking. It opens once there are ${esc(site.alltime.minTrackedDays)} days of history.</p>
 <h2>Where the data comes from</h2>
-<p>Player counts come from the Steam Web API. Genre and price model come from <a href="https://steamspy.com" target="_blank" rel="noopener">SteamSpy</a>. Only games on Steam are included, so a game's players on other stores and consoles don't count. Peakdle isn't affiliated with or endorsed by Valve or Steam. Steam is a trademark of Valve Corporation.</p>
+<p>Player counts come from the Steam Web API. Genre and price model come from <a href="https://steamspy.com" target="_blank" rel="noopener">SteamSpy</a>. Only games on Steam are included, so a game's players on other stores and consoles don't count. ${esc(site.title)} isn't affiliated with or endorsed by Valve or Steam. Steam is a trademark of Valve Corporation.</p>
 ${contact}
 <p class="quiet">Made by ${esc(site.operator)}.</p>`;
   return { path: "/about", title: "How to play & about", description: `How ${site.title} works and where its data comes from.`, body };

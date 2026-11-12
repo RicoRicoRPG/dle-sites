@@ -9,7 +9,7 @@ FONT_R = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 
 SAMPLE = {
     "speedrundle": (("Super Mario 64", "16 Star", "14:32"), ("Celeste", "Any%", "24:44")),
-    "peakdle": (("Counter-Strike 2", "Action · Free", "1,071,403"), ("Stardew Valley", "Simulation · Paid", "71,940")),
+    "peakdle": (("Counter-Strike 2", "Action · Free", "1,071,403"), ("Stardew Valley", "RPG · Paid", "71,940")),
 }
 
 
