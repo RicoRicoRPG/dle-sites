@@ -1,8 +1,8 @@
-# Speedrundle and Peakdle
+# Speedrundle and CCUdle
 
-Two daily pick-one-of-two games, each its own static site on Cloudflare Pages. GitHub Actions does the scheduled work. Nothing runs on a server.
+Two daily pick-one-of-two games (CCUdle was called Peakdle; its files, folders and workflow names still say `peakdle`), each its own static site on Cloudflare Pages. GitHub Actions does the scheduled work. Nothing runs on a server.
 
-| | Speedrundle | Peakdle |
+| | Speedrundle | CCUdle |
 |---|---|---|
 | Question | Which world record is faster? | Which Steam game had more players at its peak? |
 | Data | speedrun.com API, refreshed weekly | Steam Web API, sampled hourly |
@@ -21,7 +21,7 @@ Two daily pick-one-of-two games, each its own static site on Cloudflare Pages. G
 
 Once a puzzle file is written it never changes. A data refresh only affects future days.
 
-Peakdle Live uses the UTC day that ended two days before the puzzle date, because players' local midnights span 26 hours. The question names that day. If a day's polling failed, Live uses the newest earlier day instead.
+CCUdle Live uses the UTC day that ended two days before the puzzle date, because players' local midnights span 26 hours. The question names that day. If a day's polling failed, Live uses the newest earlier day instead.
 
 ## One-time setup
 
@@ -50,7 +50,7 @@ GitHub turns off scheduled workflows after 60 days with no repository activity. 
 ### 4. Launch timing
 
 - Set `epoch` in both `site.json` files to launch day. Puzzle #1 is that date.
-- Start the Peakdle poll at least two days before you announce. Use **Actions → Peakdle poll → Run workflow** for the first run; after that it runs hourly by itself. Live needs one closed UTC day before it has a puzzle. Until then the page says so.
+- Start the CCUdle poll at least two days before you announce. Use **Actions → Peakdle poll → Run workflow** for the first run; after that it runs hourly by itself. Live needs one closed UTC day before it has a puzzle. Until then the page says so.
 
 ### 5. AdSense
 
@@ -66,7 +66,7 @@ To check the layout before ads are approved, run `node scripts/build.mjs --ad-pr
 
 - **speedrun.com.** The October 2026 terms now give leaderboard data its own licence. Per speedrun.com's announcement, it allows any use, including commercial, but automated access has to go through the API and AI training is excluded. This code uses only the documented v1 API and sends a User-Agent naming the site. Read the Leaderboard Data License (linked from speedrun.com's Terms of Use) before launch.
 - **Steam.** Counts come from Valve's `GetNumberOfCurrentPlayers`. The footer and About page carry the non-affiliation line. The terms allow 100,000 calls a day; the hourly poll uses about 41,600.
-- **All-Time.** All-Time uses only peaks Peakdle recorded itself, so the question says "since <first day>". `data/peakdle/seed-steamcharts.json` holds the true all-time peaks from Steam Charts. It is **off**. Turn it on with `"alltime": { "seed": "steamcharts" }` only if Steam Charts gives you permission.
+- **All-Time.** All-Time uses only peaks CCUdle recorded itself, so the question says "since <first day>". `data/peakdle/seed-steamcharts.json` holds the true all-time peaks from Steam Charts. It is **off**. Turn it on with `"alltime": { "seed": "steamcharts" }` only if Steam Charts gives you permission.
 - **Images.** Cards load game art straight from Steam's and speedrun.com's servers. Nothing is copied into the repo. The art belongs to each game's publisher, as on any store or stats site that shows it. To serve the art from your own domain instead, ask for a mirror step.
 - **SteamSpy.** Genre and Free/Paid labels come from a SteamSpy snapshot, credited on the page.
 
