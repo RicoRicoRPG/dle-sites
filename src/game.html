@@ -130,6 +130,7 @@ h3.cap{font-size:15px;font-weight:800;letter-spacing:.06em;text-transform:upperc
 /* modal + toast */
 .modal{position:fixed;inset:0;background:var(--shade);display:flex;align-items:center;justify-content:center;z-index:20;padding:16px}
 .modal[hidden]{display:none}
+.links a[hidden]{display:none}
 .sheet{position:relative;background:var(--modal);color:var(--ink);border-radius:8px;box-shadow:0 4px 23px rgba(0,0,0,.2);max-width:500px;width:100%;
   max-height:calc(100vh - 32px);overflow:auto;padding:28px 24px 24px;animation:slidein .2s ease-out}
 @keyframes slidein{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
@@ -533,7 +534,18 @@ $('#btn-settings').onclick = showSettings;
 $('#footer').innerHTML = CONFIG.footer + SITE.footerLinks;
 const fa = document.querySelector('#footerad'); if (fa){ fa.outerHTML = adSlot('footer'); fillAds(document.body); }
 const pc = document.querySelector('[data-privacy-choices]');
-if (pc) pc.onclick = e => { e.preventDefault(); try { (window.googlefc = window.googlefc || {}).callbackQueue = window.googlefc.callbackQueue || []; window.googlefc.callbackQueue.push(() => window.googlefc.showRevocationMessage()); } catch(err){} };
+// The link only appears where Google's consent message applies (EEA, UK, Switzerland),
+// once the consent tool has loaded; elsewhere it would do nothing. US visitors get
+// Google's own "Do not sell or share" link from the same tool.
+if (pc){
+  pc.hidden = true;
+  pc.onclick = e => { e.preventDefault(); try { window.googlefc.showRevocationMessage(); } catch(err){} };
+  const fc = window.googlefc = window.googlefc || {};
+  fc.callbackQueue = fc.callbackQueue || [];
+  fc.callbackQueue.push({ CONSENT_API_READY: () => {
+    try { window.__tcfapi('addEventListener', 0, (tc, ok) => { if (ok && tc && tc.gdprApplies) pc.hidden = false; }); } catch(err){}
+  }});
+}
 start();
 // First visit: open How To Play, the way most daily games do.
 if (!store.get('dle.seenHelp') && !SITE.allowDateParam){ store.set('dle.seenHelp', 1); showHelp(); }
