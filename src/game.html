@@ -7,8 +7,7 @@
 <script>
 // Apply the saved theme before first paint so dark-mode players don't see a white flash.
 try { const s = JSON.parse(localStorage.getItem('dle.settings') || '{}');
-  if (s.theme) document.documentElement.dataset.theme = s.theme;
-  if (s.contrast) document.documentElement.dataset.contrast = 'high'; } catch(e){}
+  if (s.theme) document.documentElement.dataset.theme = s.theme; } catch(e){}
 </script>
 <style>
 :root{
@@ -26,7 +25,6 @@ try { const s = JSON.parse(localStorage.getItem('dle.settings') || '{}');
   --bg:#121213; --ink:#f8f8f8; --quiet:#818384; --line:#3a3a3c; --tile:#121213; --tile-line:#3a3a3c;
   --good:#538d4e; --bad:#3a3a3c; --key:#818384; --btn:#f8f8f8; --btn-ink:#121213; --modal:#121213; --shade:rgba(0,0,0,.5);
 }
-:root[data-contrast="high"]{ --good:#f5793a; }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 var(--font)}
 button{font-family:inherit}
@@ -476,19 +474,17 @@ function getSettings(){ return store.get(SETTINGS_KEY) || {}; }
 function applySettings(s){
   const r = document.documentElement;
   if (s.theme) r.dataset.theme = s.theme; else delete r.dataset.theme;
-  if (s.contrast) r.dataset.contrast = 'high'; else delete r.dataset.contrast;
 }
 function showSettings(){
   const s = getSettings();
   const dark = s.theme ? s.theme === 'dark' : (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
   const body = openModal(`<h2 class="small">Settings</h2>
-    <div class="setting"><div><div class="t">Dark Theme</div></div><button type="button" class="switch" role="switch" aria-label="Dark theme" aria-checked="${dark}" data-k="theme"></button></div>
-    <div class="setting"><div><div class="t">High Contrast Mode</div><div class="d">For improved color vision</div></div><button type="button" class="switch" role="switch" aria-label="High contrast" aria-checked="${!!s.contrast}" data-k="contrast"></button></div>`);
+    <div class="setting"><div><div class="t">Dark Theme</div></div><button type="button" class="switch" role="switch" aria-label="Dark theme" aria-checked="${dark}" data-k="theme"></button></div>`);
   body.querySelectorAll('.switch').forEach(b => b.onclick = () => {
     const on = b.getAttribute('aria-checked') !== 'true';
     b.setAttribute('aria-checked', String(on));
     const cur = getSettings();
-    if (b.dataset.k === 'theme') cur.theme = on ? 'dark' : 'light'; else cur.contrast = on;
+    cur.theme = on ? 'dark' : 'light';
     store.set(SETTINGS_KEY, cur); applySettings(cur);
   });
 }
