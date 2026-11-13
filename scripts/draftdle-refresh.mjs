@@ -2,7 +2,8 @@
 // Draftdle player pools from Wikidata (CC0). For each sport in data/draftdle/sports.json:
 //   1. check every league item and headshot property against its expected English label
 //   2. list the leagues' teams (P118), then every person who played for one (P54)
-//   3. rank by fame (Wikipedia sitelinks, plus a bonus for any Hall of Fame), keep poolSize
+//   3. rank by fame: English Wikipedia page views over the last 12 months, plus Wikipedia language
+//      count and a Hall of Fame bonus; take ~3x poolSize candidates by language count, keep poolSize
 //   4. fetch names, positions, career years, every team with dates, photo and league ids
 //   5. cut fame tiers and write data/draftdle/<sport>/pool.json
 // Runs weekly in GitHub Actions (query.wikidata.org is not reachable from every machine).
@@ -14,7 +15,37 @@ import { p, read, write, sleep } from "./lib.mjs";
 
 const ENDPOINT = process.env.DRAFTDLE_SPARQL || "https://query.wikidata.org/sparql";
 const UA = "DraftdleBot/1.0 (https://draftdle.pages.dev; info@counterspell.dev) node-fetch";
-const HOF_BONUS = 15;
+const HOF_BONUS = 3;
+const VIEWS_API = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia.org/all-access/user";
+
+// Fame: page views dominate (who people look up now, current stars and legends alike); the
+// language count and Hall of Fame break ties among the rarely viewed.
+export const fameOf = (views, sitelinks, hof) => Math.round((Math.log10((views || 0) + 10) * 10 + sitelinks * 0.1 + (hof ? HOF_BONUS : 0)) * 100) / 100;
+
+// English Wikipedia page views, last 12 full months, for many titles at a few at a time.
+export async function enViews(titles, { fetchImpl = globalThis.fetch, now = new Date(), concurrency = 6 } = {}) {
+  const ym = d => d.toISOString().slice(0, 7).replace("-", "");
+  const end = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+  const start = new Date(Date.UTC(end.getUTCFullYear() - 1, end.getUTCMonth(), 1));
+  const range = `monthly/${ym(start)}0100/${ym(new Date(end - 864e5))}0100`;
+  const out = new Map(), queue = [...new Set(titles)];
+  async function one(title) {
+    const url = `${VIEWS_API}/${encodeURIComponent(title.replace(/ /g, "_"))}/${range}`;
+    for (let i = 0; i < 4; i++) {
+      try {
+        const res = await fetchImpl(url, { headers: { "User-Agent": UA, Accept: "application/json" } });
+        if (res.status === 404) return 0;
+        if (res.status === 429 || res.status >= 500) { await sleep(process.env.DLE_FAST ? 1 : 2000 * (i + 1)); continue; }
+        if (!res.ok) return 0;
+        const j = await res.json();
+        return (j.items || []).reduce((s, x) => s + (x.views || 0), 0);
+      } catch { await sleep(process.env.DLE_FAST ? 1 : 1000 * (i + 1)); }
+    }
+    return 0;
+  }
+  await Promise.all(Array.from({ length: concurrency }, async () => { while (queue.length) { const t = queue.shift(); out.set(t, await one(t)); } }));
+  return out;
+}
 const log = (...a) => console.log(...a);
 
 export async function sparql(query, { fetchImpl = globalThis.fetch, tries = 5 } = {}) {
@@ -103,7 +134,7 @@ export function buildPlayer(sport, raw, leagueTeams, headshots, nowYear) {
   if (raw.image) img.push("https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(raw.image) + "?width=360");
   return {
     id: raw.id, name: raw.name, years, pos: pos.abbr, grp: pos.grp, teams: t.teams, img,
-    commons: raw.image || "", active: active ? 1 : 0, fame: raw.sitelinks + (raw.hof ? HOF_BONUS : 0)
+    commons: raw.image || "", active: active ? 1 : 0, views: raw.views || 0, fame: fameOf(raw.views, raw.sitelinks, raw.hof)
   };
 }
 
@@ -112,7 +143,7 @@ export function tierOf(sport, rank) {
   return rank < a ? 1 : rank < a + b ? 2 : 3;
 }
 
-async function refreshSport(sport, nowYear, q) {
+async function refreshSport(sport, nowYear, q, views) {
   log(`\n${sport.id}: checking ids`);
   const labels = await q(`SELECT ?x ?l (lang(?l) AS ?lang) WHERE { VALUES ?x { ${values(sport.leagues)} } ?x rdfs:label ?l FILTER(lang(?l) IN ("en", "mul")) }`);
   const byId = preferEn(labels);
@@ -141,15 +172,16 @@ async function refreshSport(sport, nowYear, q) {
     for (const r of rows) fame.set(qid(r.p), Number(r.sl));
   }
   const exclude = new Set((read(p("data/draftdle/curation.json"), {}).exclude || {})[sport.id] || []);
-  const ranked = [...fame].filter(([id]) => !exclude.has(id)).sort((a, b) => b[1] - a[1]).slice(0, Math.ceil(sport.poolSize * 1.25));
+  const ranked = [...fame].filter(([id]) => !exclude.has(id)).sort((a, b) => b[1] - a[1]).slice(0, Math.ceil(sport.poolSize * 3));
   log(`${sport.id}: ${fame.size} people played for these teams; fetching details for ${ranked.length}`);
 
   const raw = new Map(ranked.map(([id, sl]) => [id, { id, sitelinks: sl, name: "", positions: [], teams: [], ext: {}, hof: false }]));
   const extVars = headshots.map((h, i) => `OPTIONAL { ?p wdt:${h.prop} ?x${i} }`).join(" ");
   for (const batch of chunks(ranked.map(r => r[0]), 100)) {
     const v = values(batch);
-    for (const r of await q(`SELECT ?p ?l (lang(?l) AS ?lang) ?img ?ws ?we ?death ${headshots.map((_, i) => "?x" + i).join(" ")} WHERE { VALUES ?p { ${v} }
+    for (const r of await q(`SELECT ?p ?l (lang(?l) AS ?lang) ?img ?ws ?we ?death ?title ${headshots.map((_, i) => "?x" + i).join(" ")} WHERE { VALUES ?p { ${v} }
         OPTIONAL { ?p rdfs:label ?l FILTER(lang(?l) IN ("en", "mul")) } OPTIONAL { ?p wdt:P18 ?img } OPTIONAL { ?p wdt:P2031 ?ws }
+        OPTIONAL { ?art schema:about ?p ; schema:isPartOf <https://en.wikipedia.org/> ; schema:name ?title }
         OPTIONAL { ?p wdt:P2032 ?we } OPTIONAL { ?p wdt:P570 ?death } ${extVars} }`)) {
       const o = raw.get(qid(r.p)); if (!o) continue;
       if (r.l && (!o.name || (r.lang === "en" && o.nameLang !== "en"))) { o.name = r.l; o.nameLang = r.lang; }
@@ -157,6 +189,7 @@ async function refreshSport(sport, nowYear, q) {
       if (o.ws == null && r.ws) o.ws = year(r.ws);
       if (o.we == null && r.we) o.we = year(r.we);
       if (r.death) o.death = true;
+      if (r.title && !o.title) o.title = r.title;
       headshots.forEach((h, i) => { if (r["x" + i] && !o.ext[h.prop]) o.ext[h.prop] = r["x" + i]; });
     }
     for (const r of await q(`SELECT ?p ?pl WHERE { VALUES ?p { ${v} } ?p wdt:P413 ?pos . ?pos rdfs:label ?pl FILTER(lang(?pl) IN ("en", "mul")) }`)) {
@@ -174,6 +207,11 @@ async function refreshSport(sport, nowYear, q) {
     }
   }
 
+  const withTitle = [...raw.values()].filter(o => o.title);
+  const viewMap = await views(withTitle.map(o => o.title));
+  for (const o of withTitle) o.views = viewMap.get(o.title) || 0;
+  log(`${sport.id}: page views for ${withTitle.length} English Wikipedia articles`);
+
   const players = [];
   let noPos = 0, noTeams = 0, noName = 0;
   for (const o of raw.values()) {
@@ -188,16 +226,17 @@ async function refreshSport(sport, nowYear, q) {
   return pool;
 }
 
-export async function refresh(ids = [], { q = sparql, nowYear = new Date().getUTCFullYear() } = {}) {
+export async function refresh(ids = [], { q = sparql, views = enViews, nowYear = new Date().getUTCFullYear() } = {}) {
   const cfg = read(p("data/draftdle/sports.json"));
   const sports = cfg.sports.filter(s => !ids.length || ids.includes(s.id));
   const failed = [];
   for (const sport of sports) {
     try {
-      const pool = await refreshSport(sport, nowYear, q);
+      const pool = await refreshSport(sport, nowYear, q, views);
       const file = p("data/draftdle", sport.id, "pool.json");
       const prev = read(file, []);
-      if (pool.length < 100 || pool.length < prev.length * 0.6) throw new Error(`only ${pool.length} players (had ${prev.length}); keeping the old pool`);
+      const expected = prev.length ? Math.min(sport.poolSize, prev.length) : 0;
+      if (pool.length < 100 || pool.length < expected * 0.6) throw new Error(`only ${pool.length} players (expected about ${expected}); keeping the old pool`);
       write(file, pool);
     } catch (e) {
       failed.push(sport.id);
