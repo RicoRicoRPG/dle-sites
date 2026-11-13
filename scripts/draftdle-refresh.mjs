@@ -153,6 +153,7 @@ export function buildPlayer(sport, raw, leagueTeams, headshots, nowYear) {
   // The Wikipedia infobox is the best source when it has the span: it's written per sport and
   // kept current, where Wikidata stints often lack end dates.
   const box = raw.box || {};
+  if (box.coachOnly) return { drop: "coach" };
   const ws = box.start ?? t.first ?? raw.ws;
   const we = raw.we != null && (ws == null || raw.we >= ws) ? raw.we : null;
   const active = raw.death ? false : box.active === true ? true : box.end != null ? false : (!we && t.open);
@@ -161,6 +162,9 @@ export function buildPlayer(sport, raw, leagueTeams, headshots, nowYear) {
   // Retired with no end date anywhere: the last dated stint start beats a wrong "present".
   const end = active ? null : box.end != null ? box.end : (we != null && (t.last == null || (we >= t.last && we - t.last <= 6)) ? we : (t.last ?? we ?? t.lastStart));
   const years = ws ? (end ? (end === ws ? String(ws) : `${ws}–${end}`) : active ? `${ws}–present` : "") : "";
+  // No playing years from any source: almost always a coach, executive or a celebrity who was
+  // only drafted (Brad Stevens, Leland Melvin). Not a card.
+  if (!years) return { drop: "years" };
   const img = [];
   for (const h of headshots) if (raw.ext[h.prop]) img.push(h.url.replace("{id}", encodeURIComponent(raw.ext[h.prop])));
   if (raw.image) img.push("https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(raw.image) + "?width=360");
@@ -248,20 +252,22 @@ async function refreshSport(sport, nowYear, q, views, infobox) {
   const guessed = viewMap.size ? guessViews([...raw.values()].filter(o => o.title)) : 0;
   log(`${sport.id}: page views for ${withTitle.length} English Wikipedia articles${guessed ? `, ${guessed} estimated from players with similar language counts` : ""}`);
 
-  const boxes = sport.infobox ? await infobox(withTitle.map(o => o.title), sport.infobox, { ua: UA, log, nowYear }) : new Map();
+  const boxes = sport.infobox ? await infobox(withTitle.map(o => o.title), sport.infobox, { ua: UA, log, nowYear, leagues: sport.yearTemplates || [] }) : new Map();
   for (const o of withTitle) if (boxes.has(o.title)) o.box = boxes.get(o.title);
 
   const players = [];
-  let noPos = 0, noTeams = 0, noName = 0;
+  let noPos = 0, noTeams = 0, noName = 0, coaches = 0, noYears = 0;
   for (const o of raw.values()) {
     if (!o.name || /^Q\d+$/.test(o.name)) { noName++; continue; }
     const pl = buildPlayer(sport, o, leagueTeams, headshots, nowYear);
     if (!pl) { if (!positionOf(sport, o.positions)) noPos++; else noTeams++; continue; }
+    if (pl.drop === "coach") { coaches++; continue; }
+    if (pl.drop === "years") { noYears++; continue; }
     players.push(pl);
   }
   players.sort((a, b) => b.fame - a.fame || a.id.localeCompare(b.id));
   const pool = players.slice(0, sport.poolSize).map((pl, i) => ({ ...pl, tier: tierOf(sport, i) }));
-  log(`${sport.id}: kept ${pool.length} (dropped ${noName} without a name, ${noPos} without a usable position, ${noTeams} without a listed team)`);
+  log(`${sport.id}: kept ${pool.length} (dropped ${noName} without a name, ${noPos} without a usable position, ${noTeams} without a listed team, ${coaches} coaches or executives, ${noYears} with no playing years)`);
   return pool;
 }
 

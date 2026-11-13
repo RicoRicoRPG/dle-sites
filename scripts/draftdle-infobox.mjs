@@ -60,11 +60,26 @@ const first = s => { const y = years(s); return y.length ? y[0] : null; };
 const isOpen = s => /present|current/i.test(s) || /\d{4}\s*(?:\}\})?\s*[–—-]\s*(?:\n|$|\(|\|)/.test(s.trim() + "\n");
 
 // Year range lists: soccer "years1 = 2004–2021", gridiron "* [[Team]] ({{NFL Year|2000|2019}})".
+// Season templates to plain years: {{NFL Year|2000|2019}} -> 2000–2019, {{WNBA Year|2002}} -> 2002,
+// and the short form {{nbay|2013|start}} -> 2013, {{nbay|2025|end}} -> 2026 (the 2025–26 season's end).
+const SHORT = "(?:nba|wnba|nfl|nhl|mlb|aba|baa|afl|cfl|ufl|xfl|aaf|mls)y";
+export const flatYears = line => line.replace(
+  new RegExp(`\\{\\{\\s*(?:${SHORT}|[^|{}]*year[^|{}]*)\\s*\\|\\s*(\\d{4})\\s*(?:\\|\\s*(\\d{4}|start|end))?[^{}]*\\}\\}`, "gi"),
+  (_, a, b) => b === "end" ? String(Number(a) + 1) : /^\d{4}$/.test(b || "") ? `${a}–${b}` : a);
+
+// League seasons are written with a template ({{NBA Year|2013}}, {{NFL Year|2000|2019}}); other
+// leagues use plain years or their own template. When any row uses the league's, keep only those.
+function leagueRows(list, leagues) {
+  if (!leagues?.length) return list;
+  const re = new RegExp(`\\{\\{\\s*(${leagues.join("|")})(?:[ _]year\\b|y\\s*\\|)`, "i");
+  const mine = list.filter(l => re.test(l));
+  return mine.length ? mine : list;
+}
+
 function spans(list) {
   let lo = null, hi = null, open = false;
   for (const line of list) {
-    // {{NFL Year|2000|2019}} -> 2000–2019 ; {{WNBA Year|2002}} -> 2002
-    const flat = line.replace(/\{\{\s*[^|{}]*year[^|{}]*\|\s*(\d{4})\s*(?:\|\s*(\d{4}))?[^{}]*\}\}/gi, (_, a, b) => b ? `${a}–${b}` : a);
+    const flat = flatYears(line);
     // Gridiron lists put each team's years in parentheses after the team; read only those.
     const bits = /\*/.test(flat) ? [...flat.matchAll(/\(([^()]*)\)/g)].map(m => m[1]) : [flat];
     for (const b of bits) {
@@ -82,7 +97,7 @@ function spans(list) {
 const seasonList = (f, prefix) => Object.keys(f).filter(k => new RegExp(`^${prefix}\\d+$`).test(k))
   .sort((a, b) => Number(a.slice(prefix.length)) - Number(b.slice(prefix.length))).map(k => f[k]);
 
-export function infoboxYears(text, kind, nowYear = new Date().getUTCFullYear()) {
+export function infoboxYears(text, kind, nowYear = new Date().getUTCFullYear(), leagues = []) {
   const box = infoboxFields(text || "", kind);
   if (!box) return null;
   const f = box.fields;
@@ -92,17 +107,20 @@ export function infoboxYears(text, kind, nowYear = new Date().getUTCFullYear()) 
     end = /present/i.test(f.career_end || "") ? null : first(f.career_end || "");
     if (start && !f.career_end) active = true;
     if (/present/i.test(f.career_end || "")) active = true;
-    // Some basketball boxes leave career_start blank and only list seasons (years1, team1, ...).
-    if (!start && !end) {
-      const s = spans(seasonList(f, "years"));
-      start = s.lo; end = s.open ? null : s.hi; if (s.lo) active = s.open;
+    // career_start/end cover a whole pro career (Giannis from Greece in 2011); the season rows
+    // say which were in the league. Rows also cover boxes that leave career_start blank.
+    const rows = seasonList(f, "years");
+    const league = leagueRows(rows, leagues);
+    if (league !== rows || (!start && !end)) {
+      const s = spans(league);
+      if (s.lo) { start = s.lo; end = s.open ? null : s.hi; active = s.open; }
     }
   } else if (box.kind === "baseball") {
     start = first(f.debutyear || f.debutdate || "");
     end = first(f.finalyear || f.finaldate || "");
     if (start && !end) active = true;
   } else if (box.kind === "gridiron") {
-    const s = spans(String(f.past_teams || f.pastteams || "").split("\n"));
+    const s = spans(leagueRows(String(f.past_teams || f.pastteams || "").split("\n").filter(l => /\S/.test(l)), leagues));
     start = s.lo; end = s.open ? null : s.hi; if (s.lo) active = s.open;
     // A one-season current stint is often written without "present"; the status field says it.
     if (/^\s*(active|free agent|reserve|injured|practice squad|physically)/i.test(f.status || "")) { active = true; end = null; }
@@ -110,6 +128,8 @@ export function infoboxYears(text, kind, nowYear = new Date().getUTCFullYear()) 
     const s = spans(seasonList(f, "years"));
     start = s.lo; end = s.open ? null : s.hi; if (s.lo) active = s.open;
   }
+  // A box with a coaching career and no playing seasons: a coach or executive, not a player.
+  if (!start && !end && Object.keys(f).some(k => /^(coach|cyears|cteam|coaching|exec|gm_)/.test(k))) return { coachOnly: true };
   if (end && end > nowYear) end = null;
   if (end != null) active = false;
   // An "active" career that started 30+ years ago is a stale article, not a player.
@@ -119,7 +139,7 @@ export function infoboxYears(text, kind, nowYear = new Date().getUTCFullYear()) 
 
 // Section 0 (the lead, where the infobox lives) for up to 50 titles a request. A batch that keeps
 // failing is split in half until the bad part is found, so one odd title can't cost 49 others.
-export async function infoboxes(titles, kind, { fetchImpl = globalThis.fetch, ua, log = () => {}, nowYear } = {}) {
+export async function infoboxes(titles, kind, { fetchImpl = globalThis.fetch, ua, log = () => {}, nowYear, leagues = [] } = {}) {
   const out = new Map(), list = [...new Set(titles)];
   let failed = 0, lastErr = "";
   const wait = t => new Promise(r => setTimeout(r, process.env.DLE_FAST ? 1 : 2000 * (t + 1)));
@@ -147,7 +167,7 @@ export async function infoboxes(titles, kind, { fetchImpl = globalThis.fetch, ua
     for (const pg of j.query?.pages || []) {
       const text = pg.revisions?.[0]?.slots?.main?.content;
       if (!text) continue;
-      const y = infoboxYears(text, kind, nowYear);
+      const y = infoboxYears(text, kind, nowYear, leagues);
       if (y) out.set(back.get(pg.title) || pg.title, y);
     }
   }
