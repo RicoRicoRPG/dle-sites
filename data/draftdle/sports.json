@@ -4,7 +4,7 @@
   {
    "id": "nfl", "name": "NFL", "group": "US leagues", "wave": 1,
    "leagues": ["Q1215884"], "leagueLabels": ["National Football League"],
-   "poolSize": 1000, "tiers": [200, 400], "infobox": "gridiron",
+   "poolSize": 1000, "tiers": [200, 400], "infobox": "gridiron", "yearTemplates": ["NFL", "AFL", "AAFC"],
    "teamsFrom": "league",
    "positions": [
     ["quarterback", "QB", "qb"],
@@ -32,7 +32,7 @@
   {
    "id": "nba", "name": "NBA", "group": "US leagues", "wave": 1,
    "leagues": ["Q155223"], "leagueLabels": ["National Basketball Association"],
-   "poolSize": 1000, "tiers": [200, 400], "infobox": "basketball",
+   "poolSize": 1000, "tiers": [200, 400], "infobox": "basketball", "yearTemplates": ["NBA", "BAA"],
    "teamsFrom": "league",
    "positions": [
     ["point guard", "PG", "all"], ["shooting guard", "SG", "all"], ["small forward", "SF", "all"],
@@ -80,7 +80,7 @@
   {
    "id": "wnba", "name": "WNBA", "group": "US leagues", "wave": 1,
    "leagues": ["Q2593221"], "leagueLabels": ["Women's National Basketball Association"],
-   "poolSize": 300, "tiers": [100, 100], "sex": "Q6581072", "infobox": "basketball",
+   "poolSize": 300, "tiers": [100, 100], "sex": "Q6581072", "infobox": "basketball", "yearTemplates": ["WNBA"],
    "teamsFrom": "league",
    "positions": [
     ["point guard", "PG", "all"], ["shooting guard", "SG", "all"], ["small forward", "SF", "all"],
