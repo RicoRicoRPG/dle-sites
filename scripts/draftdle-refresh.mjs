@@ -45,6 +45,8 @@ export async function sparql(query, { fetchImpl = globalThis.fetch, tries = 5 } 
 }
 
 const qid = uri => String(uri).replace(/^.*\/entity\//, "");
+// Wikidata keeps some names only as the "default for all languages" label (mul); prefer English.
+const preferEn = rows => { const out = {}; for (const r of rows) { const k = qid(r.x); if (!out[k] || r.lang === "en") out[k] = r.l; } return out; };
 const year = v => (v && /^-?\d{4}/.test(v) ? Number(v.slice(0, 4)) : null);
 const values = ids => ids.map(id => "wd:" + id).join(" ");
 const chunks = (arr, n) => { const out = []; for (let i = 0; i < arr.length; i += n) out.push(arr.slice(i, i + n)); return out; };
@@ -112,15 +114,15 @@ export function tierOf(sport, rank) {
 
 async function refreshSport(sport, nowYear, q) {
   log(`\n${sport.id}: checking ids`);
-  const labels = await q(`SELECT ?x ?l WHERE { VALUES ?x { ${values(sport.leagues)} } ?x rdfs:label ?l FILTER(lang(?l) = "en") }`);
-  const byId = Object.fromEntries(labels.map(r => [qid(r.x), r.l]));
+  const labels = await q(`SELECT ?x ?l (lang(?l) AS ?lang) WHERE { VALUES ?x { ${values(sport.leagues)} } ?x rdfs:label ?l FILTER(lang(?l) IN ("en", "mul")) }`);
+  const byId = preferEn(labels);
   sport.leagues.forEach((id, i) => {
     if (byId[id] !== sport.leagueLabels[i]) throw new Error(`${sport.id}: ${id} is "${byId[id]}", expected "${sport.leagueLabels[i]}"`);
   });
   const headshots = [];
   if (sport.headshots.length) {
-    const props = await q(`SELECT ?x ?l WHERE { VALUES ?x { ${sport.headshots.map(h => "wd:" + h.prop).join(" ")} } ?x rdfs:label ?l FILTER(lang(?l) = "en") }`);
-    const pl = Object.fromEntries(props.map(r => [qid(r.x), r.l]));
+    const props = await q(`SELECT ?x ?l (lang(?l) AS ?lang) WHERE { VALUES ?x { ${sport.headshots.map(h => "wd:" + h.prop).join(" ")} } ?x rdfs:label ?l FILTER(lang(?l) IN ("en", "mul")) }`);
+    const pl = preferEn(props);
     for (const h of sport.headshots) {
       if (pl[h.prop] && pl[h.prop].includes(h.expectLabel)) headshots.push(h);
       else log(`${sport.id}: skipping headshots from ${h.prop} ("${pl[h.prop]}" does not mention ${h.expectLabel})`);
@@ -146,28 +148,28 @@ async function refreshSport(sport, nowYear, q) {
   const extVars = headshots.map((h, i) => `OPTIONAL { ?p wdt:${h.prop} ?x${i} }`).join(" ");
   for (const batch of chunks(ranked.map(r => r[0]), 100)) {
     const v = values(batch);
-    for (const r of await q(`SELECT ?p ?l ?img ?ws ?we ?death ${headshots.map((_, i) => "?x" + i).join(" ")} WHERE { VALUES ?p { ${v} }
-        OPTIONAL { ?p rdfs:label ?l FILTER(lang(?l) = "en") } OPTIONAL { ?p wdt:P18 ?img } OPTIONAL { ?p wdt:P2031 ?ws }
+    for (const r of await q(`SELECT ?p ?l (lang(?l) AS ?lang) ?img ?ws ?we ?death ${headshots.map((_, i) => "?x" + i).join(" ")} WHERE { VALUES ?p { ${v} }
+        OPTIONAL { ?p rdfs:label ?l FILTER(lang(?l) IN ("en", "mul")) } OPTIONAL { ?p wdt:P18 ?img } OPTIONAL { ?p wdt:P2031 ?ws }
         OPTIONAL { ?p wdt:P2032 ?we } OPTIONAL { ?p wdt:P570 ?death } ${extVars} }`)) {
       const o = raw.get(qid(r.p)); if (!o) continue;
-      if (!o.name && r.l) o.name = r.l;
+      if (r.l && (!o.name || (r.lang === "en" && o.nameLang !== "en"))) { o.name = r.l; o.nameLang = r.lang; }
       if (!o.image && r.img) o.image = decodeURIComponent(r.img.replace(/^.*\/Special:FilePath\//, "")).replace(/_/g, " ");
       if (o.ws == null && r.ws) o.ws = year(r.ws);
       if (o.we == null && r.we) o.we = year(r.we);
       if (r.death) o.death = true;
       headshots.forEach((h, i) => { if (r["x" + i] && !o.ext[h.prop]) o.ext[h.prop] = r["x" + i]; });
     }
-    for (const r of await q(`SELECT ?p ?pl WHERE { VALUES ?p { ${v} } ?p wdt:P413 ?pos . ?pos rdfs:label ?pl FILTER(lang(?pl) = "en") }`)) {
+    for (const r of await q(`SELECT ?p ?pl WHERE { VALUES ?p { ${v} } ?p wdt:P413 ?pos . ?pos rdfs:label ?pl FILTER(lang(?pl) IN ("en", "mul")) }`)) {
       const o = raw.get(qid(r.p)); if (o && !o.positions.includes(r.pl)) o.positions.push(r.pl);
     }
     for (const r of await q(`SELECT ?p ?team ?tl ?short ?start ?end WHERE { VALUES ?p { ${v} } ?p p:P54 ?st . ?st ps:P54 ?team .
-        ?team rdfs:label ?tl FILTER(lang(?tl) = "en") OPTIONAL { ?team wdt:P1813 ?short FILTER(lang(?short) = "en") }
+        ?team rdfs:label ?tl FILTER(lang(?tl) IN ("en", "mul")) OPTIONAL { ?team wdt:P1813 ?short FILTER(lang(?short) IN ("en", "mul")) }
         OPTIONAL { ?st pq:P580 ?start } OPTIONAL { ?st pq:P582 ?end } }`)) {
       const o = raw.get(qid(r.p)); if (!o) continue;
       const t = { team: qid(r.team), label: r.tl, short: r.short || "", start: year(r.start), end: year(r.end) };
       if (!o.teams.some(x => x.team === t.team && x.start === t.start)) o.teams.push(t);
     }
-    for (const r of await q(`SELECT DISTINCT ?p WHERE { VALUES ?p { ${v} } ?p wdt:P166 ?aw . ?aw rdfs:label ?al FILTER(lang(?al) = "en" && CONTAINS(LCASE(?al), "hall of fame")) }`)) {
+    for (const r of await q(`SELECT DISTINCT ?p WHERE { VALUES ?p { ${v} } ?p wdt:P166 ?aw . ?aw rdfs:label ?al FILTER(lang(?al) IN ("en", "mul") && CONTAINS(LCASE(?al), "hall of fame")) }`)) {
       const o = raw.get(qid(r.p)); if (o) o.hof = true;
     }
   }
@@ -182,7 +184,7 @@ async function refreshSport(sport, nowYear, q) {
   }
   players.sort((a, b) => b.fame - a.fame || a.id.localeCompare(b.id));
   const pool = players.slice(0, sport.poolSize).map((pl, i) => ({ ...pl, tier: tierOf(sport, i) }));
-  log(`${sport.id}: kept ${pool.length} (dropped ${noName} without an English name, ${noPos} without a usable position, ${noTeams} without a listed team)`);
+  log(`${sport.id}: kept ${pool.length} (dropped ${noName} without a name, ${noPos} without a usable position, ${noTeams} without a listed team)`);
   return pool;
 }
 
