@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Weekly: refresh each Steam app's header image path in data/peakdle/pool.json from Steam's
-// IStoreBrowseService/GetItems (100 apps per call), and drop apps Steam marks as adult-only or
+// Weekly: refresh each Steam app's header image path and regular US price in data/peakdle/pool.json
+// from Steam's IStoreBrowseService/GetItems (100 apps per call), and drop apps Steam marks as adult-only or
 // frequent sexual content (content descriptors 3 and 4); those can't sit next to AdSense ads.
 
 import { p, read, write, sleep, getJSON } from "./lib.mjs";
@@ -11,7 +11,7 @@ export async function refreshAssets({ fetchImpl = globalThis.fetch, log = consol
   const pool = read(p("data/peakdle/pool.json"), []);
   const info = new Map();
   for (let i = 0; i < pool.length; i += 100) {
-    const input = { ids: pool.slice(i, i + 100).map(a => ({ appid: a.appid })), context: { language: "english", country_code: "US" }, data_request: { include_assets: true } };
+    const input = { ids: pool.slice(i, i + 100).map(a => ({ appid: a.appid })), context: { language: "english", country_code: "US" }, data_request: { include_assets: true, include_all_purchase_options: true } };
     try {
       const j = await getJSON("https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?input_json=" + encodeURIComponent(JSON.stringify(input)), { fetchImpl });
       for (const it of j?.response?.store_items || []) info.set(String(it.appid ?? it.id), it);
@@ -25,11 +25,17 @@ export async function refreshAssets({ fetchImpl = globalThis.fetch, log = consol
     if (it && (it.content_descriptorids || []).some(d => ADULT.has(d))) { dropped.push(a.name); continue; }
     const img = it?.assets?.header || a.img || "";
     if (img !== a.img) changed++;
-    out.push({ ...a, img });
+    // Regular price, not a sale price, so a card doesn't change with every discount. No purchase
+    // option (delisted, bundle-only) keeps the last known price.
+    const bpo = it?.best_purchase_option;
+    const cents = bpo ? Number(bpo.original_price_in_cents ?? bpo.final_price_in_cents) : NaN;
+    const free = it ? (it.is_free ? true : cents > 0 ? false : a.free) : a.free;
+    const price = free ? 0 : cents > 0 ? cents : (a.price || 0);
+    out.push({ ...a, img, free, price });
   }
   if (info.size < pool.length * 0.5) throw new Error(`only ${info.size} of ${pool.length} apps answered; not writing`);
   write(p("data/peakdle/pool.json"), out);
-  log(`${out.length} apps, ${changed} image paths updated, ${dropped.length} adult apps dropped${dropped.length ? ": " + dropped.join(", ") : ""}`);
+  log(`${out.length} apps, ${changed} image paths updated, ${out.filter(a => a.price).length} prices, ${dropped.length} adult apps dropped${dropped.length ? ": " + dropped.join(", ") : ""}`);
   return { out, changed, dropped };
 }
 

@@ -58,12 +58,16 @@ function gamePage(site, ads) {
   const today = utcDay(now());
   const dates = [addDays(today, -1), today, addDays(today, 1)];
   const puzzles = {}, pools = {};
+  // CCUdle cards show the game's current regular price. It is display data joined at build time,
+  // so frozen puzzles pick up price changes without their pairs or answers changing.
+  const prices = site.name === "peakdle" ? new Map(read(p("data/peakdle/pool.json"), []).map(a => [String(a.appid), a])) : null;
+  const priced = items => !prices ? items : items.map(it => { const a = prices.get(String(it.group)); return a ? { ...it, free: a.free, price: a.price || 0 } : it; });
   const modes = [];
   for (const mode of modesFor(site)) {
     const byDate = {};
     for (const d of dates) {
       const f = read(p("data/puzzles", site.name, mode, d + ".json"), null);
-      if (f) byDate[d] = { date: d, pairs: f.pairs, meta: f.meta };
+      if (f) byDate[d] = { date: d, pairs: f.pairs.map(priced), meta: f.meta };
     }
     // Practice and the fallback use the newest pool the mode can play.
     let pool = null;
@@ -72,7 +76,7 @@ function gamePage(site, ads) {
     if (!Object.keys(byDate).length && !pool && mode !== modesFor(site)[0]) continue;
     modes.push(mode);
     puzzles[mode] = byDate;
-    pools[mode] = pool ? { items: pool.items, meta: pool.meta } : { items: [], meta: {} };
+    pools[mode] = pool ? { items: priced(pool.items), meta: pool.meta } : { items: [], meta: {} };
   }
   const SITE = {
     name: site.name, title: site.title, url: site.url, epoch: site.epoch,
