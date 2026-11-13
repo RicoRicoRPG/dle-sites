@@ -150,8 +150,8 @@ const nightlyDb = db => db.nightly;
 
   process.env.DLE_FAST = "1";
   const asked = [];
-  const got = await I.infoboxes(["Jeter", "rondo", "Gone"], "baseball", { nowYear: 2026, fetchImpl: async u => {
-    asked.push(u);
+  const got = await I.infoboxes(["Jeter", "rondo", "Gone"], "baseball", { nowYear: 2026, fetchImpl: async (u, o) => {
+    asked.push(String(o.body));
     return { ok: true, status: 200, json: async () => ({ query: {
       normalized: [{ from: "rondo", to: "Rondo" }], redirects: [{ from: "Rondo", to: "Rajon Rondo" }],
       pages: [
@@ -162,6 +162,18 @@ const nightlyDb = db => db.nightly;
   let tries = 0;
   const dead = await I.infoboxes(["A"], "baseball", { fetchImpl: async () => { tries++; throw new Error("down"); } });
   delete process.env.DLE_FAST;
+  const box = y0 => ({ slots: { main: { content: `{{Infobox baseball biography\n| debutyear = ${y0}\n| finalyear = ${y0 + 5}\n}}` } } });
+  let calls = 0;
+  const split = await I.infoboxes(["A1", "A2", "Bad", "A3", "A4"], "baseball", { fetchImpl: async (u, o) => {
+    calls++;
+    const ts = new URLSearchParams(String(o.body)).get("titles").split("|");
+    if (ts.includes("Bad")) return { ok: false, status: 414 };
+    const cont = new URLSearchParams(String(o.body)).get("rvcontinue");
+    // the first answer carries only the first title; the rest come through the continuation
+    const pages = (cont ? ts.slice(1) : ts.slice(0, 1)).map((t, k) => ({ title: t, revisions: [box(1990 + k)] }));
+    return { ok: true, status: 200, json: async () => ({ query: { pages }, ...(cont || ts.length === 1 ? {} : { continue: { rvcontinue: "x", continue: "||" } }) }) };
+  } });
+  ok(split.size === 4 && !split.has("Bad") && calls < 15, `infoboxes: a failing batch is split until only the bad title is lost, continuations followed (${split.size} of 5, ${calls} calls)`);
   ok(asked.length === 1 && /rvsection=0/.test(asked[0]) && got.get("Jeter")?.end === 2014 && got.get("rondo")?.end === 2022 && !got.has("Gone"), "infoboxes: 50 titles a request, answers mapped back through redirects");
   ok(dead.size === 0 && tries === 4, "infoboxes: an unreachable Wikipedia leaves Wikidata's years in place");
 }
