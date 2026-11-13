@@ -94,6 +94,11 @@ const nightlyDb = db => db.nightly;
   ok(nba.length === 160 && nba.every(x => x.teams.length && x.img[0].includes("cdn.nba.com")), `fake refresh builds an NBA pool (${nba.length})`);
   ok(nba.slice(0, 20).every(x => x.views === 5e6) && nba[0].tier === 1, "page views decide fame: the most viewed lead the pool even with few language links");
   ok(R.fameOf(1e6, 10, false) > R.fameOf(5000, 120, true), "a player a million people looked up outranks one with many languages but few readers");
+  process.env.DLE_FAST = "1";
+  const down = await R.enViews(Array.from({ length: 300 }, (_, i) => "T" + i), { fetchImpl: async () => { throw new Error("timeout"); } });
+  const up = await R.enViews(["A b", "C"], { fetchImpl: async u => ({ ok: true, status: 200, json: async () => ({ items: [{ views: u.includes("A_b") ? 7 : 3 }, { views: 5 }] }) }) });
+  delete process.env.DLE_FAST;
+  ok(down.size === 0 && up.get("A b") === 12 && up.get("C") === 8, "page views: summed per title; a dead service falls back instead of stalling");
   ok(errs.some(e => /Q2593221 is "WNBA \(wrong label\)"/.test(e)) && fs.existsSync(path.join(T, "data/draftdle/wnba/pool.json")) === before, "a league id with the wrong label stops that sport and keeps its old pool");
 }
 
