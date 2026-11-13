@@ -65,6 +65,8 @@ const nightlyDb = db => db.nightly;
   const back = R.buildPlayer(S.nfl, { id: "Qx", name: "X", sitelinks: 60, hof: false, ws: 2010, we: 2007, positions: ["defensive tackle"], ext: {}, teams: [{ team: "Q1", label: "Chicago Bulls", start: 2007, end: 2008 }] }, league, [], 2026);
   ok(wr.years === "2004" && back.years === "2007–2008", `career dates from another career don't override team years (${wr.years}, ${back.years})`);
   const tc = R.buildPlayer(S.nfl, { id: "Q271464", name: "Terry Crews", sitelinks: 60, hof: false, ws: 1991, positions: ["linebacker"], ext: {}, teams: [{ team: "Q1", label: "Chicago Bulls", start: 1991 }, { team: "Q1", label: "Chicago Bulls", start: 1995 }] }, league, [], 2026);
+  const gone = R.buildPlayer(S.nfl, { id: "Qm", name: "Frank McRae", sitelinks: 30, hof: false, ws: 1972, death: "2021", positions: ["defensive tackle"], ext: {}, teams: [{ team: "Q1", label: "Chicago Bulls" }] }, league, [], 2026);
+  ok(gone.years === "" && gone.active === 0, `no end date anywhere and not active: no years rather than "present" (${gone.years})`);
   ok(tc.years === "1991–1995" && tc.active === 0, `old career with no end dates isn't shown as present (${tc.years})`);
   ok(ret.years === "1984–2003" && ret.active === 0 && ret.fame === R.fameOf(0, 150, true) && R.fameOf(0, 150, true) > R.fameOf(0, 150, false), "retired player: closed years, Hall of Fame bonus");
   const { cardOf } = await imp("scripts/draftdle-lib.mjs");
