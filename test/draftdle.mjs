@@ -93,6 +93,32 @@ const nightlyDb = db => db.nightly;
   ok(errs.some(e => /Q2593221 is "WNBA \(wrong label\)"/.test(e)) && fs.existsSync(path.join(T, "data/draftdle/wnba/pool.json")) === before, "a league id with the wrong label stops that sport and keeps its old pool");
 }
 
+// ---------- 1b. placeDense keeps slots dense and writes only what moved ----------
+{
+  const { placeDense } = await imp("scripts/draftdle-nightly.mjs");
+  let seed2 = 7; const r2 = () => { seed2 = (seed2 * 16807) % 2147483647; return seed2 / 2147483647; };
+  let okAll = true, small = true;
+  for (let t = 0; t < 300; t++) {
+    const pool = Array.from({ length: 40 }, (_, i) => "k" + i);
+    const prevKeys = pool.filter(() => r2() < 0.5);
+    const prev = prevKeys.map((key, idx) => ({ key, idx, v: 1 }));
+    const wantKeys = pool.filter(k => prevKeys.includes(k) ? r2() < 0.8 : r2() < 0.3);
+    const want = new Map(wantKeys.map(k => [k, { v: 1 }]));
+    const { put, drop, size } = placeDense(prev, want, (a, b) => a.v === b.v);
+    const slots = []; prev.forEach(p => slots[p.idx] = p.key);
+    for (const [i] of put) slots[i] = null;
+    const keyOf = new Map(); for (const [i, w] of put) keyOf.set(i, w.key);
+    for (const [i, k] of keyOf) slots[i] = k;
+    if (drop !== null) slots.length = drop;
+    const live = slots.slice(0, size);
+    if (size !== wantKeys.length || live.some(x => !x) || new Set(live).size !== size || !wantKeys.every(k => live.includes(k))) okAll = false;
+    const changed = wantKeys.filter(k => !prevKeys.includes(k)).length + prevKeys.filter(k => !wantKeys.includes(k)).length;
+    if (put.length > changed) small = false;
+  }
+  ok(okAll, "placeDense: slots stay 0..n-1 and hold exactly the wanted rows");
+  ok(small, "placeDense: writes no more slots than rows that came or went");
+}
+
 // ---------- 2. synthetic pools ----------
 // Two sports with small tiers so a simulated crowd can open them in a few "days".
 const SPORTS = [
@@ -305,6 +331,13 @@ if (ds.dailyEpoch) {
   const f = db.raw.prepare("SELECT * FROM flags WHERE sport = 'nba' AND lo = ? AND hi = ?").get(row.lo, row.hi);
   ok(!!f, "a pair swung by a burst of votes is flagged");
   ok(!db.raw.prepare("SELECT 1 FROM serve WHERE sport = 'nba' AND lo = ? AND hi = ?").get(row.lo, row.hi), "a flagged pair is no longer served");
+}
+
+// A second nightly run on the same day writes nothing.
+{
+  const before = db.raw.prepare("SELECT total_changes() AS c").get().c;
+  await night(day);
+  ok(db.raw.prepare("SELECT total_changes() AS c").get().c - before <= 12, "a repeat nightly run writes (almost) nothing");
 }
 
 // Cost per Endless pick, by the stand-in's counters (Claude's measure, not Cloudflare's billing).
