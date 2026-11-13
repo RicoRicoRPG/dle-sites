@@ -65,8 +65,9 @@ jobs:
       - name: Player pools (missing ones, or all when asked)
         run: |
           missing=$(node -e "const fs=require('fs');const c=require('./data/draftdle/sports.json');console.log(c.sports.filter(s=>s.wave===1&&!fs.existsSync('data/draftdle/'+s.id+'/pool.json')).map(s=>s.id).join(' '))")
-          if [ "${{ inputs.refresh }}" = "true" ]; then node scripts/draftdle-refresh.mjs
-          elif [ -n "$missing" ]; then node scripts/draftdle-refresh.mjs $missing
+          # A sport that fails keeps its old pool (or stays "coming soon"); the others still ship.
+          if [ "${{ inputs.refresh }}" = "true" ]; then node scripts/draftdle-refresh.mjs || echo "::warning::Some Draftdle pools failed to refresh; see the log above"
+          elif [ -n "$missing" ]; then node scripts/draftdle-refresh.mjs $missing || echo "::warning::Some Draftdle pools failed to build; see the log above"
           else echo "all pools present"; fi
       - name: Restore last night's totals
         uses: actions/cache/restore@v4
