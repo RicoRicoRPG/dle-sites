@@ -66,7 +66,8 @@ const nightlyDb = db => db.nightly;
   ok(wr.years === "2004" && back.years === "2007–2008", `career dates from another career don't override team years (${wr.years}, ${back.years})`);
   const tc = R.buildPlayer(S.nfl, { id: "Q271464", name: "Terry Crews", sitelinks: 60, hof: false, ws: 1991, positions: ["linebacker"], ext: {}, teams: [{ team: "Q1", label: "Chicago Bulls", start: 1991 }, { team: "Q1", label: "Chicago Bulls", start: 1995 }] }, league, [], 2026);
   const gone = R.buildPlayer(S.nfl, { id: "Qm", name: "Frank McRae", sitelinks: 30, hof: false, ws: 1972, death: "2021", positions: ["defensive tackle"], ext: {}, teams: [{ team: "Q1", label: "Chicago Bulls" }] }, league, [], 2026);
-  ok(gone.years === "" && gone.active === 0, `no end date anywhere and not active: no years rather than "present" (${gone.years})`);
+  const coach = R.buildPlayer(S.nba, { id: "Qc", name: "Brad Stevens", sitelinks: 30, hof: false, positions: ["point guard"], ext: {}, box: { coachOnly: true }, teams: [{ team: "Q1", label: "Chicago Bulls", start: 2013 }] }, league, [], 2026);
+  ok(gone.drop === "years" && coach.drop === "coach", `no playing years anywhere, or a coach-only infobox: not a card (${gone.drop}, ${coach.drop})`);
   ok(tc.years === "1991–1995" && tc.active === 0, `old career with no end dates isn't shown as present (${tc.years})`);
   ok(ret.years === "1984–2003" && ret.active === 0 && ret.fame === R.fameOf(0, 150, true) && R.fameOf(0, 150, true) > R.fameOf(0, 150, false), "retired player: closed years, Hall of Fame bonus");
   const { cardOf } = await imp("scripts/draftdle-lib.mjs");
@@ -126,7 +127,7 @@ const nightlyDb = db => db.nightly;
 {
   const I = await imp("scripts/draftdle-infobox.mjs");
   const kindOf = t => /gridiron/i.test(t) ? "gridiron" : /basketball/i.test(t) ? "basketball" : /baseball/i.test(t) ? "baseball" : /ice hockey/i.test(t) ? "hockey" : "soccer";
-  const y = (t, kind = kindOf(t), now = 2026) => { const r = I.infoboxYears(t, kind, now); return r ? `${r.start}-${r.end} ${r.active}` : "none"; };
+  const y = (t, kind = kindOf(t), now = 2026, leagues = []) => { const r = I.infoboxYears(t, kind, now, leagues); return !r ? "none" : r.coachOnly ? "coach" : `${r.start}-${r.end} ${r.active}`; };
   const cases = [
     ["Sue Bird (basketball)", "{{Short description|x}}\n{{Infobox basketball biography\n| name = Sue Bird\n| team = Seattle Storm\n| career_start = 2002\n| career_end = 2022<ref>{{cite web|title=Retires 2023}}</ref>\n| years1 = {{WNBA Year|2002}}–{{WNBA Year|2022}}\n| years2 = 2004–2006\n}}\n'''Suzanne Bird'''", "2002-2022 false"],
     ["active basketball, no end", "{{Infobox basketball biography\n| name = Darius Garland\n| career_start = 2019\n| career_end = \n| years1 = {{NBA Year|2019}}–present\n}}", "2019-null true"],
@@ -142,9 +143,17 @@ const nightlyDb = db => db.nightly;
     ["retired soccer, manager years ignored", "{{Infobox football biography\n| years1 = 1975–1987\n| years2 = 1987–1991\n| years3 = 1991–1993\n| years4 = 1993–1995\n| manageryears1 = 1991–1993\n| manageryears2 = 2006–2008\n}}", "1975-1995 false"],
     ["hockey career_end present", "{{Infobox ice hockey player\n| name = X\n| career_start = 2005\n| career_end = present\n}}", "2005-null true"],
     ["stale article: 'active' since 1980 isn't trusted", "{{Infobox ice hockey player\n| career_start = 1980\n}}", "1980-null null"],
+    ["Giannis: only NBA seasons count", "{{Infobox basketball biography\n| career_start = 2011\n| years1 = 2011–2013\n| team1 = [[Filathlitikos]]\n| years2 = {{NBA Year|2013}}–present\n| team2 = [[Milwaukee Bucks]]\n}}", "2013-null true", ["NBA"]],
+    ["short season templates: {{nbay|2025|end}} is 2026", "{{Infobox basketball biography\n| career_start = 2011\n| years1 = 2011–2013\n| team1 = [[EFAO Zografou B.C.|Filathlitikos]]\n| years2 = {{nbay|2013|start}}–{{nbay|2025|end}}\n| team2 = [[Milwaukee Bucks]]\n| years3 = {{nbay|2026|start}}–present\n| team3 = [[Miami Heat]]\n}}", "2013-null true", ["NBA", "BAA"]],
+    ["short templates, retired", "{{Infobox basketball biography\n| career_start = 2004\n| years1 = 2004–2006\n| team1 = [[Some Club]]\n| years2 = {{nbay|2006|start}}–{{nbay|2011|end}}\n| team2 = [[Boston Celtics]]\n| years3 = {{wnbay|2013|start}}\n}}", "2006-2012 false", ["NBA", "BAA"]],
+    ["WNBA rows, overseas winters ignored", "{{Infobox basketball biography\n| career_start = 2002\n| career_end = 2022\n| years1 = {{WNBA Year|2002}}–{{WNBA Year|2022}}\n| team1 = [[Seattle Storm]]\n| years2 = 2004–2006\n| team2 = [[Dynamo Moscow]]\n| years3 = 2023–2024\n| team3 = [[Some Club]]\n}}", "2002-2022 false", ["WNBA"]],
+    ["NFL seasons only, UFL and XFL ignored", "{{Infobox gridiron football biography\n| past_teams =\n* [[Tampa Bay Buccaneers]] ({{NFL Year|2008|2011}})\n* [[Sacramento Mountain Lions]] ([[2012 UFL season|2012]])\n* [[Los Angeles Wildcats]] ({{XFL Year|2020}})\n* [[Baltimore Ravens]] ({{NFL Year|2021}})\n* [[DC Defenders]] ({{UFL Year|2024|2025}})\n}}", "2008-2021 false", ["NFL", "AFL"]],
+    ["no league template anywhere: all rows count", "{{Infobox gridiron football biography\n| past_teams =\n* [[Miami Dolphins]] ([[1968 American Football League season|1968]]–[[1974 NFL season|1974]])\n* [[New York Giants]] ([[1976 NFL season|1976]]–[[1978 NFL season|1978]])\n}}", "1968-1978 false", ["NFL", "AFL"]],
+    ["coach only: coaching career, no playing seasons", "{{Infobox basketball biography\n| career_position = Point guard\n| coach_start = 2001\n| cyears1 = 2007–2013\n| cteam1 = [[Butler Bulldogs]]\n}}", "coach", []],
     ["not a sport infobox", "{{Infobox person\n| name = Bob\n| years_active = 1990–2000\n}}", "none"],
   ];
-  const bad = cases.filter(([, t, want]) => y(t) !== want).map(([n, t, want]) => `${n}: got ${y(t)}, want ${want}`);
+  const yc = (t, lg) => y(t, kindOf(t), 2026, lg || []);
+  const bad = cases.filter(([, t, want, lg]) => yc(t, lg) !== want).map(([n, t, want, lg]) => `${n}: got ${yc(t, lg)}, want ${want}`);
   const thorpe = "{{Infobox gridiron football biography\n| past_teams =\n* [[Canton Bulldogs]] (1915–1928)\n}}\n{{Infobox baseball biography\n| debutyear = 1913\n| finalyear = 1919\n}}";
   const deion = "{{Infobox gridiron football biography\n| past_teams =\n* [[Atlanta Falcons]] ({{NFL Year|1989|1993}})\n}}";
   if (y(thorpe, "baseball") !== "1913-1919 false" || y(thorpe, "gridiron") !== "1915-1928 false" || y(deion, "baseball") !== "none") bad.push(`two-sport athletes: ${y(thorpe, "baseball")} / ${y(thorpe, "gridiron")} / ${y(deion, "baseball")}`);
