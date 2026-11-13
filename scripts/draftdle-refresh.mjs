@@ -139,7 +139,7 @@ export function teamsLine(sport, stmts, leagueTeams, nowYear) {
   const starts = club.map(r => r.start).filter(v => v != null);
   const ends = club.map(r => r.end).filter(v => v != null);
   const open = club.some(r => r.end == null && r.start != null && r.start >= nowYear - 25);
-  return { teams: out, first: starts.length ? Math.min(...starts) : null, last: ends.length ? Math.max(...ends) : null, open };
+  return { teams: out, first: starts.length ? Math.min(...starts) : null, last: ends.length ? Math.max(...ends) : null, lastStart: starts.length ? Math.max(...starts) : null, open };
 }
 
 export function buildPlayer(sport, raw, leagueTeams, headshots, nowYear) {
@@ -154,7 +154,8 @@ export function buildPlayer(sport, raw, leagueTeams, headshots, nowYear) {
   const active = !we && !raw.death && t.open;
   // A listed retirement a few years past the last dated stint is usually a missing stint
   // (Jordan's Wizards years); far past it, it's another career.
-  const end = active ? null : (we != null && (t.last == null || (we >= t.last && we - t.last <= 6)) ? we : (t.last ?? we));
+  // Retired with no end date anywhere: the last dated stint start beats a wrong "present".
+  const end = active ? null : (we != null && (t.last == null || (we >= t.last && we - t.last <= 6)) ? we : (t.last ?? we ?? t.lastStart));
   const years = ws ? (end ? (end === ws ? String(ws) : `${ws}–${end}`) : `${ws}–present`) : "";
   const img = [];
   for (const h of headshots) if (raw.ext[h.prop]) img.push(h.url.replace("{id}", encodeURIComponent(raw.ext[h.prop])));
