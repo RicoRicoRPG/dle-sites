@@ -1,0 +1,93 @@
+{
+ "_doc": "Draftdle sports. One entry per sport; adding a sport is an entry here plus a review of the pool it produces. leagues: Wikidata items whose teams (P118) define the pool; leagueLabels must match each item's English label, or the refresh stops. positions: first matching regex on the player's English position label wins. teamsFrom: 'league' lists only teams in these leagues; 'clubs' lists every senior club plus the senior national team. headshots: optional league image, keyed by a Wikidata external-id property whose label must contain expectLabel.",
+ "sports": [
+  {
+   "id": "nfl", "name": "NFL", "group": "US leagues", "wave": 1,
+   "leagues": ["Q1215884"], "leagueLabels": ["National Football League"],
+   "poolSize": 5000, "tiers": [400, 1500],
+   "teamsFrom": "league",
+   "positions": [
+    ["quarterback", "QB", "qb"],
+    ["running back|halfback|tailback", "RB", "skill"],
+    ["fullback", "FB", "skill"],
+    ["wide receiver|split end|flanker", "WR", "skill"],
+    ["tight end", "TE", "skill"],
+    ["offensive tackle", "OT", "ol"],
+    ["offensive guard|^guard", "G", "ol"],
+    ["^center|^centre", "C", "ol"],
+    ["offensive lineman|offensive line", "OL", "ol"],
+    ["defensive end", "DE", "def"],
+    ["defensive tackle|nose tackle", "DT", "def"],
+    ["defensive lineman", "DL", "def"],
+    ["linebacker", "LB", "def"],
+    ["cornerback", "CB", "def"],
+    ["safety", "S", "def"],
+    ["defensive back", "DB", "def"],
+    ["placekicker|^kicker", "K", "st"],
+    ["punter", "P", "st"],
+    ["long snapper", "LS", "st"]
+   ],
+   "headshots": [{ "prop": "P3686", "expectLabel": "ESPN", "url": "https://a.espncdn.com/i/headshots/nfl/players/full/{id}.png" }]
+  },
+  {
+   "id": "nba", "name": "NBA", "group": "US leagues", "wave": 1,
+   "leagues": ["Q155223"], "leagueLabels": ["National Basketball Association"],
+   "poolSize": 2500, "tiers": [400, 1500],
+   "teamsFrom": "league",
+   "positions": [
+    ["point guard", "PG", "all"], ["shooting guard", "SG", "all"], ["small forward", "SF", "all"],
+    ["power forward", "PF", "all"], ["^center|^centre", "C", "all"], ["guard", "G", "all"], ["forward", "F", "all"]
+   ],
+   "anyPosition": "all",
+   "headshots": [{ "prop": "P3647", "expectLabel": "NBA.com", "url": "https://cdn.nba.com/headshots/nba/latest/1040x760/{id}.png" }]
+  },
+  {
+   "id": "mlb", "name": "MLB", "group": "US leagues", "wave": 1,
+   "leagues": ["Q1163715"], "leagueLabels": ["Major League Baseball"],
+   "poolSize": 5000, "tiers": [400, 1500],
+   "teamsFrom": "league",
+   "positions": [
+    ["starting pitcher", "SP", "p"], ["relief pitcher|closer", "RP", "p"], ["pitcher", "P", "p"],
+    ["catcher", "C", "h"], ["first baseman", "1B", "h"], ["second baseman", "2B", "h"], ["third baseman", "3B", "h"],
+    ["shortstop", "SS", "h"], ["left fielder", "LF", "h"], ["center fielder|centre fielder", "CF", "h"], ["right fielder", "RF", "h"],
+    ["outfielder", "OF", "h"], ["designated hitter", "DH", "h"], ["infielder", "IF", "h"], ["utility", "UT", "h"]
+   ],
+   "headshots": [{ "prop": "P3541", "expectLabel": "MLB", "url": "https://img.mlbstatic.com/mlb-photos/image/upload/w_360,q_auto:best/v1/people/{id}/headshot/67/current" }]
+  },
+  {
+   "id": "nhl", "name": "NHL", "group": "US leagues", "wave": 1,
+   "leagues": ["Q1215892"], "leagueLabels": ["National Hockey League"],
+   "poolSize": 3500, "tiers": [400, 1500],
+   "teamsFrom": "league",
+   "positions": [
+    ["goaltender|goalie|goalkeeper", "G", "g"], ["^centre|^center", "C", "s"], ["left wing", "LW", "s"],
+    ["right wing", "RW", "s"], ["wing", "W", "s"], ["defence|defense", "D", "s"], ["forward", "F", "s"]
+   ],
+   "headshots": []
+  },
+  {
+   "id": "soccer", "name": "Soccer", "group": "Soccer", "wave": 1,
+   "leagues": ["Q9448", "Q324867", "Q15804", "Q82595", "Q13394", "Q18543"],
+   "leagueLabels": ["Premier League", "La Liga", "Serie A", "Bundesliga", "Ligue 1", "Major League Soccer"],
+   "poolSize": 5000, "tiers": [400, 1500],
+   "teamsFrom": "clubs",
+   "positions": [
+    ["goalkeeper", "GK", "gk"], ["back|defender|sweeper|libero", "DF", "out"], ["midfielder|playmaker", "MF", "out"],
+    ["forward|striker|winger|attacker", "FW", "out"]
+   ],
+   "headshots": []
+  },
+  {
+   "id": "wnba", "name": "WNBA", "group": "US leagues", "wave": 1,
+   "leagues": ["Q2593221"], "leagueLabels": ["Women's National Basketball Association"],
+   "poolSize": 600, "tiers": [200, 250],
+   "teamsFrom": "league",
+   "positions": [
+    ["point guard", "PG", "all"], ["shooting guard", "SG", "all"], ["small forward", "SF", "all"],
+    ["power forward", "PF", "all"], ["^center|^centre", "C", "all"], ["guard", "G", "all"], ["forward", "F", "all"]
+   ],
+   "anyPosition": "all",
+   "headshots": []
+  }
+ ]
+}
