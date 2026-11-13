@@ -218,6 +218,10 @@ export function freezeDaily(eligible, seedStr, { rounds = 10, recentPlayers = ne
 }
 
 // The card a client sees. Short keys keep the D1 rows and puzzle files small.
+// Retired players try the Commons photo first: league image servers answer for players they have
+// no photo of with a silhouette (not an error), so the page's fallback would never reach Commons.
 export function cardOf(p) {
-  return { id: p.id, n: p.name, y: p.years, p: p.pos, t: p.teams, i: p.img, c: p.commons || "", a: p.active ? 1 : 0 };
+  let img = p.img || [];
+  if (!p.active && p.commons) { const c = img.find(u => u.includes("commons.wikimedia.org")); if (c) img = [c, ...img.filter(u => u !== c)]; }
+  return { id: p.id, n: p.name, y: p.years, p: p.pos, t: p.teams, i: img, c: p.commons || "", a: p.active ? 1 : 0 };
 }
