@@ -61,7 +61,7 @@ const nightlyDb = db => db.nightly;
     teams: [{ team: "Q1", label: "Cleveland Cavaliers", short: "Cavaliers", start: 2003, end: 2010 }, { team: "Q3", label: "Los Angeles Lakers", short: "Lakers", start: 2018 }] }, league, S.nba.headshots, 2026);
   ok(pl.years === "2003–present" && pl.active === 1 && pl.img.length === 2 && pl.img[0].includes("/2544.png") && pl.img[1].includes("Special:FilePath"), "player card: years, active, headshot then Commons");
   const ret = R.buildPlayer(S.nba, { id: "Q41421", name: "Michael Jordan", sitelinks: 150, hof: true, ws: 1984, we: 2003, positions: ["shooting guard"], ext: {}, teams: [{ team: "Q1", label: "Chicago Bulls", start: 1984, end: 1998 }] }, league, [], 2026);
-  ok(ret.years === "1984–2003" && ret.active === 0 && ret.fame === 165, "retired player: closed years, Hall of Fame bonus");
+  ok(ret.years === "1984–2003" && ret.active === 0 && ret.fame === R.fameOf(0, 150, true) && R.fameOf(0, 150, true) > R.fameOf(0, 150, false), "retired player: closed years, Hall of Fame bonus");
   const { cardOf } = await imp("scripts/draftdle-lib.mjs");
   const both = ["https://cdn.nba.com/headshots/nba/latest/1040x760/1.png", "https://commons.wikimedia.org/wiki/Special:FilePath/X.jpg?width=360"];
   ok(cardOf({ ...ret, img: both, commons: "X.jpg" }).i[0].includes("commons") && cardOf({ ...pl, img: both, commons: "X.jpg" }).i[0].includes("cdn.nba.com"), "retired players try Commons first, active players the league headshot");
@@ -77,19 +77,23 @@ const nightlyDb = db => db.nightly;
     if (/wdt:P118/.test(q)) return [1, 2, 3].map(i => ({ team: "http://www.wikidata.org/entity/QT" + i }));
     if (/wikibase:sitelinks/.test(q)) return Array.from({ length: 160 }, (_, i) => ({ p: "http://www.wikidata.org/entity/QP" + i, sl: String(200 - i) }));
     const ids = [...q.matchAll(/wd:(QP\d+)/g)].map(m => m[1]);
-    if (/P2031/.test(q)) return ids.flatMap(id => [{ p: E + id, l: "Spieler " + id, lang: "mul", ws: "2010-01-01T00:00:00Z", x0: id.slice(2) }, { p: E + id, l: "Player " + id, lang: "en" }]);
+    if (/P2031/.test(q)) return ids.flatMap(id => [{ p: E + id, l: "Spieler " + id, lang: "mul", ws: "2010-01-01T00:00:00Z", x0: id.slice(2), title: "Article " + id }, { p: E + id, l: "Player " + id, lang: "en" }]);
     if (/P413/.test(q)) return ids.map((id, i) => ({ p: E + id, pl: ["point guard", "center", "small forward"][i % 3] }));
     if (/P54 \?st/.test(q)) return ids.map((id, i) => ({ p: E + id, team: E + "QT" + (1 + i % 3), tl: "Team " + (1 + i % 3), start: "2010-01-01T00:00:00Z" }));
     return [];
   };
   const before = fs.existsSync(path.join(T, "data/draftdle/wnba/pool.json"));
   const errs = []; const origErr = console.error; console.error = m => errs.push(m); const origLog = console.log; console.log = () => {};
-  await R.refresh(["nba", "wnba"], { q: fake, nowYear: 2026 });
+  // page views: the 20 least-linked candidates are the most viewed, so they must make the cut
+  const fakeViews = async titles => new Map(titles.map(tt => { const n = Number(tt.replace(/\D/g, "")); return [tt, n >= 140 ? 5e6 : 1000]; }));
+  await R.refresh(["nba", "wnba"], { q: fake, views: fakeViews, nowYear: 2026 });
   console.error = origErr; console.log = origLog; process.exitCode = 0;
   if (process.env.DEBUG) console.log(errs);
   const nba = readJ(path.join(T, "data/draftdle/nba/pool.json"));
   ok(nba.every(x => x.name.startsWith("Player ")), "an English name wins over the default-language one");
-  ok(nba.length === 160 && nba[0].tier === 1 && nba[159].tier === 1 && nba.every(x => x.teams.length && x.img[0].includes("cdn.nba.com")), `fake refresh builds an NBA pool (${nba.length})`);
+  ok(nba.length === 160 && nba.every(x => x.teams.length && x.img[0].includes("cdn.nba.com")), `fake refresh builds an NBA pool (${nba.length})`);
+  ok(nba.slice(0, 20).every(x => x.views === 5e6) && nba[0].tier === 1, "page views decide fame: the most viewed lead the pool even with few language links");
+  ok(R.fameOf(1e6, 10, false) > R.fameOf(5000, 120, true), "a player a million people looked up outranks one with many languages but few readers");
   ok(errs.some(e => /Q2593221 is "WNBA \(wrong label\)"/.test(e)) && fs.existsSync(path.join(T, "data/draftdle/wnba/pool.json")) === before, "a league id with the wrong label stops that sport and keeps its old pool");
 }
 
