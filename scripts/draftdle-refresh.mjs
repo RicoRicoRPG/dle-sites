@@ -147,9 +147,14 @@ export function buildPlayer(sport, raw, leagueTeams, headshots, nowYear) {
   if (!pos) return null;
   const t = teamsLine(sport, raw.teams, leagueTeams, nowYear);
   if (!t.teams.length) return null;
-  const ws = raw.ws ?? t.first, we = raw.we;
+  // Team dates first: a career start/end (P2031/P2032) can belong to another career
+  // (wrestling, acting), which gave cards like "2010–2007".
+  const ws = t.first ?? raw.ws;
+  const we = raw.we != null && (ws == null || raw.we >= ws) ? raw.we : null;
   const active = !we && !raw.death && t.open;
-  const end = active ? null : (we ?? t.last);
+  // A listed retirement a few years past the last dated stint is usually a missing stint
+  // (Jordan's Wizards years); far past it, it's another career.
+  const end = active ? null : (we != null && (t.last == null || (we >= t.last && we - t.last <= 6)) ? we : (t.last ?? we));
   const years = ws ? (end ? (end === ws ? String(ws) : `${ws}–${end}`) : `${ws}–present`) : "";
   const img = [];
   for (const h of headshots) if (raw.ext[h.prop]) img.push(h.url.replace("{id}", encodeURIComponent(raw.ext[h.prop])));
@@ -190,7 +195,7 @@ async function refreshSport(sport, nowYear, q, views) {
 
   const fame = new Map();
   for (const batch of chunks([...leagueTeams], 8)) {
-    const rows = await q(`SELECT DISTINCT ?p ?sl WHERE { VALUES ?team { ${values(batch)} } ?p p:P54/ps:P54 ?team ; wdt:P31 wd:Q5 ; wikibase:sitelinks ?sl . }`);
+    const rows = await q(`SELECT DISTINCT ?p ?sl WHERE { VALUES ?team { ${values(batch)} } ?p p:P54/ps:P54 ?team ; wdt:P31 wd:Q5 ; wikibase:sitelinks ?sl . ${sport.sex ? `?p wdt:P21 wd:${sport.sex} .` : ""} }`);
     for (const r of rows) fame.set(qid(r.p), Number(r.sl));
   }
   const exclude = new Set((read(p("data/draftdle/curation.json"), {}).exclude || {})[sport.id] || []);
