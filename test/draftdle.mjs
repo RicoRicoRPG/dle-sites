@@ -91,13 +91,17 @@ const nightlyDb = db => db.nightly;
   const errs = []; const origErr = console.error; console.error = m => errs.push(m); const origLog = console.log; console.log = () => {};
   // page views: the 20 least-linked candidates are the most viewed, so they must make the cut
   const fakeViews = async titles => new Map(titles.map(tt => { const n = Number(tt.replace(/\D/g, "")); return [tt, n >= 140 ? 5e6 : 1000]; }));
-  await R.refresh(["nba", "wnba"], { q: fake, views: fakeViews, nowYear: 2026 });
+  // infobox: one retired player whose Wikidata stints are open
+  const fakeBox = async (titles, kind) => kind !== "basketball" ? new Map() : new Map(titles.filter(tt => tt === "Article QP3").map(tt => [tt, { start: 2006, end: 2022, active: false }]));
+  await R.refresh(["nba", "wnba"], { q: fake, views: fakeViews, infobox: fakeBox, nowYear: 2026 });
   console.error = origErr; console.log = origLog; process.exitCode = 0;
   if (process.env.DEBUG) console.log(errs);
   const nba = readJ(path.join(T, "data/draftdle/nba/pool.json"));
   ok(nba.every(x => x.name.startsWith("Player ")), "an English name wins over the default-language one");
   ok(nba.length === 160 && nba.every(x => x.teams.length && x.img[0].includes("cdn.nba.com")), `fake refresh builds an NBA pool (${nba.length})`);
   ok(nba.slice(0, 20).every(x => x.views === 5e6) && nba[0].tier === 1, "page views decide fame: the most viewed lead the pool even with few language links");
+  const p3 = nba.find(x => x.id === "QP3"), p4 = nba.find(x => x.id === "QP4");
+  ok(p3.years === "2006–2022" && p3.active === 0 && p4.years === "2010–present" && p4.active === 1, `infobox years override open Wikidata stints (${p3.years}; others ${p4.years})`);
   ok(R.fameOf(1e6, 10, false) > R.fameOf(5000, 120, true), "a player a million people looked up outranks one with many languages but few readers");
   process.env.DLE_FAST = "1";
   const down = await R.enViews(Array.from({ length: 300 }, (_, i) => "T" + i), { fetchImpl: async () => { throw new Error("timeout"); } });
@@ -114,6 +118,52 @@ const nightlyDb = db => db.nightly;
   ok(nG === 2 && g[4].views >= 9000 && g[4].viewsGuess && g[5].views <= 120, "a failed lookup is estimated from players with similar language counts, not zeroed");
   ok(down.size === 0 && up.get("A b") === 12 && up.get("C") === 8, "page views: summed per title; a dead service falls back instead of stalling");
   ok(errs.some(e => /Q2593221 is "WNBA \(wrong label\)"/.test(e)) && fs.existsSync(path.join(T, "data/draftdle/wnba/pool.json")) === before, "a league id with the wrong label stops that sport and keeps its old pool");
+}
+
+// ---------- 1a. career years from Wikipedia infoboxes ----------
+{
+  const I = await imp("scripts/draftdle-infobox.mjs");
+  const kindOf = t => /gridiron/i.test(t) ? "gridiron" : /basketball/i.test(t) ? "basketball" : /baseball/i.test(t) ? "baseball" : /ice hockey/i.test(t) ? "hockey" : "soccer";
+  const y = (t, kind = kindOf(t), now = 2026) => { const r = I.infoboxYears(t, kind, now); return r ? `${r.start}-${r.end} ${r.active}` : "none"; };
+  const cases = [
+    ["Sue Bird (basketball)", "{{Short description|x}}\n{{Infobox basketball biography\n| name = Sue Bird\n| team = Seattle Storm\n| career_start = 2002\n| career_end = 2022<ref>{{cite web|title=Retires 2023}}</ref>\n| years1 = {{WNBA Year|2002}}–{{WNBA Year|2022}}\n| years2 = 2004–2006\n}}\n'''Suzanne Bird'''", "2002-2022 false"],
+    ["active basketball, no end", "{{Infobox basketball biography\n| name = Darius Garland\n| career_start = 2019\n| career_end = \n| years1 = {{NBA Year|2019}}–present\n}}", "2019-null true"],
+    ["blank career fields, seasons only", "{{Infobox basketball biography\n| career_start = \n| career_end = \n| coach_start = 2000\n| years1 = {{WNBA Year|1997}}\n| team1 = [[Sacramento Monarchs]]\n| years2 = {{WNBA Year|1998}}\n| team2 = [[Detroit Shock]]\n| cyears1 = 2000–2002\n}}", "1997-1998 false"],
+    ["Jeter (baseball)", "{{Infobox baseball biography\n| name = Derek Jeter\n| debutleague = MLB\n| debutdate = May 29\n| debutyear = 1995\n| finaldate = September 28\n| finalyear = 2014\n}}", "1995-2014 false"],
+    ["active baseball", "{{Infobox baseball biography\n| name = Luis Arráez\n| debutdate = May 18\n| debutyear = 2019\n| debutteam = Minnesota Twins\n}}", "2019-null true"],
+    ["Brady (gridiron)", "{{Infobox gridiron football biography\n| name = Tom Brady\n| draft_year = 2000\n| past_teams =\n* [[New England Patriots]] ({{NFL Year|2000|2019}})\n* [[Tampa Bay Buccaneers]] ({{NFL Year|2020|2022}})\n| highlights =\n* 3× [[NFL Most Valuable Player]] (2007, 2010, 2017)\n}}", "2000-2022 false"],
+    ["Crews: draft year and highlights ignored", "{{Infobox gridiron football biography\n| name = Terry Crews\n| draft_year = 1991\n| past_teams =\n* [[Los Angeles Rams]] ({{NFL Year|1991}})*\n* [[Green Bay Packers]] ({{NFL Year|1992}})*\n* [[Philadelphia Eagles]] ({{NFL Year|1996}})\n}}", "1991-1996 false"],
+    ["active gridiron", "{{Infobox gridiron football biography\n| name = Travis Kelce\n| current_team = Kansas City Chiefs\n| status = Active\n| past_teams =\n* [[Kansas City Chiefs]] ({{NFL Year|2013}}–present)\n}}", "2013-null true"],
+    ["one-season current stint, status says active", "{{Infobox gridiron football biography\n| status = Active\n| past_teams =\n* [[Denver Broncos]] ({{NFL Year|2025}})\n}}", "2025-null true"],
+    ["coach: current_team alone isn't playing", "{{Infobox gridiron football biography\n| name = Deion Sanders\n| current_team = Colorado Buffaloes\n| past_teams =\n* [[Atlanta Falcons]] ({{NFL Year|1989|1993}})\n* [[Baltimore Ravens]] ({{NFL Year|2004|2005}})\n| coach_teams =\n* [[Colorado Buffaloes|Colorado]] (2023–present)\n}}", "1989-2005 false"],
+    ["Messi (soccer), open last club; youth and national team ignored", "{{Infobox football biography\n| name = Lionel Messi\n| youthyears1 = 1994–2000\n| years1 = 2003–2004\n| clubs1 = [[FC Barcelona C|Barcelona C]]\n| years3 = 2004–2021\n| years4 = 2021–2023\n| years5 = 2023–\n| clubs5 = [[Inter Miami CF]]\n| nationalyears1 = 2005–\n}}", "2003-null true"],
+    ["retired soccer, manager years ignored", "{{Infobox football biography\n| years1 = 1975–1987\n| years2 = 1987–1991\n| years3 = 1991–1993\n| years4 = 1993–1995\n| manageryears1 = 1991–1993\n| manageryears2 = 2006–2008\n}}", "1975-1995 false"],
+    ["hockey career_end present", "{{Infobox ice hockey player\n| name = X\n| career_start = 2005\n| career_end = present\n}}", "2005-null true"],
+    ["stale article: 'active' since 1980 isn't trusted", "{{Infobox ice hockey player\n| career_start = 1980\n}}", "1980-null null"],
+    ["not a sport infobox", "{{Infobox person\n| name = Bob\n| years_active = 1990–2000\n}}", "none"],
+  ];
+  const bad = cases.filter(([, t, want]) => y(t) !== want).map(([n, t, want]) => `${n}: got ${y(t)}, want ${want}`);
+  const thorpe = "{{Infobox gridiron football biography\n| past_teams =\n* [[Canton Bulldogs]] (1915–1928)\n}}\n{{Infobox baseball biography\n| debutyear = 1913\n| finalyear = 1919\n}}";
+  const deion = "{{Infobox gridiron football biography\n| past_teams =\n* [[Atlanta Falcons]] ({{NFL Year|1989|1993}})\n}}";
+  if (y(thorpe, "baseball") !== "1913-1919 false" || y(thorpe, "gridiron") !== "1915-1928 false" || y(deion, "baseball") !== "none") bad.push(`two-sport athletes: ${y(thorpe, "baseball")} / ${y(thorpe, "gridiron")} / ${y(deion, "baseball")}`);
+  ok(!bad.length, `infobox career years across sports (${bad.join("; ") || cases.length + " cases"})`);
+
+  process.env.DLE_FAST = "1";
+  const asked = [];
+  const got = await I.infoboxes(["Jeter", "rondo", "Gone"], "baseball", { nowYear: 2026, fetchImpl: async u => {
+    asked.push(u);
+    return { ok: true, status: 200, json: async () => ({ query: {
+      normalized: [{ from: "rondo", to: "Rondo" }], redirects: [{ from: "Rondo", to: "Rajon Rondo" }],
+      pages: [
+        { title: "Jeter", revisions: [{ slots: { main: { content: cases[3][1] } } }] },
+        { title: "Rajon Rondo", revisions: [{ slots: { main: { content: "{{Infobox baseball biography\n| debutyear = 2006\n| finalyear = 2022\n}}" } } }] },
+        { title: "Gone", missing: true }] } }) };
+  } });
+  let tries = 0;
+  const dead = await I.infoboxes(["A"], "baseball", { fetchImpl: async () => { tries++; throw new Error("down"); } });
+  delete process.env.DLE_FAST;
+  ok(asked.length === 1 && /rvsection=0/.test(asked[0]) && got.get("Jeter")?.end === 2014 && got.get("rondo")?.end === 2022 && !got.has("Gone"), "infoboxes: 50 titles a request, answers mapped back through redirects");
+  ok(dead.size === 0 && tries === 4, "infoboxes: an unreachable Wikipedia leaves Wikidata's years in place");
 }
 
 // ---------- 1b. placeDense keeps slots dense and writes only what moved ----------
