@@ -23,27 +23,39 @@ const VIEWS_API = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-artic
 export const fameOf = (views, sitelinks, hof) => Math.round((Math.log10((views || 0) + 10) * 10 + sitelinks * 0.1 + (hof ? HOF_BONUS : 0)) * 100) / 100;
 
 // English Wikipedia page views, last 12 full months, for many titles at a few at a time.
-export async function enViews(titles, { fetchImpl = globalThis.fetch, now = new Date(), concurrency = 6 } = {}) {
+export async function enViews(titles, { fetchImpl = globalThis.fetch, now = new Date(), concurrency = 8, log: say = () => {} } = {}) {
   const ym = d => d.toISOString().slice(0, 7).replace("-", "");
   const end = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
   const start = new Date(Date.UTC(end.getUTCFullYear() - 1, end.getUTCMonth(), 1));
   const range = `monthly/${ym(start)}0100/${ym(new Date(end - 864e5))}0100`;
-  const out = new Map(), queue = [...new Set(titles)];
+  const out = new Map(), queue = [...new Set(titles)], total = queue.length;
+  let done = 0, failed = 0, gaveUp = false;
   async function one(title) {
     const url = `${VIEWS_API}/${encodeURIComponent(title.replace(/ /g, "_"))}/${range}`;
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 3; i++) {
       try {
-        const res = await fetchImpl(url, { headers: { "User-Agent": UA, Accept: "application/json" } });
+        const res = await fetchImpl(url, { headers: { "User-Agent": UA, Accept: "application/json" }, signal: AbortSignal.timeout(15000) });
         if (res.status === 404) return 0;
-        if (res.status === 429 || res.status >= 500) { await sleep(process.env.DLE_FAST ? 1 : 2000 * (i + 1)); continue; }
-        if (!res.ok) return 0;
+        if (res.status === 429 || res.status >= 500) { await sleep(process.env.DLE_FAST ? 1 : 1500 * (i + 1)); continue; }
+        if (!res.ok) return null;
         const j = await res.json();
         return (j.items || []).reduce((s, x) => s + (x.views || 0), 0);
       } catch { await sleep(process.env.DLE_FAST ? 1 : 1000 * (i + 1)); }
     }
-    return 0;
+    return null;
   }
-  await Promise.all(Array.from({ length: concurrency }, async () => { while (queue.length) { const t = queue.shift(); out.set(t, await one(t)); } }));
+  await Promise.all(Array.from({ length: concurrency }, async () => {
+    while (queue.length && !gaveUp) {
+      const t = queue.shift();
+      const v = await one(t);
+      if (v === null) failed++; else out.set(t, v);
+      done++;
+      if (done % 500 === 0) say(`  page views ${done}/${total}${failed ? `, ${failed} failed` : ""}`);
+      // If the service isn't answering, stop and rank by language count instead of stalling the job.
+      if (done >= 100 && failed / done > 0.5) gaveUp = true;
+    }
+  }));
+  if (gaveUp) { say(`  page views unavailable (${failed} of ${done} failed); ranking by language count`); return new Map(); }
   return out;
 }
 const log = (...a) => console.log(...a);
@@ -55,7 +67,8 @@ export async function sparql(query, { fetchImpl = globalThis.fetch, tries = 5 } 
       const res = await fetchImpl(ENDPOINT, {
         method: "POST",
         headers: { "User-Agent": UA, Accept: "application/sparql-results+json", "Content-Type": "application/x-www-form-urlencoded" },
-        body: "query=" + encodeURIComponent(query)
+        body: "query=" + encodeURIComponent(query),
+        signal: AbortSignal.timeout(90000)
       });
       if (res.status === 429 || res.status >= 500) {
         const wait = Number(res.headers.get("retry-after")) || 10 * (i + 1);
@@ -177,7 +190,10 @@ async function refreshSport(sport, nowYear, q, views) {
 
   const raw = new Map(ranked.map(([id, sl]) => [id, { id, sitelinks: sl, name: "", positions: [], teams: [], ext: {}, hof: false }]));
   const extVars = headshots.map((h, i) => `OPTIONAL { ?p wdt:${h.prop} ?x${i} }`).join(" ");
-  for (const batch of chunks(ranked.map(r => r[0]), 100)) {
+  let batchNo = 0;
+  const batches = chunks(ranked.map(r => r[0]), 100);
+  for (const batch of batches) {
+    if (++batchNo % 10 === 0) log(`  details ${batchNo}/${batches.length}`);
     const v = values(batch);
     for (const r of await q(`SELECT ?p ?l (lang(?l) AS ?lang) ?img ?ws ?we ?death ?title ${headshots.map((_, i) => "?x" + i).join(" ")} WHERE { VALUES ?p { ${v} }
         OPTIONAL { ?p rdfs:label ?l FILTER(lang(?l) IN ("en", "mul")) } OPTIONAL { ?p wdt:P18 ?img } OPTIONAL { ?p wdt:P2031 ?ws }
@@ -208,7 +224,7 @@ async function refreshSport(sport, nowYear, q, views) {
   }
 
   const withTitle = [...raw.values()].filter(o => o.title);
-  const viewMap = await views(withTitle.map(o => o.title));
+  const viewMap = await views(withTitle.map(o => o.title), { log });
   for (const o of withTitle) o.views = viewMap.get(o.title) || 0;
   log(`${sport.id}: page views for ${withTitle.length} English Wikipedia articles`);
 
