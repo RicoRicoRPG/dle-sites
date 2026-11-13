@@ -160,7 +160,7 @@ export function buildPlayer(sport, raw, leagueTeams, headshots, nowYear) {
   // (Jordan's Wizards years); far past it, it's another career.
   // Retired with no end date anywhere: the last dated stint start beats a wrong "present".
   const end = active ? null : box.end != null ? box.end : (we != null && (t.last == null || (we >= t.last && we - t.last <= 6)) ? we : (t.last ?? we ?? t.lastStart));
-  const years = ws ? (end ? (end === ws ? String(ws) : `${ws}–${end}`) : `${ws}–present`) : "";
+  const years = ws ? (end ? (end === ws ? String(ws) : `${ws}–${end}`) : active ? `${ws}–present` : "") : "";
   const img = [];
   for (const h of headshots) if (raw.ext[h.prop]) img.push(h.url.replace("{id}", encodeURIComponent(raw.ext[h.prop])));
   if (raw.image) img.push("https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(raw.image) + "?width=360");
