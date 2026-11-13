@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--HEAD-->
+<script>
+try { const s = JSON.parse(localStorage.getItem('dle.settings') || '{}');
+  if (s.theme) document.documentElement.dataset.theme = s.theme; } catch(e){}
+</script>
+<style>
+/*BASECSS*/
+/* Draftdle additions */
+.sub .sport{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border:2px solid var(--line);border-radius:999px;padding:5px 12px;background:none;color:var(--ink);cursor:pointer}
+.sub .sport:hover{border-color:var(--key)}
+.sports h2{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--quiet);margin:18px 0 8px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tile{font:inherit;text-align:left;border:2px solid var(--tile-line);border-radius:6px;background:var(--tile);color:var(--ink);padding:14px;cursor:pointer;display:flex;flex-direction:column;gap:4px}
+.tile:hover:not([disabled]){border-color:var(--key)}
+.tile[disabled]{cursor:default;opacity:.55}
+.tile .tn{font-size:20px;font-weight:800}
+.tile .ts{font-size:13px;color:var(--quiet)}
+.tile .ts.good{color:var(--good);font-weight:700}
+.card .pos{font-size:13px;font-weight:800;letter-spacing:.04em;color:var(--quiet)}
+.card .teams{font-size:12px;line-height:1.35;color:var(--quiet);max-width:100%;overflow-wrap:anywhere}
+.card .teams.long{font-size:11px}
+.card.win .pos,.card.win .teams,.card.lose .pos,.card.lose .teams,.card.even .pos,.card.even .teams{color:rgba(255,255,255,.85)}
+.card.even{background:var(--key);border-color:var(--key);color:#fff}
+.art.face img{object-fit:contain}
+.banner{text-align:center;font-size:13px;font-weight:700;letter-spacing:.04em;margin:-6px 0 12px;padding:6px 10px;border-radius:4px;background:var(--line)}
+.runbar{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin:0 0 12px;font-size:13px;color:var(--quiet)}
+.runbar b{color:var(--ink);font-size:16px}
+.boards nav{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:12px}
+.boards nav button{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:6px 10px;border:2px solid var(--line);border-radius:999px;background:none;color:var(--quiet);cursor:pointer}
+.boards nav button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.lb{width:100%;border-collapse:collapse;font-size:15px}
+.lb td{padding:7px 4px;border-top:1px solid var(--line)}
+.lb td.r{width:36px;color:var(--quiet)}.lb td.v{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}.lb td.d{width:96px;text-align:right;color:var(--quiet);font-size:13px}
+.namebox{display:flex;gap:8px;margin:12px 0}
+.namebox input{flex:1;font:inherit;font-size:16px;padding:10px 12px;border:2px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.err{color:#c9302c;font-size:14px;min-height:18px}
+.credit{font-size:11px}
+.credit a{color:inherit}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="side">
+    <button type="button" class="icon" id="btn-help" aria-label="How to play"><svg viewBox="0 0 24 24"><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/></svg></button>
+  </div>
+  <h1 id="title"></h1>
+  <div class="side right">
+    <button type="button" class="icon" id="btn-stats" aria-label="Statistics"><svg viewBox="0 0 24 24"><path d="M16 11V3H8v6H2v12h20V11h-6zm-6-6h4v14h-4V5zm-6 6h4v8H4v-8zm16 8h-4v-6h4v6z"/></svg></button>
+    <button type="button" class="icon" id="btn-settings" aria-label="Settings"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></button>
+  </div>
+</header>
+<main>
+  <div class="sub" id="sub"></div>
+  <div id="game"></div>
+  <footer id="footer"></footer>
+  <div id="footerad"></div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="modal" hidden><div class="sheet" role="dialog" aria-modal="true"><button type="button" class="icon x" id="modal-x" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div id="modal-body"></div></div></div>
+<script>
+const SITE = /*SITE*/;
+const SPORTS = /*SPORTS*/;
+const STATUS = /*STATUS*/;
+const PUZZLES = /*PUZZLES*/;
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const SHARE_ICON = '<svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>';
+const QUESTION = 'Who do you draft?';
+const MILESTONES = [25, 50, 100, 250, 500, 1000];
+
+// ---------- storage ----------
+const mem = {};
+const store = {
+  get(k){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : (mem[k] ?? null); } catch(e){ return mem[k] ?? null; } },
+  set(k,v){ mem[k] = v; try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+};
+function browserId(){
+  let id = store.get('draftdle.bid');
+  if (!id){ const b = new Uint8Array(12); (window.crypto || {}).getRandomValues ? crypto.getRandomValues(b) : b.forEach((_,i) => b[i] = Math.random()*256); id = 'b' + [...b].map(x => x.toString(16).padStart(2,'0')).join(''); store.set('draftdle.bid', id); }
+  return id;
+}
+
+// ---------- dates ----------
+function localISO(d){ const z = n => String(n).padStart(2,'0'); return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate()); }
+const TODAY = (() => { try { const q = new URLSearchParams(location.search).get('date'); if (SITE.allowDateParam && q && /^\d{4}-\d{2}-\d{2}$/.test(q)) return q; } catch(e){} return localISO(new Date()); })();
+
+// ---------- api ----------
+async function api(path, body){
+  const opts = body ? {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body)} : {};
+  let res;
+  try { res = await fetch(path, opts); } catch(e){ return {error: 'offline'}; }
+  let j = {}; try { j = await res.json(); } catch(e){}
+  if (!res.ok) return Object.assign({error: j.error || ('HTTP ' + res.status), status: res.status}, j);
+  return j;
+}
+
+// ---------- state ----------
+const sportOf = id => SPORTS.find(s => s.id === id);
+const statusOf = id => (STATUS.sports || {})[id] || {phase:'soon'};
+let view = {sport: null, mode: 'daily'};
+let daily = null;   // {sport, date, pairs, picks[], revealed, justPicked, puzzle}
+let run = null;     // {sport, id, next, reveal, stats, phase, busy, error, done}
+let boardTab = 'pct25';
+
+function dailyKey(s){ return 'draftdle.v1:daily:' + s; }
+function endlessKey(s){ return 'draftdle.v1:endless:' + s; }
+
+// ---------- ads, toast, modal (as on the other dles) ----------
+const ADS = SITE.ads || {};
+function adSlot(name){
+  const slot = (ADS.slots || {})[name];
+  if (ADS.preview) return `<aside class="ad preview" data-ad="${name}"><span class="adlabel">Advertisement</span><ins></ins></aside>`;
+  if (!ADS.client || !slot) return '';
+  return `<aside class="ad" data-ad="${name}"><span class="adlabel">Advertisement</span><ins class="adsbygoogle" style="display:block" data-ad-client="${esc(ADS.client)}" data-ad-slot="${esc(slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>`;
+}
+function fillAds(root){ root.querySelectorAll('ins.adsbygoogle:not([data-pushed])').forEach(el => { el.setAttribute('data-pushed','1'); try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){} }); }
+let toastTimer = null;
+function toast(msg, ms = 1800){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), ms); }
+function openModal(html){ $('#modal-body').innerHTML = html; $('#modal').hidden = false; $('#modal-x').focus({preventScroll:true}); return $('#modal-body'); }
+function closeModal(){ $('#modal').hidden = true; }
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+$('#modal-x').onclick = closeModal;
+function untilMidnight(){ const n = new Date(), m = new Date(n); m.setHours(24,0,0,0); const s = Math.max(0, Math.floor((m - n)/1000)), z = x => String(x).padStart(2,'0'); return `${z(Math.floor(s/3600))}:${z(Math.floor(s%3600/60))}:${z(s%60)}`; }
+setInterval(() => { document.querySelectorAll('.countdown').forEach(el => el.textContent = untilMidnight()); }, 1000);
+async function copy(txt){
+  let ok = false;
+  try { await navigator.clipboard.writeText(txt); ok = true; } catch(e){ try { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); ok = document.execCommand('copy'); ta.remove(); } catch(e2){} }
+  toast(ok ? 'Copied results to clipboard' : 'Select the text to copy it');
+}
+
+// ---------- cards ----------
+// Pictures: league headshot first, then the Commons photo, then initials. A Commons photo gets a
+// credit link on the reveal.
+function initials(name){ return String(name).replace(/[^\p{L}\p{N} ]/gu, ' ').split(/\s+/).filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase(); }
+window.__dNextImg = img => {
+  const rest = (img.dataset.alt || '').split('|').filter(Boolean);
+  if (!rest.length){ img.parentNode.classList.add('noimg'); return; }
+  img.dataset.alt = rest.slice(1).join('|');
+  img.src = rest[0];
+  const blur = img.parentNode.querySelector('.blur'); if (blur) blur.style.backgroundImage = `url('${rest[0]}')`;
+};
+function artHTML(c){
+  const imgs = (c.i || []).filter(Boolean);
+  if (!imgs.length) return `<span class="art face noimg"><span class="init">${esc(initials(c.n))}</span></span>`;
+  return `<span class="art face"><span class="blur" style="background-image:url('${esc(imgs[0])}')"></span><img src="${esc(imgs[0])}" data-alt="${esc(imgs.slice(1).join('|'))}" alt="" decoding="async" referrerpolicy="no-referrer" onerror="__dNextImg(this)"><span class="init">${esc(initials(c.n))}</span></span>`;
+}
+function creditHTML(idx){
+  const img = document.querySelector(`.card[data-idx="${idx}"] img`);
+  const c = (current() || [])[idx];
+  if (!img || !c || !c.c || !/commons\.wikimedia\.org/.test(img.currentSrc || img.src)) return '';
+  return ` · <span class="credit"><a href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(c.c.replace(/ /g,'_'))}" target="_blank" rel="noopener">photo: Wikimedia Commons</a></span>`;
+}
+function current(){ if (view.mode === 'daily' && daily) { const i = daily.revealed ? daily.picks.length - 1 : daily.picks.length; return daily.pairs[i] && daily.pairs[i].cards; } if (view.mode === 'endless' && run) return run.shown && run.shown.cards; return null; }
+function pct(x){ return Math.round(x * 100) + '%'; }
+function cardHTML(c, idx, o){
+  const cls = ['card'];
+  if (o.revealed) cls.push(o.even ? 'even' : (idx === o.winIdx ? 'win' : 'lose'));
+  if (o.revealed && o.flip) cls.push('flip');
+  const meta = [c.p, c.y].filter(Boolean).join(' · ');
+  const teams = (c.t || []).join(' · ');
+  return `<button type="button" class="${cls.join(' ')}" data-idx="${idx}" ${o.revealed || o.busy ? 'disabled' : ''} aria-label="${esc(c.n)}${meta ? ', ' + esc(meta) : ''}"${o.flip ? ` style="animation-delay:${idx*0.15}s"` : ''}>
+    ${artHTML(c)}
+    <span class="body">
+      <span class="name">${esc(c.n)}</span>
+      ${meta ? `<span class="pos">${esc(meta)}</span>` : ''}
+      ${teams ? `<span class="teams${teams.length > 70 ? ' long' : ''}">${esc(teams)}</span>` : ''}
+      <span class="value">${o.revealed ? esc(pct(o.share[idx])) : ''}</span>
+      <span class="detail">${o.revealed ? '' : `<span class="key">Press ${idx+1}</span>`}</span>
+      ${o.revealed && idx === o.picked ? '<span class="picked">Your pick</span>' : ''}
+    </span>
+  </button>`;
+}
+function pairHTML(cards, o){ return `<div class="pair">${cardHTML(cards[0],0,o)}<span class="or">OR</span>${cardHTML(cards[1],1,o)}</div>`; }
+function preload(cards){ (cards || []).forEach(c => { const u = (c.i || [])[0]; if (u){ const i = new Image(); i.referrerPolicy = 'no-referrer'; i.src = u; } }); }
+
+// ---------- header + sub bar ----------
+function renderSub(){
+  const s = view.sport ? sportOf(view.sport) : null;
+  const sub = $('#sub');
+  if (!s){ sub.innerHTML = '<span class="no">Pick a sport</span>'; return; }
+  const no = view.mode === 'daily' && daily && daily.puzzle ? '#' + daily.puzzle.no : '';
+  sub.innerHTML = `<button type="button" class="sport" id="pick-sport" aria-label="Change sport">${esc(s.name)} ▾</button>
+    <nav class="modes" aria-label="Mode">${[['daily','Daily'],['endless','Endless'],['boards','Boards']].map(([id,l]) => `<button type="button" data-mode="${id}" aria-pressed="${view.mode===id}">${l}</button>`).join('')}</nav>
+    ${no ? `<span class="no">${esc(no)}</span>` : ''}`;
+  $('#pick-sport').onclick = () => go(null);
+  sub.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => go(view.sport, b.dataset.mode));
+}
+
+function go(sport, mode){
+  if (run && run.id && (sport !== run.sport || mode !== 'endless')) flushRun();
+  view.sport = sport;
+  if (sport){ store.set('draftdle.sport', sport); view.mode = mode || view.mode || 'daily'; }
+  if (sport && view.mode === 'daily') startDaily(sport);
+  if (sport && view.mode === 'endless' && (!run || run.sport !== sport || run.done)) startRun(sport);
+  render();
+}
+
+function render(){
+  $('#title').textContent = SITE.title;
+  renderSub();
+  if (!view.sport) return renderSports();
+  if (view.mode === 'daily') return renderDaily();
+  if (view.mode === 'endless') return renderEndless();
+  return renderBoards();
+}
+
+// ---------- sport picker ----------
+function tileStatus(id){
+  const st = statusOf(id);
+  if (st.phase === 'soon') return {text:'Coming soon', off:true};
+  const h = store.get(dailyKey(id)) || {days:{}};
+  const d = h.days[TODAY];
+  if (d && d.done) return {text:`Daily done · ${d.score}/${(PUZZLES[id]||{})[TODAY] ? PUZZLES[id][TODAY].pairs.length : 10}`, good:true};
+  if ((PUZZLES[id] || {})[TODAY]) return {text:`Daily #${PUZZLES[id][TODAY].no} ready`};
+  if (st.phase === 'scouting') return {text:'Scouting: vote to open it'};
+  return {text:'Endless open'};
+}
+function renderSports(){
+  const groups = [];
+  for (const s of SPORTS){ let g = groups.find(x => x.name === s.group); if (!g){ g = {name: s.group, items: []}; groups.push(g); } g.items.push(s); }
+  $('#game').innerHTML = `<div class="sports"><p class="question">${esc(QUESTION)}</p><p class="hint" style="margin-top:0">Pick a sport. Each has its own Daily, Endless runs and boards.</p>
+    ${groups.map(g => `<h2>${esc(g.name)}</h2><div class="tiles">${g.items.map(s => { const t = tileStatus(s.id); return `<button type="button" class="tile" data-sport="${s.id}" ${t.off ? 'disabled' : ''}><span class="tn">${esc(s.name)}</span><span class="ts${t.good ? ' good' : ''}">${esc(t.text)}</span></button>`; }).join('')}</div>`).join('')}</div>`;
+  $('#game').querySelectorAll('[data-sport]').forEach(b => b.onclick = () => go(b.dataset.sport, 'daily'));
+}
+
+// ---------- Daily ----------
+function startDaily(sport){
+  const puzzle = (PUZZLES[sport] || {})[TODAY] || null;
+  const h = store.get(dailyKey(sport)) || {days:{}};
+  const saved = h.days[TODAY];
+  daily = {sport, date: TODAY, puzzle, pairs: puzzle ? puzzle.pairs : [], picks: saved && Array.isArray(saved.picks) ? saved.picks.slice() : [], revealed: false, justPicked: false, sent: !!(saved && saved.sent)};
+}
+function dailyScore(){ return daily.picks.filter((p,i) => p === daily.pairs[i].winner).length; }
+function saveDaily(extra = {}){
+  const h = store.get(dailyKey(daily.sport)) || {days:{}};
+  h.days[daily.date] = Object.assign({}, h.days[daily.date], {picks: daily.picks.slice(), score: dailyScore(), done: daily.picks.length >= daily.pairs.length, no: daily.puzzle && daily.puzzle.no}, extra);
+  store.set(dailyKey(daily.sport), h);
+}
+function sendDaily(beacon){
+  if (!daily || !daily.puzzle || daily.sent || !daily.picks.length) return;
+  const body = {sport: daily.sport, date: daily.puzzle.date, bid: browserId(), picks: daily.picks.map((p,i) => ({a: daily.pairs[i].cards[0].id, b: daily.pairs[i].cards[1].id, pick: daily.pairs[i].cards[p].id}))};
+  if (!beacon && daily.picks.length < daily.pairs.length) return;
+  daily.sent = daily.picks.length >= daily.pairs.length;
+  if (daily.sent) saveDaily({sent: true});
+  try {
+    if (beacon && navigator.sendBeacon) navigator.sendBeacon('/api/votes', new Blob([JSON.stringify(body)], {type:'application/json'}));
+    else api('/api/votes', body);
+  } catch(e){}
+}
+function dotsHTML(){
+  return `<div class="dots" style="grid-template-columns:repeat(${daily.pairs.length},1fr)" aria-hidden="true">` + daily.pairs.map((p,i) => {
+    if (i < daily.picks.length) return `<div class="dot ${daily.picks[i] === p.winner ? 'good' : 'bad'}${daily.justPicked && i === daily.picks.length - 1 ? ' pop' : ''}"></div>`;
+    return `<div class="dot ${i === daily.picks.length ? 'cur' : ''}"></div>`;
+  }).join('') + '</div>';
+}
+function renderDaily(){
+  const g = $('#game'), st = statusOf(view.sport), s = sportOf(view.sport);
+  if (!daily.puzzle){
+    const msg = st.phase === 'scouting' || !st.dailyEpoch
+      ? `${esc(s.name)}'s Daily opens once ${esc(st.dailyNeeds || 100)} matchups have a crowd verdict: ${esc(Math.min(st.eligible || 0, st.dailyNeeds || 100))} so far. Every pick in Endless counts toward it.`
+      : `Today's ${esc(s.name)} Daily isn't ready yet. Endless is open in the meantime.`;
+    g.innerHTML = `<div class="notice"><p>${msg}</p><button type="button" class="btn" id="to-endless">Play Endless</button></div>`;
+    $('#to-endless').onclick = () => go(view.sport, 'endless');
+    return;
+  }
+  const n = daily.picks.length, total = daily.pairs.length;
+  if (n >= total && !daily.revealed) return renderDailyResults();
+  const showIdx = daily.revealed ? n - 1 : n;
+  const pair = daily.pairs[showIdx];
+  const picked = daily.revealed ? daily.picks[showIdx] : -1;
+  const share = [pair.winner === 0 ? pair.share : 1 - pair.share, pair.winner === 1 ? pair.share : 1 - pair.share];
+  const band = showIdx < Math.ceil(total * .3) ? 'Warm-up' : showIdx < Math.ceil(total * .7) ? 'Closer' : 'Close call';
+  const o = {revealed: daily.revealed, winIdx: pair.winner, picked, share, flip: daily.revealed && daily.justPicked, detail: `${pair.votes.toLocaleString('en-US')} votes`};
+  let result = '<div class="result"></div>';
+  if (daily.revealed){
+    const ok = picked === pair.winner;
+    result = `<div class="result"><span class="verdict">${ok ? 'With the crowd' : 'Against the crowd'} · ${pct(pair.share)} of ${pair.votes.toLocaleString('en-US')} picked ${esc(pair.cards[pair.winner].n)}</span>
+      <button type="button" class="btn" id="next">${n >= total ? 'See results' : 'Next pair'}</button></div>`;
+  }
+  g.innerHTML = `${dotsHTML()}<p class="question">${esc(QUESTION)}</p><span class="band">Round ${showIdx+1} of ${total} · ${band}</span>${pairHTML(pair.cards, o)}${result}`;
+  daily.justPicked = false;
+  if (!daily.revealed) g.querySelectorAll('.card').forEach(c => c.onclick = () => chooseDaily(Number(c.dataset.idx)));
+  else { [0,1].forEach(i => { const d = g.querySelector(`.card[data-idx="${i}"] .detail`); if (d) d.innerHTML = creditHTML(i).replace(/^ · /, ''); }); $('#next').onclick = nextDaily; $('#next').focus({preventScroll:true}); }
+  preload((daily.pairs[showIdx+1] || {}).cards);
+}
+function chooseDaily(idx){ if (daily.revealed) return; daily.picks.push(idx); daily.revealed = true; daily.justPicked = true; saveDaily(); render(); }
+function nextDaily(){
+  daily.revealed = false;
+  const done = daily.picks.length >= daily.pairs.length;
+  if (done) sendDaily(false);
+  render();
+  if (done) setTimeout(showStats, 350);
+}
+function dailyShare(){
+  const s = sportOf(daily.sport);
+  return `${SITE.title} ${s.name} #${daily.puzzle.no} · ${dailyScore()}/${daily.pairs.length}\n${daily.picks.map((p,i) => p === daily.pairs[i].winner ? '🟩' : '⬛').join('')}\n${SITE.shareUrl}`;
+}
+function dailyStats(sport){
+  const h = store.get(dailyKey(sport)) || {days:{}};
+  const days = Object.entries(h.days).filter(([,d]) => d.done).sort(([a],[b]) => a < b ? -1 : 1);
+  const rounds = statusOf(sport).rounds || 10;
+  const dist = Array(rounds + 1).fill(0); days.forEach(([,d]) => { if (d.score <= rounds) dist[d.score]++; });
+  let streak = 0; const cur = new Date(TODAY + 'T12:00:00'); const has = iso => h.days[iso] && h.days[iso].done;
+  if (!has(localISO(cur))) cur.setDate(cur.getDate() - 1);
+  while (has(localISO(cur))){ streak++; cur.setDate(cur.getDate() - 1); }
+  let best = 0, r = 0, prev = null; days.forEach(([iso]) => { const d = Date.parse(iso); r = (prev !== null && Math.round((d - prev)/864e5) === 1) ? r + 1 : 1; best = Math.max(best, r); prev = d; });
+  const avg = days.length ? (days.reduce((s,[,d]) => s + d.score, 0) / days.length).toFixed(1) : '0';
+  return {played: days.length, streak, best, avg, dist, today: h.days[TODAY] && h.days[TODAY].done ? h.days[TODAY].score : null};
+}
+function statsHTML(s){
+  const max = Math.max(1, ...s.dist);
+  return `<div class="stats"><span><b>${s.played}</b>Played</span><span><b>${s.avg}</b>Average</span><span><b>${s.streak}</b>Current Streak</span><span><b>${s.best}</b>Max Streak</span></div>
+    <h3 class="cap">Score Distribution</h3><div class="hist">${s.dist.map((c,i) => ({c,i})).reverse().map(({c,i}) => `<div class="row${i === s.today ? ' me' : ''}"><span class="k">${i}</span><span class="hb" style="width:${Math.max(7, Math.round(c/max*100))}%">${c}</span></div>`).join('')}</div>`;
+}
+function renderDailyResults(){
+  const txt = dailyShare();
+  const rows = daily.pairs.map((p,i) => {
+    const w = p.winner, ok = daily.picks[i] === w;
+    return `<tr><td class="n">${i+1}</td><td class="r"><span class="sq ${ok ? 'good' : ''}"></span></td><td class="t">${artHTML(p.cards[w])}</td>
+      <td><span class="w">${esc(p.cards[w].n)}</span> ${pct(p.share)}<br><span class="meta">over ${esc(p.cards[1-w].n)} · ${p.votes.toLocaleString('en-US')} votes</span></td></tr>`;
+  }).join('');
+  $('#game').innerHTML = `${dotsHTML()}<div class="done-grid"><div class="col"><div class="done">
+      <div class="of">Today's score</div><p class="score">${dailyScore()}/${daily.pairs.length}</p>
+      <pre class="share">${esc(txt)}</pre>
+      <div class="footer-row"><div class="next"><div class="lbl">Next Daily</div><div class="countdown">${untilMidnight()}</div></div><div class="vr"></div>
+      <button type="button" class="btn share" data-share>Share ${SHARE_ICON}</button></div>
+      <div class="footer-row"><button type="button" class="btn ghost" id="to-endless">Play Endless</button></div>
+    </div><h3 class="cap">Your Record</h3>${statsHTML(dailyStats(daily.sport))}${adSlot('results')}</div>
+    <div class="col"><h3 class="cap">Today's Pairs</h3><table class="review">${rows}</table></div></div>`;
+  $('#game').querySelectorAll('[data-share]').forEach(b => b.onclick = () => copy(txt));
+  $('#to-endless').onclick = () => go(view.sport, 'endless');
+  fillAds($('#game'));
+}
+
+// ---------- Endless ----------
+async function turnstileToken(){
+  if (!SITE.turnstile) return null;
+  await new Promise(r => { if (window.turnstile) return r(); const s = document.createElement('script'); s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'; s.onload = r; s.onerror = r; document.head.appendChild(s); });
+  if (!window.turnstile) return null;
+  return new Promise(r => { const el = document.createElement('div'); el.style.display = 'none'; document.body.appendChild(el);
+    window.turnstile.render(el, {sitekey: SITE.turnstile, size: 'invisible', callback: t => { r(t); }, 'error-callback': () => r(null)}); });
+}
+async function startRun(sport){
+  run = {sport, id: null, shown: null, reveal: null, stats: null, busy: true, error: null, done: false};
+  render();
+  const token = await turnstileToken();
+  const res = await api('/api/endless/start', {sport, bid: browserId(), turnstile: token});
+  if (!run || run.sport !== sport) return;
+  run.busy = false;
+  if (res.error){ run.error = res.status === 503 ? 'No questions are ready for this sport yet. Check back tomorrow.' : "Couldn't reach Draftdle. Check your connection and try again."; }
+  else { run.id = res.run; run.phase = res.phase; run.shown = res.next; run.stats = res.stats; preload(res.next && res.next.cards); }
+  if (view.mode === 'endless' && view.sport === sport) render();
+}
+async function pickRun(side){
+  if (!run || run.busy || run.reveal || !run.shown) return;
+  run.busy = true; run.pickedSide = side;
+  renderEndless();
+  const res = await api('/api/endless/pick', {run: run.id, bid: browserId(), side});
+  run.busy = false;
+  if (res.expired){ run.done = true; run.error = 'This run ended after 30 minutes idle. Start a new one.'; return renderEndless(); }
+  if (res.error){ run.error = "That pick didn't go through. Try again."; return renderEndless(); }
+  run.error = null;
+  run.reveal = res.reveal; run.stats = res.stats; run.after = res.next; run.phase = res.phase || run.phase;
+  run.justPicked = true;
+  saveEndless(res);
+  renderEndless();
+  if (res.entered && res.entered.length){
+    const e = res.entered[res.entered.length - 1];
+    const label = e.board === 'streak' ? `Streak of ${e.value}` : `${e.value}% over ${e.board.slice(3)} picks`;
+    if (res.named === false && !store.get('draftdle.named')) setTimeout(() => askName(`${label}: #${e.rank} on the ${sportOf(run.sport).name} board.`), 600);
+    else toast(`${label}: #${e.rank} on the board`, 2600);
+  }
+  preload(res.next && res.next.cards);
+}
+function nextRun(){
+  if (!run || !run.reveal) return;
+  run.shown = run.after; run.after = null; run.reveal = null;
+  if (!run.shown){ run.done = true; run.error = 'No more questions right now. Check back tomorrow.'; }
+  renderEndless();
+}
+function flushRun(){ if (run && run.id && !run.done){ try { const b = JSON.stringify({run: run.id, bid: browserId()}); navigator.sendBeacon ? navigator.sendBeacon('/api/endless/end', new Blob([b], {type:'application/json'})) : api('/api/endless/end', JSON.parse(b)); } catch(e){} } }
+function endRun(){ if (!run) return; flushRun(); run.done = true; renderEndless(); }
+function saveEndless(res){
+  const k = endlessKey(run.sport), e = store.get(k) || {best:{}, bestStreak: 0, runs: 0};
+  const s = res.stats;
+  if (MILESTONES.includes(s.scored) && s.pct !== null && !(e.best['pct' + s.scored] >= s.pct)) e.best['pct' + s.scored] = s.pct;
+  e.bestStreak = Math.max(e.bestStreak || 0, s.best || 0);
+  store.set(k, e);
+}
+function endlessShare(){
+  const s = run.stats || {}, sp = sportOf(run.sport);
+  const reach = MILESTONES.filter(m => m <= (s.scored || 0)).pop();
+  const over = s.scored ? `${s.pct}% over ${s.scored}` : 'no scored picks yet';
+  return `${SITE.title} ${sp.name} Endless · ${over} · best streak ${s.best || 0}${reach ? '' : ''}\n${SITE.shareUrl}`;
+}
+function runbarHTML(){
+  const s = run.stats || {};
+  if (run.phase !== 'open') return `<div class="banner">Scouting: no winners yet. Every pick builds the ${esc(sportOf(run.sport).name)} board.</div>`;
+  return `<div class="runbar"><span><b>${s.scored ? s.pct + '%' : '–'}</b> agreement</span><span><b>${s.scored || 0}</b> scored</span><span><b>${s.streak || 0}</b> streak</span><span><b>${s.best || 0}</b> best</span></div>`;
+}
+function renderEndless(){
+  const g = $('#game');
+  if (!run || run.sport !== view.sport){ g.innerHTML = ''; return; }
+  if (run.done){
+    const s = run.stats || {};
+    const txt = endlessShare();
+    g.innerHTML = `<div class="done"><div class="of">${run.error ? esc(run.error) : 'Run over'}</div>
+      ${s.scored ? `<p class="score">${s.pct}%</p><div class="of">over ${s.scored} scored picks · best streak ${s.best}</div><pre class="share">${esc(txt)}</pre>` : ''}
+      <div class="footer-row">${s.scored ? `<button type="button" class="btn share" data-share>Share ${SHARE_ICON}</button>` : ''}<button type="button" class="btn" id="again">New run</button></div></div>${adSlot('results')}`;
+    g.querySelectorAll('[data-share]').forEach(b => b.onclick = () => copy(txt));
+    $('#again').onclick = () => startRun(run.sport);
+    fillAds(g);
+    return;
+  }
+  if (!run.shown){
+    g.innerHTML = `<p class="question">${esc(QUESTION)}</p>${run.error ? `<div class="notice"><p>${esc(run.error)}</p><button type="button" class="btn" id="retry">Try again</button></div>` : ''}`;
+    const r = $('#retry'); if (r) r.onclick = () => startRun(run.sport);
+    return;
+  }
+  const pair = run.shown, rv = run.reveal;
+  const nowinBanner = pair.nowin && run.phase === 'open' ? '<div class="banner">No winner yet: your pick helps decide it.</div>' : '';
+  let o = {revealed: !!rv, busy: run.busy, picked: rv ? rv.picked : -1, flip: !!(rv && run.justPicked)};
+  let result = '<div class="result"></div>';
+  if (rv){
+    o.share = [rv.left, 1 - rv.left];
+    if (rv.nowin){
+      o.even = true;
+      o.detail = rv.votes <= 1 ? "You're one of the first votes" : `${rv.votes.toLocaleString('en-US')} votes so far`;
+      result = `<div class="result"><span class="verdict">No winner yet · ${esc(o.detail)}</span><button type="button" class="btn" id="next">Next pair</button></div>`;
+    } else {
+      o.winIdx = rv.winnerSide;
+      o.detail = rv.source === 'crowd' ? `${rv.votes.toLocaleString('en-US')} votes` : 'predicted from the crowd';
+      result = `<div class="result"><span class="verdict">${rv.match ? 'With the crowd' : 'Against the crowd · streak reset'} · ${esc(o.detail)}</span><button type="button" class="btn" id="next">Next pair</button></div>`;
+    }
+  }
+  g.innerHTML = `${runbarHTML()}${nowinBanner}<p class="question">${esc(QUESTION)}</p>${pairHTML(pair.cards, o)}${result}
+    ${run.error ? `<p class="hint err">${esc(run.error)}</p>` : ''}
+    <p class="hint"><button type="button" class="btn ghost" id="end-run">End run</button></p>`;
+  run.justPicked = false;
+  if (!rv) g.querySelectorAll('.card').forEach(c => c.onclick = () => pickRun(Number(c.dataset.idx)));
+  else { [0,1].forEach(i => { const d = g.querySelector(`.card[data-idx="${i}"] .detail`); if (d) d.innerHTML = creditHTML(i).replace(/^ · /, ''); }); $('#next').onclick = nextRun; $('#next').focus({preventScroll:true}); }
+  $('#end-run').onclick = endRun;
+}
+function askName(lede){
+  const body = openModal(`<h2 class="small">You're on the board</h2><p>${esc(lede)}</p><p>Pick a name for the boards. 3–16 letters, numbers, spaces or underscores.</p>
+    <form class="namebox" id="nameform"><input id="namein" maxlength="16" autocomplete="nickname" placeholder="Name" value="${esc(store.get('draftdle.name') || '')}"><button type="submit" class="btn">Save</button></form><p class="err" id="nameerr"></p>
+    <p class="quiet" style="font-size:13px">Skip it and you'll show as Anonymous scout.</p>`);
+  body.querySelector('#nameform').onsubmit = async e => {
+    e.preventDefault();
+    const name = body.querySelector('#namein').value;
+    const res = await api('/api/name', {bid: browserId(), name});
+    if (res.error){ body.querySelector('#nameerr').textContent = res.error; return; }
+    store.set('draftdle.name', res.name); store.set('draftdle.named', 1); closeModal(); toast('Name saved');
+  };
+  body.querySelector('#namein').focus();
+}
+
+// ---------- Boards ----------
+const boardsCache = {};
+async function loadBoards(sport){
+  const res = await api('/api/leaderboard?sport=' + encodeURIComponent(sport));
+  boardsCache[sport] = res.error ? {error: true} : res.boards;
+  if (view.mode === 'boards' && view.sport === sport) renderBoards();
+}
+function renderBoards(){
+  const g = $('#game'), sport = view.sport, st = statusOf(sport);
+  const tabs = [['pct25','25'],['pct50','50'],['pct100','100'],['pct250','250'],['pct500','500'],['pct1000','1000'],['streak','Streak']];
+  if (st.phase !== 'open'){ g.innerHTML = `<div class="notice"><p>The ${esc(sportOf(sport).name)} boards open when the sport leaves scouting.</p><button type="button" class="btn" id="to-endless">Play Endless</button></div>`; $('#to-endless').onclick = () => go(sport, 'endless'); return; }
+  const data = boardsCache[sport];
+  if (data === undefined) loadBoards(sport);
+  const rows = data && !data.error ? (data[boardTab] || []) : [];
+  const unit = boardTab === 'streak' ? '' : '%';
+  g.innerHTML = `<div class="boards"><p class="question">${boardTab === 'streak' ? 'Longest streak' : `Best agreement at ${boardTab.slice(3)} picks`}</p>
+    <nav>${tabs.map(([id,l]) => `<button type="button" data-tab="${id}" aria-pressed="${boardTab===id}">${l}</button>`).join('')}</nav>
+    ${data && data.error ? `<div class="notice"><p>Couldn't load the boards.</p></div>` : rows.length ? `<table class="lb">${rows.map((r,i) => `<tr><td class="r">${i+1}</td><td>${esc(r.name)}</td><td class="v">${esc(r.value)}${unit}</td><td class="d">${esc(r.day)}</td></tr>`).join('')}</table>` : data ? `<p class="hint">No entries yet. Reach ${boardTab === 'streak' ? 'a streak of 5' : boardTab.slice(3) + ' scored picks'} in one Endless run to post here.</p>` : ''}
+    <p class="hint">All-time, top 100. Updated every few minutes.</p></div>`;
+  g.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { boardTab = b.dataset.tab; renderBoards(); });
+}
+
+// ---------- modals ----------
+function showStats(){
+  if (!view.sport){ openModal(`<h2 class="small">Statistics</h2><p>Pick a sport to see its stats.</p>`); return; }
+  const sp = sportOf(view.sport), e = store.get(endlessKey(view.sport)) || {best:{}, bestStreak: 0};
+  const done = view.mode === 'daily' && daily && daily.puzzle && daily.picks.length >= daily.pairs.length;
+  const body = openModal(`<h2 class="small">Statistics · ${esc(sp.name)}</h2><h3 class="cap">Daily</h3>${statsHTML(dailyStats(view.sport))}
+    ${done ? `<div class="footer-row"><div class="next"><div class="lbl">Next Daily</div><div class="countdown">${untilMidnight()}</div></div><div class="vr"></div><button type="button" class="btn share" data-share>Share ${SHARE_ICON}</button></div>` : ''}
+    <h3 class="cap">Endless bests</h3><div class="stats">${MILESTONES.map(m => `<span><b>${e.best['pct'+m] != null ? e.best['pct'+m] + '%' : '–'}</b>at ${m}</span>`).join('')}<span><b>${e.bestStreak || 0}</b>Streak</span></div>`);
+  body.querySelectorAll('[data-share]').forEach(b => b.onclick = () => copy(dailyShare()));
+}
+function showHelp(){
+  openModal(`<h2>How To Play</h2><p class="lede">Two players. Who do you draft?</p>
+    <ul><li>There's no right answer, only the crowd's. The player more people picked wins the pair.</li>
+    <li><b>Daily:</b> ten pairs, the same for everyone. Score a point each time you side with the crowd. A new set starts at midnight.</li>
+    <li><b>Endless:</b> keep going as long as you like. A miss resets your streak; your agreement percentage keeps counting. Hit 25, 50, 100, 250, 500 or 1,000 scored picks in one run to post to the boards.</li>
+    <li>Now and then Endless asks a question with no winner yet. Those don't count for or against you; they decide future answers.</li>
+    <li>Retired players count as they were at their best. Cards show career years, position and every team.</li></ul>
+    <p>Pick a sport from the list. Each has its own Daily, Endless runs and boards. Keys: 1 or ← for the left card, 2 or → for the right.</p>`);
+}
+const SETTINGS_KEY = 'dle.settings';
+function showSettings(){
+  const s = store.get(SETTINGS_KEY) || {};
+  const dark = s.theme ? s.theme === 'dark' : (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  const body = openModal(`<h2 class="small">Settings</h2><div class="setting"><div><div class="t">Dark Theme</div></div><button type="button" class="switch" role="switch" aria-label="Dark theme" aria-checked="${dark}"></button></div>
+    <div class="setting"><div><div class="t">Board name</div><div class="d">${esc(store.get('draftdle.name') || 'Anonymous scout')}</div></div><button type="button" class="btn ghost" id="rename">Change</button></div>`);
+  body.querySelector('.switch').onclick = function(){ const on = this.getAttribute('aria-checked') !== 'true'; this.setAttribute('aria-checked', String(on)); const cur = store.get(SETTINGS_KEY) || {}; cur.theme = on ? 'dark' : 'light'; store.set(SETTINGS_KEY, cur); document.documentElement.dataset.theme = cur.theme; };
+  body.querySelector('#rename').onclick = () => askName('Your name shows next to your entries on every board.');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === 'Escape' && !$('#modal').hidden){ closeModal(); return; }
+  if (!$('#modal').hidden || /input|textarea/i.test((e.target || {}).tagName || '')) return;
+  const side = e.key === '1' || e.key === 'ArrowLeft' ? 0 : e.key === '2' || e.key === 'ArrowRight' ? 1 : -1;
+  if (side >= 0){ const c = document.querySelector(`.card[data-idx="${side}"]:not([disabled])`); if (c){ e.preventDefault(); c.click(); } }
+  else if (e.key === 'Enter'){ const n = $('#next'); if (n){ e.preventDefault(); n.click(); } }
+});
+window.addEventListener('pagehide', () => { sendDaily(true); });
+
+document.documentElement.style.setProperty('--art', '4/3');
+document.documentElement.style.setProperty('--art-d', '4/3');
+$('#btn-help').onclick = showHelp;
+$('#btn-stats').onclick = showStats;
+$('#btn-settings').onclick = showSettings;
+$('#footer').innerHTML = SITE.footer + SITE.footerLinks;
+const fa = document.querySelector('#footerad'); if (fa){ fa.outerHTML = adSlot('footer'); fillAds(document.body); }
+const last = store.get('draftdle.sport');
+go(last && sportOf(last) && statusOf(last).phase !== 'soon' ? last : null, 'daily');
+if (!store.get('draftdle.seenHelp') && !SITE.allowDateParam){ store.set('draftdle.seenHelp', 1); showHelp(); }
+window.__draftdle = {SITE, SPORTS, STATUS, PUZZLES, TODAY, state: () => ({view, daily, run})};
+})();
+</script>
+</body>
+</html>
