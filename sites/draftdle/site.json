@@ -1,0 +1,21 @@
+{
+  "name": "draftdle",
+  "title": "Draftdle",
+  "url": "https://draftdle.pages.dev",
+  "cloudflareProject": "draftdle",
+  "d1Name": "draftdle",
+  "tagline": "Two players. Who do you draft? The crowd decides.",
+  "description": "A daily sports game: pick a sport, see two players, and pick the one you'd draft. The player more people pick wins. Ten pairs a day, plus Endless runs with leaderboards.",
+  "themeColor": "#6aaa64",
+  "icon": "D",
+  "operator": "Counterspell",
+  "contact": "info@counterspell.dev",
+  "turnstileSiteKey": "",
+  "adsense": {
+    "client": "",
+    "slots": {
+      "results": "",
+      "footer": ""
+    }
+  }
+}
