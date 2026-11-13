@@ -134,12 +134,18 @@ setSite("peakdle", { live: { lagDays: 2 } });
     const ids = JSON.parse(decodeURIComponent(url.split("input_json=")[1])).ids.map(x => x.appid);
     return { ok: true, status: 200, json: async () => ({ response: { store_items: ids.map(appid => ({ appid, success: 1,
       content_descriptorids: appid === 730 ? [2, 5] : appid === 570 ? [3] : [],
-      assets: { header: appid === 730 ? "abc123/header.jpg" : "header.jpg" } })) } }) };
+      assets: { header: appid === 730 ? "abc123/header.jpg" : "header.jpg" },
+      ...(appid === 730 ? { is_free: true } : {}),
+      ...(appid === 413150 ? { best_purchase_option: { final_price_in_cents: "749", original_price_in_cents: "1499", discount_pct: 50 } } : {}),
+      ...(appid === 1086940 ? { best_purchase_option: { final_price_in_cents: "5999" } } : {}) })) } }) };
   };
   const r = await refreshAssets({ fetchImpl: fake, delayMs: 0, log: () => {} });
   const after = readJ(path.join(T, "data/peakdle/pool.json"));
   ok(after.find(a => a.appid === 730)?.img === "abc123/header.jpg", "assets: header path updated");
   ok(!after.some(a => a.appid === 570) && r.dropped.length === 1, "assets: adult-only app dropped");
+  const pr = id => after.find(a => a.appid === id);
+  ok(pr(413150).price === 1499 && pr(413150).free === false, "assets: regular price kept during a sale");
+  ok(pr(1086940).price === 5999 && pr(730).free === true && pr(730).price === 0, "assets: full price and free-to-play recorded");
   fs.writeFileSync(path.join(T, "data/peakdle/pool.json"), JSON.stringify(before));
 }
 
@@ -208,6 +214,13 @@ ok(fs.existsSync(live("2026-12-06")) && readJ(live("2026-12-06")).meta.day === "
   const first = frozen.pairs[0][0];
   const img = pg.d.querySelector('.card[data-idx="0"] .art img');
   ok(first.img ? img && img.getAttribute("src") === `https://shared.steamstatic.com/store_item_assets/steam/apps/${first.group}/${first.img}` : pg.d.querySelector('.card[data-idx="0"] .art.noimg'), "peakdle: card shows the Steam header image");
+  {
+    // frozen puzzles carry no price; the build joins the current one from pool.json
+    const a = readJ(path.join(T, "data/peakdle/pool.json")).find(x => x.appid === first.group);
+    const want = a.free ? "Free" : a.price ? "$" + (a.price / 100).toFixed(2) : "Paid";
+    const meta = pg.d.querySelector('.card[data-idx="0"] .meta')?.textContent || "";
+    ok(!("price" in first) && meta.endsWith(want), `peakdle: card shows the build-time price (${meta}, want ${want})`);
+  }
   const err = playDay(pg);
   ok(!err, "peakdle: full day plays " + (err || ""));
   const share = pg.d.querySelector("#sharetext")?.textContent || "";
