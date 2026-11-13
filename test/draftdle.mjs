@@ -97,7 +97,16 @@ const nightlyDb = db => db.nightly;
   process.env.DLE_FAST = "1";
   const down = await R.enViews(Array.from({ length: 300 }, (_, i) => "T" + i), { fetchImpl: async () => { throw new Error("timeout"); } });
   const up = await R.enViews(["A b", "C"], { fetchImpl: async u => ({ ok: true, status: 200, json: async () => ({ items: [{ views: u.includes("A_b") ? 7 : 3 }, { views: 5 }] }) }) });
+  let bTries = 0;
+  const flaky = await R.enViews(Array.from({ length: 120 }, (_, i) => "P" + i), { fetchImpl: async u => {
+    if (u.includes("/P7/") && bTries++ < 3) return { ok: false, status: 429 };
+    return { ok: true, status: 200, json: async () => ({ items: [{ views: 2 }] }) };
+  } });
+  const g = [{ sitelinks: 10, views: 100 }, { sitelinks: 12, views: 120 }, { sitelinks: 80, views: 9000 }, { sitelinks: 82, views: 11000 }, { sitelinks: 81 }, { sitelinks: 11 }];
+  const nG = R.guessViews(g, 2);
   delete process.env.DLE_FAST;
+  ok(flaky.get("P7") === 2 && flaky.size === 120, "page views: a rate-limited title is picked up by the second pass");
+  ok(nG === 2 && g[4].views >= 9000 && g[4].viewsGuess && g[5].views <= 120, "a failed lookup is estimated from players with similar language counts, not zeroed");
   ok(down.size === 0 && up.get("A b") === 12 && up.get("C") === 8, "page views: summed per title; a dead service falls back instead of stalling");
   ok(errs.some(e => /Q2593221 is "WNBA \(wrong label\)"/.test(e)) && fs.existsSync(path.join(T, "data/draftdle/wnba/pool.json")) === before, "a league id with the wrong label stops that sport and keeps its old pool");
 }
