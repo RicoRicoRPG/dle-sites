@@ -61,12 +61,6 @@ jobs:
           migrations_dir = "migrations"
           TOML
           sed -i 's/^          //' wrangler.toml
-      # The steps that write to D1 run nightly or by hand, never on a push: a redeploy only builds
-      # and deploys, so it costs no D1 writes.
-      - name: Migrations
-        if: github.event_name != 'push'
-        working-directory: sites/draftdle
-        run: npx --yes wrangler@4 d1 migrations apply "$(node -p "require('./site.json').d1Name")" --remote
       - name: Player pools (missing ones, or all when asked)
         run: |
           missing=$(node -e "const fs=require('fs');const c=require('./data/draftdle/sports.json');console.log(c.sports.filter(s=>s.wave===1&&!fs.existsSync('data/draftdle/'+s.id+'/pool.json')).map(s=>s.id).join(' '))")
@@ -84,6 +78,12 @@ jobs:
             git pull --rebase
             git push
           fi
+      # The steps that write to D1 run nightly or by hand, never on a push: a redeploy only builds
+      # and deploys, so it costs no D1 writes.
+      - name: Migrations
+        if: github.event_name != 'push'
+        working-directory: sites/draftdle
+        run: npx --yes wrangler@4 d1 migrations apply "$(node -p "require('./site.json').d1Name")" --remote
       - name: Restore last night's totals
         if: github.event_name != 'push'
         uses: actions/cache/restore@v4
