@@ -35,6 +35,6 @@
   }],
   example: Object.assign([{ name: "Counter-Strike 2", value: "1,071,403", group: 730, img: "162664aa5da85f418105350c5d67ca565f6c3713/header.jpg" }, { name: "Stardew Valley", value: "71,940", group: 413150, img: "header.jpg" }],
     { note: "Counter-Strike 2 had more people playing at its peak, so that card wins. These numbers are an example; each puzzle uses the day it names." }),
-  footer: `<p>Player counts from the Steam Web API, sampled hourly. Genre and price model from <a href="https://steamspy.com" target="_blank" rel="noopener">SteamSpy</a>.</p>
+  footer: `<p>Player counts from the Steam Web API and <a href="https://steamcharts.com" target="_blank" rel="noopener">SteamCharts</a>, sampled hourly. Genre and price model from <a href="https://steamspy.com" target="_blank" rel="noopener">SteamSpy</a>.</p>
            <p>Not affiliated with or endorsed by Valve or Steam. Steam is a trademark of Valve Corporation. Data is provided as is, without warranty of any kind.</p>`
 }
