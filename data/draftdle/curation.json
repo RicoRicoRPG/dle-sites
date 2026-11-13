@@ -1,1 +1,9 @@
-{ "exclude": {} }
+{
+  "exclude": {
+    "nfl": ["Q220556", "Q275971"]
+  },
+  "notes": {
+    "Q220556": "Brock Lesnar: preseason only; famous for wrestling",
+    "Q275971": "Roman Reigns: practice squads only; famous for wrestling"
+  }
+}

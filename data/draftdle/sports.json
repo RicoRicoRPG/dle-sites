@@ -80,7 +80,7 @@
   {
    "id": "wnba", "name": "WNBA", "group": "US leagues", "wave": 1,
    "leagues": ["Q2593221"], "leagueLabels": ["Women's National Basketball Association"],
-   "poolSize": 300, "tiers": [100, 100],
+   "poolSize": 300, "tiers": [100, 100], "sex": "Q6581072",
    "teamsFrom": "league",
    "positions": [
     ["point guard", "PG", "all"], ["shooting guard", "SG", "all"], ["small forward", "SF", "all"],
