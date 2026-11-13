@@ -20,6 +20,8 @@ const T = fs.mkdtempSync(path.join(os.tmpdir(), "draftdle-check-"));
 for (const d of ["src", "scripts", "sites", "static", "data", "test"]) if (fs.existsSync(path.join(ROOT, d))) fs.cpSync(path.join(ROOT, d), path.join(T, d), { recursive: true });
 fs.rmSync(path.join(T, "data/puzzles"), { recursive: true, force: true });
 fs.rmSync(path.join(T, "data/draftdle/status.json"), { force: true });
+// Start from no pools: CI runs this after the real Wikidata pull has written them.
+for (const d of fs.readdirSync(path.join(T, "data/draftdle"), { withFileTypes: true })) if (d.isDirectory()) fs.rmSync(path.join(T, "data/draftdle", d.name), { recursive: true, force: true });
 if (fs.existsSync(path.join(ROOT, "node_modules"))) fs.symlinkSync(path.join(ROOT, "node_modules"), path.join(T, "node_modules"));
 const imp = rel => import(pathToFileURL(path.join(T, rel)));
 
