@@ -1,0 +1,89 @@
+{
+ "sports": {
+  "nfl": {
+   "name": "NFL",
+   "group": "US leagues",
+   "phase": "scouting",
+   "tiersOpen": 0,
+   "players": 5000,
+   "headliners": 400,
+   "coveredHeadliners": 0,
+   "eligible": 0,
+   "dailyNeeds": 100,
+   "dailyEpoch": null,
+   "rounds": 10,
+   "votes": 0
+  },
+  "nba": {
+   "name": "NBA",
+   "group": "US leagues",
+   "phase": "scouting",
+   "tiersOpen": 0,
+   "players": 2500,
+   "headliners": 400,
+   "coveredHeadliners": 0,
+   "eligible": 0,
+   "dailyNeeds": 100,
+   "dailyEpoch": null,
+   "rounds": 10,
+   "votes": 0
+  },
+  "mlb": {
+   "name": "MLB",
+   "group": "US leagues",
+   "phase": "scouting",
+   "tiersOpen": 0,
+   "players": 5000,
+   "headliners": 400,
+   "coveredHeadliners": 0,
+   "eligible": 0,
+   "dailyNeeds": 100,
+   "dailyEpoch": null,
+   "rounds": 10,
+   "votes": 0
+  },
+  "nhl": {
+   "name": "NHL",
+   "group": "US leagues",
+   "phase": "scouting",
+   "tiersOpen": 0,
+   "players": 3500,
+   "headliners": 400,
+   "coveredHeadliners": 0,
+   "eligible": 0,
+   "dailyNeeds": 100,
+   "dailyEpoch": null,
+   "rounds": 10,
+   "votes": 0
+  },
+  "soccer": {
+   "name": "Soccer",
+   "group": "Soccer",
+   "phase": "scouting",
+   "tiersOpen": 0,
+   "players": 5000,
+   "headliners": 400,
+   "coveredHeadliners": 0,
+   "eligible": 0,
+   "dailyNeeds": 100,
+   "dailyEpoch": null,
+   "rounds": 10,
+   "votes": 0
+  },
+  "wnba": {
+   "name": "WNBA",
+   "group": "US leagues",
+   "phase": "scouting",
+   "tiersOpen": 0,
+   "players": 600,
+   "headliners": 200,
+   "coveredHeadliners": 0,
+   "eligible": 0,
+   "dailyNeeds": 100,
+   "dailyEpoch": null,
+   "rounds": 10,
+   "votes": 0
+  }
+ },
+ "updated": "2026-11-13"
+}
