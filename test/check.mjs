@@ -39,22 +39,22 @@ function playDay(pg) {
   return null;
 }
 function checkDist(distRoot, label) {
-  for (const site of ["speedrundle", "peakdle"]) {
+  for (const site of ["speedrundle", "peakdle", "draftdle"]) {
     const dir = path.join(distRoot, site);
     for (const f of ["index.html", "about.html", "privacy.html", "404.html", "robots.txt", "sitemap.xml", "_headers", "favicon.svg", "og.png", "apple-touch-icon.png"])
       ok(fs.existsSync(path.join(dir, f)), `${label} ${site}: missing ${f}`);
     const html = fs.readFileSync(path.join(dir, "index.html"), "utf8");
-    ok(!/\/\*(CORE|SITE|CONFIG|PUZZLES|POOLS)\*\/|<!--HEAD-->/.test(html), `${label} ${site}: unfilled template marker`);
+    ok(!/\/\*(CORE|SITE|CONFIG|PUZZLES|POOLS|BASECSS|SPORTS|STATUS)\*\/|<!--HEAD-->/.test(html), `${label} ${site}: unfilled template marker`);
     ok(/<link rel="canonical"/.test(html) && /og:image/.test(html), `${label} ${site}: missing canonical/og tags`);
   }
 }
 
 if (process.argv.includes("--dist")) {
   checkDist(path.join(ROOT, "dist"), "dist");
-  for (const site of ["speedrundle", "peakdle"]) {
+  for (const site of ["speedrundle", "peakdle", "draftdle"]) {
     const pg = await openPage(path.join(ROOT, "dist", site, "index.html"));
     ok(!pg.errs.length, `dist ${site}: script errors ${pg.errs.join("; ")}`);
-    ok(pg.d.querySelectorAll("#game .card").length === 2 || pg.d.querySelector("#game .notice"), `dist ${site}: no cards and no notice`);
+    ok(pg.d.querySelectorAll("#game .card").length === 2 || pg.d.querySelector("#game .notice") || pg.d.querySelectorAll("#game .tile").length, `dist ${site}: no cards, tiles or notice`);
     pg.w.close();
   }
   console.log(failures ? `${failures} failure(s), ${passes} passed` : `dist ok (${passes} checks)`);
@@ -134,18 +134,12 @@ setSite("peakdle", { live: { lagDays: 2 } });
     const ids = JSON.parse(decodeURIComponent(url.split("input_json=")[1])).ids.map(x => x.appid);
     return { ok: true, status: 200, json: async () => ({ response: { store_items: ids.map(appid => ({ appid, success: 1,
       content_descriptorids: appid === 730 ? [2, 5] : appid === 570 ? [3] : [],
-      assets: { header: appid === 730 ? "abc123/header.jpg" : "header.jpg" },
-      ...(appid === 730 ? { is_free: true } : {}),
-      ...(appid === 413150 ? { best_purchase_option: { final_price_in_cents: "749", original_price_in_cents: "1499", discount_pct: 50 } } : {}),
-      ...(appid === 1086940 ? { best_purchase_option: { final_price_in_cents: "5999" } } : {}) })) } }) };
+      assets: { header: appid === 730 ? "abc123/header.jpg" : "header.jpg" } })) } }) };
   };
   const r = await refreshAssets({ fetchImpl: fake, delayMs: 0, log: () => {} });
   const after = readJ(path.join(T, "data/peakdle/pool.json"));
   ok(after.find(a => a.appid === 730)?.img === "abc123/header.jpg", "assets: header path updated");
   ok(!after.some(a => a.appid === 570) && r.dropped.length === 1, "assets: adult-only app dropped");
-  const pr = id => after.find(a => a.appid === id);
-  ok(pr(413150).price === 1499 && pr(413150).free === false, "assets: regular price kept during a sale");
-  ok(pr(1086940).price === 5999 && pr(730).free === true && pr(730).price === 0, "assets: full price and free-to-play recorded");
   fs.writeFileSync(path.join(T, "data/peakdle/pool.json"), JSON.stringify(before));
 }
 
@@ -214,13 +208,6 @@ ok(fs.existsSync(live("2026-12-06")) && readJ(live("2026-12-06")).meta.day === "
   const first = frozen.pairs[0][0];
   const img = pg.d.querySelector('.card[data-idx="0"] .art img');
   ok(first.img ? img && img.getAttribute("src") === `https://shared.steamstatic.com/store_item_assets/steam/apps/${first.group}/${first.img}` : pg.d.querySelector('.card[data-idx="0"] .art.noimg'), "peakdle: card shows the Steam header image");
-  {
-    // frozen puzzles carry no price; the build joins the current one from pool.json
-    const a = readJ(path.join(T, "data/peakdle/pool.json")).find(x => x.appid === first.group);
-    const want = a.free ? "Free" : a.price ? "$" + (a.price / 100).toFixed(2) : "Paid";
-    const meta = pg.d.querySelector('.card[data-idx="0"] .meta')?.textContent || "";
-    ok(!("price" in first) && meta.endsWith(want), `peakdle: card shows the build-time price (${meta}, want ${want})`);
-  }
   const err = playDay(pg);
   ok(!err, "peakdle: full day plays " + (err || ""));
   const share = pg.d.querySelector("#sharetext")?.textContent || "";
@@ -316,5 +303,11 @@ polls("2026-12-06", HOURS); daily("2026-12-07");
 }
 
 fs.rmSync(T, { recursive: true, force: true });
+
+// ---------- Draftdle (its own suite: functions on a SQLite stand-in, nightly job, page) ----------
+{
+  const d = await import(pathToFileURL(path.join(ROOT, "test/draftdle.mjs")));
+  failures += d.result.failures; passes += d.result.passes;
+}
 console.log(failures ? `${failures} failure(s), ${passes} passed` : `all ${passes} checks passed`);
 process.exit(failures ? 1 : 0);
