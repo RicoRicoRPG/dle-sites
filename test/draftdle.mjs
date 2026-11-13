@@ -62,6 +62,9 @@ const nightlyDb = db => db.nightly;
   ok(pl.years === "2003–present" && pl.active === 1 && pl.img.length === 2 && pl.img[0].includes("/2544.png") && pl.img[1].includes("Special:FilePath"), "player card: years, active, headshot then Commons");
   const ret = R.buildPlayer(S.nba, { id: "Q41421", name: "Michael Jordan", sitelinks: 150, hof: true, ws: 1984, we: 2003, positions: ["shooting guard"], ext: {}, teams: [{ team: "Q1", label: "Chicago Bulls", start: 1984, end: 1998 }] }, league, [], 2026);
   ok(ret.years === "1984–2003" && ret.active === 0 && ret.fame === 165, "retired player: closed years, Hall of Fame bonus");
+  const { cardOf } = await imp("scripts/draftdle-lib.mjs");
+  const both = ["https://cdn.nba.com/headshots/nba/latest/1040x760/1.png", "https://commons.wikimedia.org/wiki/Special:FilePath/X.jpg?width=360"];
+  ok(cardOf({ ...ret, img: both, commons: "X.jpg" }).i[0].includes("commons") && cardOf({ ...pl, img: both, commons: "X.jpg" }).i[0].includes("cdn.nba.com"), "retired players try Commons first, active players the league headshot");
 
   // a full refresh against a fake query service, including a wrong league id
   const E = "http://www.wikidata.org/entity/";
