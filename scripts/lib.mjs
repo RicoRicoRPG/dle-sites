@@ -17,7 +17,7 @@ export const addDays = (iso, n) => new Date(Date.parse(iso + "T00:00:00Z") + n *
 export const now = () => (process.env.DLE_NOW ? new Date(process.env.DLE_NOW) : new Date());
 
 export function sites() {
-  return ["speedrundle", "peakdle"].map(name => ({ ...read(p("sites", name, "site.json")), dir: p("sites", name) }));
+  return ["speedrundle", "peakdle", "draftdle"].map(name => ({ ...read(p("sites", name, "site.json")), dir: p("sites", name) }));
 }
 
 // fetch with a timeout and retries. speedrun.com answers 420 when hit too fast.

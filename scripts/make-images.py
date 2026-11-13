@@ -1,5 +1,5 @@
 """One-off: draw the social preview (og.png), touch icon and favicon for each site into static/SITE/.
-Re-run after changing a title or tagline: python3 scripts/make-images.py"""
+Re-run after changing a title or tagline: python3 scripts/make-images.py [site ...]"""
 import json, pathlib
 from PIL import Image, ImageDraw, ImageFont
 
@@ -10,6 +10,7 @@ FONT_R = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 SAMPLE = {
     "speedrundle": (("Super Mario 64", "16 Star", "14:32"), ("Celeste", "Any%", "24:44")),
     "peakdle": (("Counter-Strike 2", "Action · Free", "1,071,403"), ("Stardew Valley", "RPG · Paid", "71,940")),
+    "draftdle": (("Quarterback", "QB · 2018–present", "64%"), ("Wide receiver", "WR · 2012–2024", "36%")),
 }
 
 
@@ -64,7 +65,8 @@ def icon(site, size):
     return im
 
 
-for name in ("speedrundle", "peakdle"):
+import sys
+for name in (sys.argv[1:] or ("speedrundle", "peakdle", "draftdle")):
     site = json.loads((ROOT / "sites" / name / "site.json").read_text())
     out = ROOT / "static" / name
     out.mkdir(parents=True, exist_ok=True)

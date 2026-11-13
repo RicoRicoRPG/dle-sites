@@ -94,6 +94,41 @@ function gamePage(site, ads) {
     .replace("/*POOLS*/", () => json(pools));
 }
 
+// ---------- Draftdle ----------
+// Its own page (sport picker, server-scored Endless, boards) on the same chrome: the base CSS is
+// lifted from src/game.html so the three sites stay one family.
+function draftdlePuzzles(today) {
+  const out = {};
+  for (const s of read(p("data/draftdle/sports.json")).sports) {
+    for (const d of [addDays(today, -1), today, addDays(today, 1)]) {
+      const f = read(p("data/puzzles/draftdle", s.id, d + ".json"), null);
+      if (f) (out[s.id] = out[s.id] || {})[d] = f;
+    }
+  }
+  return out;
+}
+function draftdlePage(site, ads) {
+  const base = fs.readFileSync(p("src/game.html"), "utf8").match(/<style>([\s\S]*?)<\/style>/)[1];
+  const tpl = fs.readFileSync(p("src/draftdle.html"), "utf8");
+  const today = utcDay(now());
+  const status = read(p("data/draftdle/status.json"), { sports: {} });
+  const sports = read(p("data/draftdle/sports.json")).sports.map(s => ({ id: s.id, name: s.name, group: s.group, wave: s.wave }));
+  const SITE = {
+    name: site.name, title: site.title, url: site.url,
+    shareUrl: site.url.replace(/^https?:\/\//, "").replace(/\/$/, ""),
+    ads: { client: ads ? site.adsense.client : "", slots: ads ? site.adsense.slots : {}, preview: args.has("--ad-preview") },
+    footerLinks: footerLinks(ads), allowDateParam: args.has("--allow-date"), turnstile: site.turnstileSiteKey || "",
+    footer: `<p>Players, positions, careers and teams from <a href="https://www.wikidata.org" target="_blank" rel="noopener">Wikidata</a> (CC0), refreshed weekly. Photos load from league sites and <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>; each Commons photo links to its author and licence on the reveal.</p><p>Answers come from Draftdle players' votes. Not affiliated with any league, team or player.</p>`
+  };
+  return tpl
+    .replace("<!--HEAD-->", head(site, { title: `${site.title}: ${site.tagline.replace(/\.$/, "")}`, description: site.description, path: "/", ads }))
+    .replace("/*BASECSS*/", () => base)
+    .replace("/*SITE*/", () => json(SITE))
+    .replace("/*SPORTS*/", () => json(sports))
+    .replace("/*STATUS*/", () => json(status))
+    .replace("/*PUZZLES*/", () => json(draftdlePuzzles(today)));
+}
+
 // ---------- text pages ----------
 const PAGE_CSS = `:root{--bg:#fff;--ink:#1a1a1b;--quiet:#787c7e;--line:#d3d6da;--good:#6aaa64}
 @media (prefers-color-scheme: dark){:root{--bg:#121213;--ink:#f8f8f8;--quiet:#818384;--line:#3a3a3c;--good:#538d4e}}
@@ -127,6 +162,19 @@ ${body}
 }
 
 function about(site) {
+  if (site.name === "draftdle") return { path: "/about", title: "How to play & about", description: `How ${site.title} works and where its data comes from.`, body: `<h1>About Draftdle</h1>
+<p>${esc(site.description)}</p>
+<h2>How to play</h2>
+<p>Pick a sport, then pick one of two players: the one you'd draft. There's no right answer except the crowd's: the player more Draftdle players picked wins the pair. For a retired player, picture them at their best.</p>
+<p><b>Daily</b> has ten pairs, the same for everyone, easy to hard by how lopsided the vote was. You score a point each time you side with the crowd. A new set starts at midnight in your time zone.</p>
+<p><b>Endless</b> keeps going as long as you like. A miss resets your streak; your agreement percentage keeps counting. Reach 25, 50, 100, 250, 500 or 1,000 scored picks in one run, or a streak of 5 or more, to post to that sport's boards. Now and then Endless asks a question with no winner yet: it doesn't count for or against you, and it decides future answers.</p>
+<h2>Where the answers come from</h2>
+<p>Every tap in Daily and Endless is stored as an anonymous vote. Each night the votes are totalled. A pair gets a crowd verdict once at least 40 people have voted on it (25 in a sport's first two weeks). For pairs with fewer votes, Endless predicts the crowd from how each player has done against everyone else. A Daily only uses pairs with a real crowd verdict of at least 55%.</p>
+<p>A new sport starts with a scouting phase: every question is a data question until each headline player has about 30 votes. Then scoring and the boards open, and the sport's Daily follows once 100 pairs have a crowd verdict.</p>
+<h2>Where the players come from</h2>
+<p>Names, positions, career years and teams come from <a href="https://www.wikidata.org" target="_blank" rel="noopener">Wikidata</a>, the free knowledge base behind Wikipedia, and are refreshed weekly. Which players count as headliners depends on how many Wikipedia languages have an article about them. Photos load from league sites where they have one, otherwise from Wikimedia Commons, credited on the reveal. Draftdle isn't affiliated with any league, team or player.</p>
+${site.contact ? `<p>Questions, corrections or a player we got wrong: <a href="mailto:${esc(site.contact)}">${esc(site.contact)}</a>.</p>` : ""}
+<p class="quiet">Made by ${esc(site.operator)}.</p>` };
   const contact = site.contact ? `<p>Questions, corrections or a game you'd like added: <a href="mailto:${esc(site.contact)}">${esc(site.contact)}</a>.</p>` : "";
   const how = `<h2>How to play</h2>
 <p>Each day has ten pairs. Pick the card you think wins; the answer and the margin show right away. The first three pairs are far apart, the middle four are closer, and the last three are within 1.5× of each other. Everyone gets the same ten pairs, and a new set starts at midnight in your time zone.</p>
@@ -155,17 +203,18 @@ ${contact}
 }
 
 function privacy(site, ads) {
-  const updated = "2026-11-11";
+  const updated = site.name === "draftdle" ? "2026-11-12" : "2026-11-11";
   const contact = site.contact ? `<a href="mailto:${esc(site.contact)}">${esc(site.contact)}</a>` : "the contact address on the About page";
   const body = `<h1>Privacy policy</h1>
 <p class="quiet">Last updated ${updated}</p>
 <p>${esc(site.title)} (${esc(site.url)}) is run by ${esc(site.operator)}. This page says what the site stores, who else is involved, and the choices you have.</p>
 <h2>What the game keeps</h2>
-<p>Your answers, streak and score history are saved in your browser's local storage so you can come back to them. They never leave your device and are not sent to us. Clearing your browser's site data deletes them. There are no accounts.</p>
+${site.name === "draftdle" ? `<p>Your answers, streaks and stats are saved in your browser's local storage. There are no accounts.</p>
+<p>Draftdle's answers come from its players, so each pick is also sent to us as a vote. A vote stores the sport, the two players, which one you picked, whether it was Daily or Endless, the date (no time of day), and an identifier: a random code your browser makes the first time you play, run through a one-way hash on our server. Endless also keeps each run's score, and a display name if you choose one for the leaderboards. We don't store your IP address with any of this; the server uses it only for a moment to slow down abuse. Clearing your browser's site data gives you a new random code.</p>` : `<p>Your answers, streak and score history are saved in your browser's local storage so you can come back to them. They never leave your device and are not sent to us. Clearing your browser's site data deletes them. There are no accounts.</p>`}
 <h2>Hosting</h2>
 <p>The site is served by Cloudflare. Like any web host, Cloudflare processes your IP address and basic request details to deliver pages and protect the site from abuse. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare's privacy policy</a>.</p>
-<h2>Game images</h2>
-<p>${site.name === "peakdle" ? "Game art loads straight from Steam's image servers (steamstatic.com)" : "Game box art loads straight from speedrun.com"}, so those servers receive your IP address and browser details when you view a card, as with any image on the web. The page asks your browser not to send them the address of this site.</p>
+<h2>${site.name === "draftdle" ? "Player photos" : "Game images"}</h2>
+<p>${site.name === "peakdle" ? "Game art loads straight from Steam's image servers (steamstatic.com)" : site.name === "draftdle" ? "Player photos load straight from league and ESPN image servers and from Wikimedia Commons" : "Game box art loads straight from speedrun.com"}, so those servers receive your IP address and browser details when you view a card, as with any image on the web. The page asks your browser not to send them the address of this site.</p>
 <h2>Advertising</h2>
 <p>The site shows ads from Google AdSense. Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to you based on your visits to this site and/or other sites on the Internet.</p>
 <p>You can opt out of personalised advertising in <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google's Ads Settings</a>, or opt out of some third-party vendors' use of cookies for personalised advertising at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener">aboutads.info</a>. Google explains how it uses information from sites that use its services at <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">policies.google.com/technologies/partner-sites</a>.</p>
@@ -191,7 +240,12 @@ for (const site of sites()) {
   fs.rmSync(out, { recursive: true, force: true });
   fs.mkdirSync(out, { recursive: true });
   const put = (f, s) => fs.writeFileSync(`${out}/${f}`, s);
-  put("index.html", gamePage(site, ads));
+  put("index.html", site.name === "draftdle" ? draftdlePage(site, ads) : gamePage(site, ads));
+  if (site.name === "draftdle") {
+    // Frozen puzzles, served at /d/<sport>/<date>.json: the archive reads them and /api/votes checks against them.
+    const src = p("data/puzzles/draftdle");
+    if (fs.existsSync(src)) fs.cpSync(src, `${out}/d`, { recursive: true });
+  }
   put("about.html", textPage(site, ads, about(site)));
   put("privacy.html", textPage(site, ads, privacy(site, ads)));
   put("404.html", textPage(site, ads, notFound(site)));

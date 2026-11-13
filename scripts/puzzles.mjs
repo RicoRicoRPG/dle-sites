@@ -56,7 +56,9 @@ export function poolFor(site, mode, date) {
   return null;
 }
 
+// Draftdle freezes its own puzzles in scripts/draftdle-nightly.mjs, from crowd votes.
 export function modesFor(site) {
+  if (site.name === "draftdle") return [];
   return site.name === "speedrundle" ? ["daily"] : ["live", "alltime"];
 }
 
