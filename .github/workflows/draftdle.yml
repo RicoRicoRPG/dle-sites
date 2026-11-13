@@ -45,7 +45,7 @@ jobs:
         working-directory: sites/draftdle
         run: |
           name=$(node -p "require('./site.json').d1Name")
-          list() { npx --yes wrangler@4 d1 list --json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const r=JSON.parse(s).find(x=>x.name==='$name');process.stdout.write(r?r.uuid:'')})"; }
+          list() { npx --yes wrangler@4 d1 list --json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{let r=null;try{r=JSON.parse(s).find(x=>x.name==='$name')}catch(e){};process.stdout.write(r?r.uuid:'')})"; }
           id=$(list)
           if [ -z "$id" ]; then npx --yes wrangler@4 d1 create "$name"; id=$(list); fi
           test -n "$id" || { echo "Could not find or create the D1 database. Does the API token have D1 Edit permission?"; exit 1; }
