@@ -64,6 +64,8 @@ const nightlyDb = db => db.nightly;
   const wr = R.buildPlayer(S.nfl, { id: "Q220556", name: "Brock Lesnar", sitelinks: 60, hof: false, ws: 2000, we: 2026, positions: ["defensive tackle"], ext: {}, teams: [{ team: "Q1", label: "Chicago Bulls", start: 2004, end: 2004 }] }, league, [], 2026);
   const back = R.buildPlayer(S.nfl, { id: "Qx", name: "X", sitelinks: 60, hof: false, ws: 2010, we: 2007, positions: ["defensive tackle"], ext: {}, teams: [{ team: "Q1", label: "Chicago Bulls", start: 2007, end: 2008 }] }, league, [], 2026);
   ok(wr.years === "2004" && back.years === "2007–2008", `career dates from another career don't override team years (${wr.years}, ${back.years})`);
+  const tc = R.buildPlayer(S.nfl, { id: "Q271464", name: "Terry Crews", sitelinks: 60, hof: false, ws: 1991, positions: ["linebacker"], ext: {}, teams: [{ team: "Q1", label: "Chicago Bulls", start: 1991 }, { team: "Q1", label: "Chicago Bulls", start: 1995 }] }, league, [], 2026);
+  ok(tc.years === "1991–1995" && tc.active === 0, `old career with no end dates isn't shown as present (${tc.years})`);
   ok(ret.years === "1984–2003" && ret.active === 0 && ret.fame === R.fameOf(0, 150, true) && R.fameOf(0, 150, true) > R.fameOf(0, 150, false), "retired player: closed years, Hall of Fame bonus");
   const { cardOf } = await imp("scripts/draftdle-lib.mjs");
   const both = ["https://cdn.nba.com/headshots/nba/latest/1040x760/1.png", "https://commons.wikimedia.org/wiki/Special:FilePath/X.jpg?width=360"];
