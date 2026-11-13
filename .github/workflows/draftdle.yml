@@ -69,6 +69,16 @@ jobs:
           if [ "${{ inputs.refresh }}" = "true" ]; then node scripts/draftdle-refresh.mjs || echo "::warning::Some Draftdle pools failed to refresh; see the log above"
           elif [ -n "$missing" ]; then node scripts/draftdle-refresh.mjs $missing || echo "::warning::Some Draftdle pools failed to build; see the log above"
           else echo "all pools present"; fi
+      - name: Commit player pools
+        run: |
+          git config user.name "dle-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/draftdle
+          if ! git diff --cached --quiet; then
+            git commit -m "Draftdle player pools $(date -u +%F)"
+            git pull --rebase
+            git push
+          fi
       - name: Restore last night's totals
         uses: actions/cache/restore@v4
         with:
@@ -92,7 +102,7 @@ jobs:
         run: |
           git config user.name "dle-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/draftdle data/puzzles/draftdle
+          git add data/draftdle data/puzzles
           if ! git diff --cached --quiet; then
             git commit -m "Draftdle data $(date -u +%F)"
             git pull --rebase
