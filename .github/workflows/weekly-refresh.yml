@@ -15,7 +15,7 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 150
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -25,11 +25,14 @@ jobs:
         run: node scripts/speedrundle-refresh.mjs
       - name: Refresh Steam images
         run: node scripts/peakdle-assets.mjs
+      - name: Refresh Draftdle player pools (Wikidata)
+        continue-on-error: true
+        run: node scripts/draftdle-refresh.mjs
       - name: Commit
         run: |
           git config user.name "dle-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/speedrundle/records.json data/peakdle/pool.json
+          git add data/speedrundle/records.json data/peakdle/pool.json data/draftdle
           if ! git diff --cached --quiet; then
             git commit -m "Weekly data $(date -u +%F)"
             git pull --rebase

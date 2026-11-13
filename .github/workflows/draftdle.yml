@@ -1,0 +1,106 @@
+name: Draftdle
+
+# 00:35 UTC (after the Speedrundle/CCUdle job), on every push to main, and by hand.
+# Kept apart from daily.yml so a Draftdle problem never blocks the other two sites.
+#   1. make sure the D1 database exists, write sites/draftdle/wrangler.toml, apply migrations
+#   2. build player pools from Wikidata if any are missing (the weekly refresh keeps them current)
+#   3. nightly job: ratings, Endless serving tables, flags, Daily freeze, status.json
+#   4. test, build, commit the new data, deploy the site with its Functions
+on:
+  schedule:
+    - cron: "35 0 * * *"
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      refresh:
+        description: "Rebuild every player pool from Wikidata first"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: draftdle
+  cancel-in-progress: false
+
+env:
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+  DRAFTDLE_STATE: state-draftdle/totals.json
+
+jobs:
+  draftdle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Database and config
+        working-directory: sites/draftdle
+        run: |
+          name=$(node -p "require('./site.json').d1Name")
+          list() { npx --yes wrangler@4 d1 list --json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const r=JSON.parse(s).find(x=>x.name==='$name');process.stdout.write(r?r.uuid:'')})"; }
+          id=$(list)
+          if [ -z "$id" ]; then npx --yes wrangler@4 d1 create "$name"; id=$(list); fi
+          test -n "$id" || { echo "Could not find or create the D1 database. Does the API token have D1 Edit permission?"; exit 1; }
+          cat > wrangler.toml <<TOML
+          name = "$(node -p "require('./site.json').cloudflareProject")"
+          pages_build_output_dir = "../../dist/draftdle"
+          compatibility_date = "2026-11-01"
+
+          [[d1_databases]]
+          binding = "DB"
+          database_name = "$name"
+          database_id = "$id"
+          migrations_dir = "migrations"
+          TOML
+          sed -i 's/^          //' wrangler.toml
+          npx --yes wrangler@4 d1 migrations apply "$name" --remote
+      - name: Player pools (missing ones, or all when asked)
+        run: |
+          missing=$(node -e "const fs=require('fs');const c=require('./data/draftdle/sports.json');console.log(c.sports.filter(s=>s.wave===1&&!fs.existsSync('data/draftdle/'+s.id+'/pool.json')).map(s=>s.id).join(' '))")
+          if [ "${{ inputs.refresh }}" = "true" ]; then node scripts/draftdle-refresh.mjs
+          elif [ -n "$missing" ]; then node scripts/draftdle-refresh.mjs $missing
+          else echo "all pools present"; fi
+      - name: Restore last night's totals
+        uses: actions/cache/restore@v4
+        with:
+          path: state-draftdle
+          key: draftdle-state-${{ github.run_id }}
+          restore-keys: draftdle-state-
+      - name: Nightly
+        run: node scripts/draftdle-nightly.mjs
+      - name: Save totals
+        uses: actions/cache/save@v4
+        with:
+          path: state-draftdle
+          key: draftdle-state-${{ github.run_id }}
+      - name: Test
+        run: node test/draftdle.mjs
+      - name: Build
+        run: node scripts/build.mjs
+      - name: Check the build
+        run: node test/check.mjs --dist
+      - name: Commit new data
+        run: |
+          git config user.name "dle-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/draftdle data/puzzles/draftdle
+          if ! git diff --cached --quiet; then
+            git commit -m "Draftdle data $(date -u +%F)"
+            git pull --rebase
+            git push
+          fi
+      - name: Deploy
+        working-directory: sites/draftdle
+        run: |
+          project=$(node -p "require('./site.json').cloudflareProject")
+          npx --yes wrangler@4 pages project create "$project" --production-branch main 2>/dev/null || true
+          if [ -n "${{ secrets.DRAFTDLE_VOTER_KEY }}" ]; then echo "${{ secrets.DRAFTDLE_VOTER_KEY }}" | npx --yes wrangler@4 pages secret put VOTER_KEY --project-name "$project"; fi
+          npx --yes wrangler@4 pages deploy --project-name "$project" --branch main --commit-dirty=true
