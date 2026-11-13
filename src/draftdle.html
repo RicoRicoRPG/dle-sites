@@ -354,7 +354,7 @@ async function startRun(sport){
   const res = await api('/api/endless/start', {sport, bid: browserId(), turnstile: token});
   if (!run || run.sport !== sport) return;
   run.busy = false;
-  if (res.error){ run.error = res.status === 503 ? 'No questions are ready for this sport yet. Check back tomorrow.' : "Couldn't reach Draftdle. Check your connection and try again."; }
+  if (res.error){ run.error = res.status === 503 && /no pairs/.test(res.error) ? 'No questions are ready for this sport yet. Check back tomorrow.' : res.error === 'offline' ? "Couldn't reach Draftdle. Check your connection and try again." : "Draftdle can't save picks right now. Try again in a few hours."; }
   else { run.id = res.run; run.phase = res.phase; run.shown = res.next; run.stats = res.stats; preload(res.next && res.next.cards); }
   if (view.mode === 'endless' && view.sport === sport) render();
 }
@@ -365,7 +365,7 @@ async function pickRun(side){
   const res = await api('/api/endless/pick', {run: run.id, bid: browserId(), side});
   run.busy = false;
   if (res.expired){ run.done = true; run.error = 'This run ended after 30 minutes idle. Start a new one.'; return renderEndless(); }
-  if (res.error){ run.error = "That pick didn't go through. Try again."; return renderEndless(); }
+  if (res.error){ run.error = res.error === 'offline' ? "That pick didn't go through. Check your connection and try again." : "Draftdle can't save picks right now. Try again in a few hours."; return renderEndless(); }
   run.error = null;
   run.reveal = res.reveal; run.stats = res.stats; run.after = res.next; run.phase = res.phase || run.phase;
   run.justPicked = true;
