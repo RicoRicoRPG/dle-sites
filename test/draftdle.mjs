@@ -64,14 +64,15 @@ const nightlyDb = db => db.nightly;
   // a full refresh against a fake query service, including a wrong league id
   const E = "http://www.wikidata.org/entity/";
   const fake = async q => {
-    if (/rdfs:label \?l FILTER\(lang\(\?l\) = "en"\) \}$/.test(q.trim()) && /VALUES \?x/.test(q)) {
+    if (/VALUES \?x/.test(q) && /rdfs:label/.test(q)) {
       const ids = [...q.matchAll(/wd:(\w+)/g)].map(m => m[1]);
-      return ids.map(id => ({ x: "http://www.wikidata.org/entity/" + id, l: id === "Q155223" ? "National Basketball Association" : id === "P3647" ? "NBA.com player ID" : id === "Q2593221" ? "WNBA (wrong label)" : id }));
+      // NBA's name comes back only as a "mul" label, as some do on Wikidata now
+      return ids.map(id => ({ x: "http://www.wikidata.org/entity/" + id, lang: id === "Q155223" ? "mul" : "en", l: id === "Q155223" ? "National Basketball Association" : id === "P3647" ? "NBA.com player ID" : id === "Q2593221" ? "WNBA (wrong label)" : id }));
     }
     if (/wdt:P118/.test(q)) return [1, 2, 3].map(i => ({ team: "http://www.wikidata.org/entity/QT" + i }));
     if (/wikibase:sitelinks/.test(q)) return Array.from({ length: 160 }, (_, i) => ({ p: "http://www.wikidata.org/entity/QP" + i, sl: String(200 - i) }));
     const ids = [...q.matchAll(/wd:(QP\d+)/g)].map(m => m[1]);
-    if (/P2031/.test(q)) return ids.map(id => ({ p: E + id, l: "Player " + id, ws: "2010-01-01T00:00:00Z", x0: id.slice(2) }));
+    if (/P2031/.test(q)) return ids.flatMap(id => [{ p: E + id, l: "Spieler " + id, lang: "mul", ws: "2010-01-01T00:00:00Z", x0: id.slice(2) }, { p: E + id, l: "Player " + id, lang: "en" }]);
     if (/P413/.test(q)) return ids.map((id, i) => ({ p: E + id, pl: ["point guard", "center", "small forward"][i % 3] }));
     if (/P54 \?st/.test(q)) return ids.map((id, i) => ({ p: E + id, team: E + "QT" + (1 + i % 3), tl: "Team " + (1 + i % 3), start: "2010-01-01T00:00:00Z" }));
     return [];
@@ -82,6 +83,7 @@ const nightlyDb = db => db.nightly;
   console.error = origErr; console.log = origLog; process.exitCode = 0;
   if (process.env.DEBUG) console.log(errs);
   const nba = readJ(path.join(T, "data/draftdle/nba/pool.json"));
+  ok(nba.every(x => x.name.startsWith("Player ")), "an English name wins over the default-language one");
   ok(nba.length === 160 && nba[0].tier === 1 && nba[159].tier === 1 && nba.every(x => x.teams.length && x.img[0].includes("cdn.nba.com")), `fake refresh builds an NBA pool (${nba.length})`);
   ok(errs.some(e => /Q2593221 is "WNBA \(wrong label\)"/.test(e)) && fs.existsSync(path.join(T, "data/draftdle/wnba/pool.json")) === before, "a league id with the wrong label stops that sport and keeps its old pool");
 }
