@@ -127,9 +127,11 @@ async function refreshSport(sport, nowYear, q) {
     }
   }
 
-  const teams = await q(`SELECT DISTINCT ?team WHERE { VALUES ?lg { ${values(sport.leagues)} } ?team wdt:P118 ?lg . }`);
+  // Many items carry a league (seasons, games, drafts); a team is one somebody played for (P54).
+  const teams = await q(`SELECT DISTINCT ?team WHERE { VALUES ?lg { ${values(sport.leagues)} } ?team wdt:P118 ?lg . FILTER EXISTS { ?x wdt:P54 ?team } }`);
   const leagueTeams = new Set(teams.map(r => qid(r.team)));
   log(`${sport.id}: ${leagueTeams.size} teams`);
+  if (leagueTeams.size > 1500) throw new Error(`${sport.id}: ${leagueTeams.size} teams is far too many; check the league query`);
 
   const fame = new Map();
   for (const batch of chunks([...leagueTeams], 8)) {
