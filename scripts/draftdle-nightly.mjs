@@ -52,6 +52,36 @@ export function wranglerDb(name, { cwd = p("sites/draftdle") } = {}) {
   };
 }
 
+
+// Keep each row in its slot. Rows that left free their slot; new rows fill free slots, then the
+// end; if more left than came, rows from the end move down so slots stay 0..n-1 (Endless picks a
+// random slot). Returns the slots to write, where to cut the tail, and the new size.
+export function placeDense(prev, want, same) {
+  const slots = [];
+  for (const r of prev) slots[r.idx] = r;
+  const out = new Map(), free = [];
+  for (let i = 0; i < slots.length; i++) {
+    const r = slots[i];
+    if (r && want.has(r.key)) { const w = { ...want.get(r.key), key: r.key }; if (!same(r, w)) out.set(i, w); slots[i] = w; }
+    else { slots[i] = null; free.push(i); }
+  }
+  const placed = new Set(slots.filter(Boolean).map(r => r.key));
+  for (const [key, w] of want) {
+    if (placed.has(key)) continue;
+    const i = free.length ? free.shift() : slots.length;
+    slots[i] = { ...w, key }; out.set(i, slots[i]);
+  }
+  let size = slots.length;
+  while (size && !slots[size - 1]) size--;
+  for (const i of free.filter(i => i < size).sort((a, b) => a - b)) {
+    while (size && !slots[size - 1]) size--;
+    if (i >= size) break;
+    slots[i] = slots[size - 1]; slots[size - 1] = null; out.set(i, slots[i]); out.delete(size - 1); size--;
+  }
+  while (size && !slots[size - 1]) size--;
+  return { put: [...out].filter(([i]) => i < size), drop: size < prev.length || slots.length > size ? size : null, size };
+}
+
 // ---------- helpers ----------
 const puzzleDir = sport => p("data/puzzles/draftdle", sport);
 function pastPuzzles(sport, before, days) {
@@ -69,9 +99,11 @@ export async function nightly({ db, log = console.log, stateFile = process.env.D
   const writes = [];
   const flagged = new Set((await db.all("SELECT sport, lo, hi FROM flags")).map(r => r.sport + ":" + r.lo + "|" + r.hi));
 
-  // 1. players and groups
+  // 1. players and groups: changed rows only. An upsert, not INSERT OR REPLACE, which SQLite runs
+  // as a delete plus an insert and so bills twice.
   const current = new Map((await db.all("SELECT sport, id, tier, grp, gidx, card FROM players")).map(r => [r.sport + ":" + r.id, r]));
-  const wanted = new Set();
+  const currentGroups = new Map((await db.all("SELECT sport, tier, grp, n FROM groups")).map(r => [`${r.sport}:${r.tier}:${r.grp}`, r.n]));
+  const wanted = new Set(), wantedGroups = new Set();
   const pools = {};
   for (const sport of cfg.sports) {
     const pool = read(p("data/draftdle", sport.id, "pool.json"), null);
@@ -86,12 +118,17 @@ export async function nightly({ db, log = console.log, stateFile = process.env.D
       wanted.add(key);
       const cur = current.get(key);
       if (!cur || cur.tier !== pl.tier || cur.grp !== pl.grp || cur.gidx !== gidx || cur.card !== card)
-        writes.push(inline("INSERT OR REPLACE INTO players (sport, id, tier, grp, gidx, card) VALUES (?, ?, ?, ?, ?, ?)", [sport.id, pl.id, pl.tier, pl.grp, gidx, card]));
+        writes.push(inline("INSERT INTO players (sport, id, tier, grp, gidx, card) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT (sport, id) DO UPDATE SET tier = excluded.tier, grp = excluded.grp, gidx = excluded.gidx, card = excluded.card", [sport.id, pl.id, pl.tier, pl.grp, gidx, card]));
     }
-    writes.push(inline("DELETE FROM groups WHERE sport = ?", [sport.id]));
-    for (const [g, n] of counters) { const [tier, grp] = g.split(/:(.*)/s); writes.push(inline("INSERT INTO groups (sport, tier, grp, n) VALUES (?, ?, ?, ?)", [sport.id, Number(tier), grp, n])); }
+    for (const [g, n] of counters) {
+      const [tier, grp] = g.split(/:(.*)/s);
+      const k = `${sport.id}:${tier}:${grp}`;
+      wantedGroups.add(k);
+      if (currentGroups.get(k) !== n) writes.push(inline("INSERT INTO groups (sport, tier, grp, n) VALUES (?, ?, ?, ?) ON CONFLICT (sport, tier, grp) DO UPDATE SET n = excluded.n", [sport.id, Number(tier), grp, n]));
+    }
   }
-  for (const key of current.keys()) if (!wanted.has(key)) { const [s, id] = key.split(/:(.*)/s); writes.push(inline("DELETE FROM players WHERE sport = ? AND id = ?", [s, id])); }
+  for (const key of current.keys()) if (!wanted.has(key)) { const [s2, id] = key.split(/:(.*)/s); writes.push(inline("DELETE FROM players WHERE sport = ? AND id = ?", [s2, id])); }
+  for (const k of currentGroups.keys()) if (!wantedGroups.has(k)) { const [s2, tier, grp] = k.split(/:([^:]*):(.*)/s); writes.push(inline("DELETE FROM groups WHERE sport = ? AND tier = ? AND grp = ?", [s2, Number(tier), grp])); }
 
   // 2. totals
   const totalsAll = await db.all("SELECT sport, lo, hi, SUM(pick = 0) AS a, COUNT(*) AS n FROM votes GROUP BY sport, lo, hi");
@@ -118,6 +155,7 @@ export async function nightly({ db, log = console.log, stateFile = process.env.D
 
   // 4 and 5, per sport
   const made = [];
+  const sportsRows = new Map((await db.all("SELECT * FROM sports")).map(r => [r.sport, r]));
   for (const sport of cfg.sports) {
     const pool = pools[sport.id];
     if (!pool) { status.sports[sport.id] = { name: sport.name, group: sport.group, phase: "soon" }; continue; }
@@ -130,13 +168,29 @@ export async function nightly({ db, log = console.log, stateFile = process.env.D
     const recentDaily = new Set(pastPuzzles(sport.id, addDays(today, 2), RULES.pairCooldown).flatMap(x => x.f.pairs.map(q => q.lo + "|" + q.hi)));
     const serve = servePairs(sport, pool, fit, totals, open, excluded, recentDaily, `serve:${sport.id}:${today}`);
 
-    writes.push(inline("DELETE FROM serve WHERE sport = ?", [sport.id]));
-    for (const kind of ["cand", "settled"]) serve[kind].forEach((s, i) =>
-      writes.push(inline("INSERT INTO serve (sport, kind, idx, lo, hi, winner, share, votes, source) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", [sport.id, kind, i, s.lo, s.hi, s.winner, s.share, s.votes, s.source])));
-    writes.push(inline("DELETE FROM collect WHERE sport = ?", [sport.id]));
-    collect.forEach((c, i) => writes.push(inline("INSERT INTO collect (sport, idx, player, tier, grp) VALUES (?, ?, ?, ?, ?)", [sport.id, i, c.id, c.tier, c.grp])));
-    writes.push(inline("INSERT OR REPLACE INTO sports (sport, phase, tiers_open, rate, n_cand, n_settled, n_collect, updated) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-      [sport.id, phase, open, RULES.rate, serve.cand.length, serve.settled.length, collect.length, today]));
+    // Serving tables: rows keep their slot from night to night, so only pairs and players that
+    // came or went are written (see placeDense).
+    for (const kind of ["cand", "settled"]) {
+      const prev = (await db.all("SELECT idx, lo, hi, winner, share, votes, source FROM serve WHERE sport = ? AND kind = ?", [sport.id, kind])).map(r => ({ ...r, key: r.lo + "|" + r.hi }));
+      const want = new Map(serve[kind].map(x => [x.lo + "|" + x.hi, x]));
+      const same = (a, b) => a.winner === b.winner && a.source === b.source && Math.abs(a.share - b.share) < 0.01 && Math.abs(a.votes - b.votes) < Math.max(5, b.votes * 0.1);
+      const { put, drop, size } = placeDense(prev, want, same);
+      serve[kind].length = size;
+      for (const [i, x] of put) writes.push(inline("INSERT INTO serve (sport, kind, idx, lo, hi, winner, share, votes, source) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (sport, kind, idx) DO UPDATE SET lo = excluded.lo, hi = excluded.hi, winner = excluded.winner, share = excluded.share, votes = excluded.votes, source = excluded.source", [sport.id, kind, i, x.lo, x.hi, x.winner, x.share, x.votes, x.source]));
+      if (drop !== null) writes.push(inline("DELETE FROM serve WHERE sport = ? AND kind = ? AND idx >= ?", [sport.id, kind, drop]));
+    }
+    {
+      const prev = (await db.all("SELECT idx, player, tier, grp FROM collect WHERE sport = ?", [sport.id])).map(r => ({ ...r, key: r.player }));
+      const want = new Map(collect.map(c => [c.id, { player: c.id, tier: c.tier, grp: c.grp }]));
+      const { put, drop } = placeDense(prev, want, (a, b) => a.tier === b.tier && a.grp === b.grp);
+      for (const [i, x] of put) writes.push(inline("INSERT INTO collect (sport, idx, player, tier, grp) VALUES (?, ?, ?, ?, ?) ON CONFLICT (sport, idx) DO UPDATE SET player = excluded.player, tier = excluded.tier, grp = excluded.grp", [sport.id, i, x.player, x.tier, x.grp]));
+      if (drop !== null) writes.push(inline("DELETE FROM collect WHERE sport = ? AND idx >= ?", [sport.id, drop]));
+    }
+    const sp = [phase, open, RULES.rate, serve.cand.length, serve.settled.length, collect.length];
+    const cur = sportsRows.get(sport.id);
+    if (!cur || [cur.phase, cur.tiers_open, cur.rate, cur.n_cand, cur.n_settled, cur.n_collect].join() !== sp.join())
+      writes.push(inline("INSERT INTO sports (sport, phase, tiers_open, rate, n_cand, n_settled, n_collect, updated) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (sport) DO UPDATE SET phase = excluded.phase, tiers_open = excluded.tiers_open, rate = excluded.rate, n_cand = excluded.n_cand, n_settled = excluded.n_settled, n_collect = excluded.n_collect, updated = excluded.updated",
+        [sport.id, ...sp, today]));
 
     // Daily
     const st = status.sports[sport.id] || {};
