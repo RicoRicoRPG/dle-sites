@@ -30,25 +30,26 @@ export async function enViews(titles, { fetchImpl = globalThis.fetch, now = new 
   const range = `monthly/${ym(start)}0100/${ym(new Date(end - 864e5))}0100`;
   const out = new Map(), queue = [...new Set(titles)], total = queue.length;
   let done = 0, failed = 0, gaveUp = false;
-  async function one(title) {
+  async function one(title, tries = 3, wait = 1500) {
     const url = `${VIEWS_API}/${encodeURIComponent(title.replace(/ /g, "_"))}/${range}`;
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < tries; i++) {
       try {
         const res = await fetchImpl(url, { headers: { "User-Agent": UA, Accept: "application/json" }, signal: AbortSignal.timeout(15000) });
         if (res.status === 404) return 0;
-        if (res.status === 429 || res.status >= 500) { await sleep(process.env.DLE_FAST ? 1 : 1500 * (i + 1)); continue; }
+        if (res.status === 429 || res.status >= 500) { await sleep(process.env.DLE_FAST ? 1 : wait * (i + 1)); continue; }
         if (!res.ok) return null;
         const j = await res.json();
         return (j.items || []).reduce((s, x) => s + (x.views || 0), 0);
-      } catch { await sleep(process.env.DLE_FAST ? 1 : 1000 * (i + 1)); }
+      } catch { await sleep(process.env.DLE_FAST ? 1 : wait * (i + 1)); }
     }
     return null;
   }
+  const missed = [];
   await Promise.all(Array.from({ length: concurrency }, async () => {
     while (queue.length && !gaveUp) {
       const t = queue.shift();
       const v = await one(t);
-      if (v === null) failed++; else out.set(t, v);
+      if (v === null) { failed++; missed.push(t); } else out.set(t, v);
       done++;
       if (done % 500 === 0) say(`  page views ${done}/${total}${failed ? `, ${failed} failed` : ""}`);
       // If the service isn't answering, stop and rank by language count instead of stalling the job.
@@ -56,6 +57,14 @@ export async function enViews(titles, { fetchImpl = globalThis.fetch, now = new 
     }
   }));
   if (gaveUp) { say(`  page views unavailable (${failed} of ${done} failed); ranking by language count`); return new Map(); }
+  // Second, gentler pass for the ones the service turned away (mostly rate limits).
+  if (missed.length) {
+    let back = 0;
+    await Promise.all(Array.from({ length: 2 }, async () => {
+      while (missed.length) { const t = missed.shift(); const v = await one(t, 4, 3000); if (v !== null) { out.set(t, v); back++; } }
+    }));
+    say(`  page views retried ${failed}, got ${back} back`);
+  }
   return out;
 }
 const log = (...a) => console.log(...a);
@@ -225,8 +234,9 @@ async function refreshSport(sport, nowYear, q, views) {
 
   const withTitle = [...raw.values()].filter(o => o.title);
   const viewMap = await views(withTitle.map(o => o.title), { log });
-  for (const o of withTitle) o.views = viewMap.get(o.title) || 0;
-  log(`${sport.id}: page views for ${withTitle.length} English Wikipedia articles`);
+  for (const o of withTitle) if (viewMap.has(o.title)) o.views = viewMap.get(o.title);
+  const guessed = viewMap.size ? guessViews([...raw.values()].filter(o => o.title)) : 0;
+  log(`${sport.id}: page views for ${withTitle.length} English Wikipedia articles${guessed ? `, ${guessed} estimated from players with similar language counts` : ""}`);
 
   const players = [];
   let noPos = 0, noTeams = 0, noName = 0;
@@ -240,6 +250,21 @@ async function refreshSport(sport, nowYear, q, views) {
   const pool = players.slice(0, sport.poolSize).map((pl, i) => ({ ...pl, tier: tierOf(sport, i) }));
   log(`${sport.id}: kept ${pool.length} (dropped ${noName} without a name, ${noPos} without a usable position, ${noTeams} without a listed team)`);
   return pool;
+}
+
+// A failed lookup shouldn't sink a star: estimate from the players nearest in language count.
+export function guessViews(list, k = 25) {
+  const known = list.filter(o => o.views != null).sort((a, b) => a.sitelinks - b.sitelinks);
+  if (!known.length) return 0;
+  let n = 0;
+  for (const o of list) {
+    if (o.views != null) continue;
+    let lo = 0, hi = known.length;
+    while (lo < hi) { const m = (lo + hi) >> 1; if (known[m].sitelinks < o.sitelinks) lo = m + 1; else hi = m; }
+    const near = known.slice(Math.max(0, lo - (k >> 1)), Math.max(0, lo - (k >> 1)) + k).map(x => x.views).sort((a, b) => a - b);
+    o.views = near[near.length >> 1]; o.viewsGuess = true; n++;
+  }
+  return n;
 }
 
 export async function refresh(ids = [], { q = sparql, views = enViews, nowYear = new Date().getUTCFullYear() } = {}) {
