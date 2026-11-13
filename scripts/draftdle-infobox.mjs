@@ -117,35 +117,57 @@ export function infoboxYears(text, kind, nowYear = new Date().getUTCFullYear()) 
   return start || end || active != null ? { start, end, active } : null;
 }
 
-// Section 0 (the lead, where the infobox lives) for up to 50 titles a request.
+// Section 0 (the lead, where the infobox lives) for up to 50 titles a request. A batch that keeps
+// failing is split in half until the bad part is found, so one odd title can't cost 49 others.
 export async function infoboxes(titles, kind, { fetchImpl = globalThis.fetch, ua, log = () => {}, nowYear } = {}) {
   const out = new Map(), list = [...new Set(titles)];
-  let failed = 0;
-  for (let i = 0; i < list.length; i += 50) {
-    const batch = list.slice(i, i + 50);
-    const url = "https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&rvsection=0&format=json&formatversion=2&redirects=1&maxlag=5&titles=" + encodeURIComponent(batch.join("|"));
-    let j = null;
-    for (let t = 0; t < 4 && !j; t++) {
+  let failed = 0, lastErr = "";
+  const wait = t => new Promise(r => setTimeout(r, process.env.DLE_FAST ? 1 : 2000 * (t + 1)));
+
+  async function ask(batch, cont = {}) {
+    const body = new URLSearchParams({ action: "query", prop: "revisions", rvprop: "content", rvslots: "main", rvsection: "0",
+      format: "json", formatversion: "2", redirects: "1", titles: batch.join("|"), ...cont });
+    for (let t = 0; t < 4; t++) {
       try {
-        const res = await fetchImpl(url, { headers: { "User-Agent": ua || "Draftdle", Accept: "application/json" }, signal: AbortSignal.timeout(30000) });
-        if (res.ok) { j = await res.json(); if (j.error) { j = null; throw new Error(j?.error?.code); } }
-        else if (res.status !== 429 && res.status < 500) break;
-      } catch { /* retry */ }
-      if (!j) await new Promise(r => setTimeout(r, process.env.DLE_FAST ? 1 : 2000 * (t + 1)));
+        const res = await fetchImpl("https://en.wikipedia.org/w/api.php", { method: "POST", body,
+          headers: { "User-Agent": ua || "Draftdle", Accept: "application/json", "Content-Type": "application/x-www-form-urlencoded" },
+          signal: AbortSignal.timeout(30000) });
+        if (!res.ok) { lastErr = `HTTP ${res.status}`; if (res.status !== 429 && res.status < 500) return null; }
+        else { const j = await res.json(); if (!j.error) return j; lastErr = j.error.code || "api error"; }
+      } catch (e) { lastErr = e.message || String(e); }
+      await wait(t);
     }
-    if (!j) { failed += batch.length; continue; }
-    // Redirects and normalisation change titles; map answers back to what we asked for.
+    return null;
+  }
+
+  function take(batch, j) {
     const back = new Map(batch.map(b => [b, b]));
     for (const n of j.query?.normalized || []) back.set(n.to, back.get(n.from) || n.from);
     for (const r of j.query?.redirects || []) back.set(r.to, back.get(r.from) || r.from);
-    for (const p of j.query?.pages || []) {
-      const text = p.revisions?.[0]?.slots?.main?.content;
+    for (const pg of j.query?.pages || []) {
+      const text = pg.revisions?.[0]?.slots?.main?.content;
       if (!text) continue;
       const y = infoboxYears(text, kind, nowYear);
-      if (y) out.set(back.get(p.title) || p.title, y);
+      if (y) out.set(back.get(pg.title) || pg.title, y);
     }
+  }
+
+  async function run(batch) {
+    let j = await ask(batch);
+    if (!j) {
+      if (batch.length === 1) { failed++; return; }
+      const half = Math.ceil(batch.length / 2);
+      await run(batch.slice(0, half)); await run(batch.slice(half)); return;
+    }
+    take(batch, j);
+    // Large answers come back in parts; follow the continuation for the rest.
+    for (let n = 0; j.continue && n < 50; n++) { j = await ask(batch, j.continue); if (!j) break; take(batch, j); }
+  }
+
+  for (let i = 0; i < list.length; i += 50) {
+    await run(list.slice(i, i + 50));
     if ((i / 50 + 1) % 10 === 0) log(`  infoboxes ${Math.min(i + 50, list.length)}/${list.length}`);
   }
-  log(`  career years from ${out.size} of ${list.length} infoboxes${failed ? ` (${failed} not fetched)` : ""}`);
+  log(`  career years from ${out.size} of ${list.length} infoboxes${failed ? ` (${failed} not fetched; last error: ${lastErr})` : ""}`);
   return out;
 }
