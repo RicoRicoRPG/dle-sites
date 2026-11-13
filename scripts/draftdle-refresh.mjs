@@ -12,6 +12,7 @@
 //   node scripts/draftdle-refresh.mjs nba wnba   # some sports
 
 import { p, read, write, sleep } from "./lib.mjs";
+import { infoboxes } from "./draftdle-infobox.mjs";
 
 const ENDPOINT = process.env.DRAFTDLE_SPARQL || "https://query.wikidata.org/sparql";
 const UA = "DraftdleBot/1.0 (https://draftdle.pages.dev; info@counterspell.dev) node-fetch";
@@ -149,13 +150,16 @@ export function buildPlayer(sport, raw, leagueTeams, headshots, nowYear) {
   if (!t.teams.length) return null;
   // Team dates first: a career start/end (P2031/P2032) can belong to another career
   // (wrestling, acting), which gave cards like "2010–2007".
-  const ws = t.first ?? raw.ws;
+  // The Wikipedia infobox is the best source when it has the span: it's written per sport and
+  // kept current, where Wikidata stints often lack end dates.
+  const box = raw.box || {};
+  const ws = box.start ?? t.first ?? raw.ws;
   const we = raw.we != null && (ws == null || raw.we >= ws) ? raw.we : null;
-  const active = !we && !raw.death && t.open;
+  const active = raw.death ? false : box.active === true ? true : box.end != null ? false : (!we && t.open);
   // A listed retirement a few years past the last dated stint is usually a missing stint
   // (Jordan's Wizards years); far past it, it's another career.
   // Retired with no end date anywhere: the last dated stint start beats a wrong "present".
-  const end = active ? null : (we != null && (t.last == null || (we >= t.last && we - t.last <= 6)) ? we : (t.last ?? we ?? t.lastStart));
+  const end = active ? null : box.end != null ? box.end : (we != null && (t.last == null || (we >= t.last && we - t.last <= 6)) ? we : (t.last ?? we ?? t.lastStart));
   const years = ws ? (end ? (end === ws ? String(ws) : `${ws}–${end}`) : `${ws}–present`) : "";
   const img = [];
   for (const h of headshots) if (raw.ext[h.prop]) img.push(h.url.replace("{id}", encodeURIComponent(raw.ext[h.prop])));
@@ -171,7 +175,7 @@ export function tierOf(sport, rank) {
   return rank < a ? 1 : rank < a + b ? 2 : 3;
 }
 
-async function refreshSport(sport, nowYear, q, views) {
+async function refreshSport(sport, nowYear, q, views, infobox) {
   log(`\n${sport.id}: checking ids`);
   const labels = await q(`SELECT ?x ?l (lang(?l) AS ?lang) WHERE { VALUES ?x { ${values(sport.leagues)} } ?x rdfs:label ?l FILTER(lang(?l) IN ("en", "mul")) }`);
   const byId = preferEn(labels);
@@ -244,6 +248,9 @@ async function refreshSport(sport, nowYear, q, views) {
   const guessed = viewMap.size ? guessViews([...raw.values()].filter(o => o.title)) : 0;
   log(`${sport.id}: page views for ${withTitle.length} English Wikipedia articles${guessed ? `, ${guessed} estimated from players with similar language counts` : ""}`);
 
+  const boxes = sport.infobox ? await infobox(withTitle.map(o => o.title), sport.infobox, { ua: UA, log, nowYear }) : new Map();
+  for (const o of withTitle) if (boxes.has(o.title)) o.box = boxes.get(o.title);
+
   const players = [];
   let noPos = 0, noTeams = 0, noName = 0;
   for (const o of raw.values()) {
@@ -273,13 +280,13 @@ export function guessViews(list, k = 25) {
   return n;
 }
 
-export async function refresh(ids = [], { q = sparql, views = enViews, nowYear = new Date().getUTCFullYear() } = {}) {
+export async function refresh(ids = [], { q = sparql, views = enViews, infobox = infoboxes, nowYear = new Date().getUTCFullYear() } = {}) {
   const cfg = read(p("data/draftdle/sports.json"));
   const sports = cfg.sports.filter(s => !ids.length || ids.includes(s.id));
   const failed = [];
   for (const sport of sports) {
     try {
-      const pool = await refreshSport(sport, nowYear, q, views);
+      const pool = await refreshSport(sport, nowYear, q, views, infobox);
       const file = p("data/draftdle", sport.id, "pool.json");
       const prev = read(file, []);
       const expected = prev.length ? Math.min(sport.poolSize, prev.length) : 0;
