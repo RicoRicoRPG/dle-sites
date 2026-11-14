@@ -244,14 +244,37 @@ const nightlyDb = db => db.nightly;
   ok(pl.pos === "PF" && pl.years === "2026–present", `a rookie with no Wikidata position gets the infobox's (${pl.pos})`);
 
   process.env.DLE_FAST = "1";
-  const era = await P.eraPhotos([{ id: "Qb", name: "Muggsy Bogues", title: "Muggsy Bogues", start: 1987, end: 2001, active: false, commons: "Muggsy Bogues 2025 event.jpg" }], { nowYear: 2026, fetchImpl: async (u, o) => {
+  const yr = t => Number((t.match(/(19|20)\d\d/) || ["2025"])[0]);
+  const reply = j => ({ ok: true, status: 200, json: async () => j });
+  const info = titles => reply({ query: { pages: titles.map(t => ({ title: t, imagerepository: "shared", imageinfo: [{ width: 900, height: 1200, extmetadata: { DateTimeOriginal: { value: String(yr(t)) } } }] })) } });
+  const players = [
+    { id: "Qb", name: "Muggsy Bogues", title: "Muggsy Bogues", start: 1987, end: 2001, active: false, commons: "Muggsy Bogues 2025 event.jpg" },
+    { id: "Ql", name: "Rebecca Lobo", title: "Rebecca Lobo", start: 1997, end: 2003, active: false, commons: "" },
+    { id: "Qo", name: "Old Guy", title: "Old Guy", start: 1980, end: 1990, active: false, commons: "Old Guy 2020.jpg" }];
+  const era = await P.eraPhotos(players, { nowYear: 2026, fetchImpl: async (u, o) => {
+    if (u.startsWith("https://www.wikidata.org")) return reply({ entities: { Qb: { claims: { P373: [{ mainsnak: { datavalue: { value: "Muggsy Bogues" } } }] } }, Ql: { claims: {} }, Qo: { claims: { P373: [{ mainsnak: { datavalue: { value: "Old Guy" } } }] } } } });
     const q = new URLSearchParams(String(o.body));
-    if (q.get("prop") === "images") return { ok: true, status: 200, json: async () => ({ query: { pages: [{ title: "Muggsy Bogues", images: [] }] } }) };
-    return { ok: true, status: 200, json: async () => ({ query: { pages: q.get("titles").split("|").map(t => ({ title: t, imagerepository: "shared", imageinfo: [{ width: 900, height: 1200, extmetadata: { DateTimeOriginal: { value: "2025-01-28" } } }] })) } }) };
+    if (q.get("prop") === "images") return reply({ query: { pages: q.get("titles").split("|").map(t => ({ title: t, images: [] })) } });
+    if (q.get("prop") === "imageinfo") return info(q.get("titles").split("|"));
+    if (q.get("list") === "categorymembers") {
+      const c = q.get("cmtitle");
+      if (c === "Category:Muggsy Bogues") return reply({ query: { categorymembers: [{ ns: 6, title: "File:Muggsy Bogues Hornets 1993.jpg" }, { ns: 14, title: "Category:Muggsy Bogues in 1995" }] } });
+      if (c === "Category:Muggsy Bogues in 1995") return reply({ query: { categorymembers: [{ ns: 6, title: "File:Bogues dribbling 1995.jpg" }] } });
+      if (c === "Category:Old Guy") return reply({ query: { categorymembers: [{ ns: 6, title: "File:Old Guy 2010.jpg" }, { ns: 6, title: "File:Old Guy 1975 portrait.jpg" }] } });
+      return reply({ query: { categorymembers: [] } });
+    }
+    if (q.get("list") === "search") return reply({ query: { search: /Rebecca Lobo/.test(q.get("srsearch")) ? [{ title: "File:Rebecca Lobo Liberty 1999.jpg" }, { title: "File:Lobo family 2015.jpg" }] : [] } });
+    return reply({});
   } });
-  ok(!era.has("Qb") && era.offEra.has("Qb"), "a Wikidata photo from 2025 for a career that ended in 2001 is flagged off-era");
+  ok(era.offEra.has("Qb") && /Hornets 1993|dribbling 1995/.test(era.get("Qb") || ""), `no career photo in the article: the player's Commons category has one (${era.get("Qb")})`);
+  ok(era.get("Ql") === "Rebecca Lobo Liberty 1999.jpg", `no photo anywhere else: a Commons search by name finds one (${era.get("Ql")})`);
+  ok(!era.has("Qo") && era.alt.get("Qo") === "Old Guy 1975 portrait.jpg", `nothing from the career at all: the closest-dated photo, not a blank card (${era.alt.get("Qo")})`);
   const nba = "https://cdn.nba.com/headshots/nba/latest/1040x760/177.png", c18 = "https://commons.wikimedia.org/wiki/Special:FilePath/Muggsy%20Bogues%202025%20event.jpg?width=360";
-  ok(cardOf({ id: "Qb", name: "Muggsy Bogues", active: 0, offEra: 1, img: [c18], commons: "x" }).i.length === 0 && cardOf({ id: "Qb", name: "M", active: 0, offEra: 1, hs: 1, img: [nba, c18], commons: "x" }).i.join() === nba, "off-era photo left out: a real headshot shows, else the initials");
+  const altU = "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent("Old Guy 1975 portrait.jpg") + "?width=360";
+  ok(cardOf({ id: "Qb", name: "Muggsy Bogues", active: 0, offEra: 1, img: [c18], commons: "x" }).i.join() === c18
+    && cardOf({ id: "Qb", name: "M", active: 0, offEra: 1, hs: 1, img: [nba, c18], commons: "x" }).i.join() === [nba, c18].join()
+    && cardOf({ id: "Qo", name: "Old Guy", active: 0, offEra: 1, alt: "Old Guy 1975 portrait.jpg", img: [c18], commons: "x" }).i.join() === [altU, c18].join(),
+    "off-era photo goes last: a real headshot, then the closest photo, then Wikidata's; never a blank card");
 
   const bytes = s => ({ ok: true, status: 200, arrayBuffer: async () => new TextEncoder().encode(s).buffer });
   const pool = [{ id: "A", img: ["https://cdn.nba.com/headshots/nba/latest/1040x760/1.png", c18] }, { id: "B", img: ["https://cdn.nba.com/headshots/nba/latest/1040x760/2.png"] }, { id: "C", img: [c18] }];
