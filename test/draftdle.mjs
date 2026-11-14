@@ -126,7 +126,7 @@ const nightlyDb = db => db.nightly;
 // ---------- 1a. career years from Wikipedia infoboxes ----------
 {
   const I = await imp("scripts/draftdle-infobox.mjs");
-  const kindOf = t => /gridiron/i.test(t) ? "gridiron" : /basketball/i.test(t) ? "basketball" : /baseball/i.test(t) ? "baseball" : /ice hockey/i.test(t) ? "hockey" : "soccer";
+  const kindOf = t => /gridiron|NFL biography/i.test(t) ? "gridiron" : /basketball/i.test(t) ? "basketball" : /baseball/i.test(t) ? "baseball" : /ice hockey/i.test(t) ? "hockey" : "soccer";
   const y = (t, kind = kindOf(t), now = 2026, leagues = []) => { const r = I.infoboxYears(t, kind, now, leagues); return !r ? "none" : r.coachOnly ? "coach" : `${r.start}-${r.end} ${r.active}`; };
   const cases = [
     ["Sue Bird (basketball)", "{{Short description|x}}\n{{Infobox basketball biography\n| name = Sue Bird\n| team = Seattle Storm\n| career_start = 2002\n| career_end = 2022<ref>{{cite web|title=Retires 2023}}</ref>\n| years1 = {{WNBA Year|2002}}–{{WNBA Year|2022}}\n| years2 = 2004–2006\n}}\n'''Suzanne Bird'''", "2002-2022 false"],
@@ -150,6 +150,9 @@ const nightlyDb = db => db.nightly;
     ["NFL seasons only, UFL and XFL ignored", "{{Infobox gridiron football biography\n| past_teams =\n* [[Tampa Bay Buccaneers]] ({{NFL Year|2008|2011}})\n* [[Sacramento Mountain Lions]] ([[2012 UFL season|2012]])\n* [[Los Angeles Wildcats]] ({{XFL Year|2020}})\n* [[Baltimore Ravens]] ({{NFL Year|2021}})\n* [[DC Defenders]] ({{UFL Year|2024|2025}})\n}}", "2008-2021 false", ["NFL", "AFL"]],
     ["no league template anywhere: all rows count", "{{Infobox gridiron football biography\n| past_teams =\n* [[Miami Dolphins]] ([[1968 American Football League season|1968]]–[[1974 NFL season|1974]])\n* [[New York Giants]] ([[1976 NFL season|1976]]–[[1978 NFL season|1978]])\n}}", "1968-1978 false", ["NFL", "AFL"]],
     ["coach only: coaching career, no playing seasons", "{{Infobox basketball biography\n| career_position = Point guard\n| coach_start = 2001\n| cyears1 = 2007–2013\n| cteam1 = [[Butler Bulldogs]]\n}}", "coach", []],
+    ["no career_end but the rows end", "{{Infobox basketball biography\n| career_start = 1999\n| years1 = 1999–2001\n| team1 = [[Cleveland Rockers]]\n| years2 = 2002–2010\n| team2 = [[Washington Mystics]]\n| cyears1 = 2014–present\n| cteam1 = [[Some College]]\n}}", "1999-2010 false", ["WNBA"]],
+    ["unmarked rows don't override career_start", "{{Infobox basketball biography\n| career_start = 2009\n| career_end = 2020\n| years1 = 1996–2004\n| team1 = [[Youth Club]]\n| years2 = 2009–2020\n| team2 = [[Perfumerías Avenida]]\n}}", "2009-2020 false", ["WNBA"]],
+    ["NFL coach: records but no playing teams", "{{Infobox NFL biography\n| name = Brian Flores\n| current_team = Miami Dolphins\n| career_position = Head coach\n| regular_record = 24–25\n| pfr_coach = FlorBr0\n}}", "coach", ["NFL"]],
     ["not a sport infobox", "{{Infobox person\n| name = Bob\n| years_active = 1990–2000\n}}", "none"],
   ];
   const yc = (t, lg) => y(t, kindOf(t), 2026, lg || []);
