@@ -220,8 +220,19 @@ export function freezeDaily(eligible, seedStr, { rounds = 10, recentPlayers = ne
 // The card a client sees. Short keys keep the D1 rows and puzzle files small.
 // Retired players try the Commons photo first: league image servers answer for players they have
 // no photo of with a silhouette (not an error), so the page's fallback would never reach Commons.
+// Pictures in the order the card tries them. A photo from the playing years (era) leads for
+// retired players; active players keep the league headshot first, a current-season portrait.
+export const commonsUrl = f => "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(f) + "?width=360";
 export function cardOf(p) {
   let img = p.img || [];
-  if (!p.active && p.commons) { const c = img.find(u => u.includes("commons.wikimedia.org")); if (c) img = [c, ...img.filter(u => u !== c)]; }
+  const era = p.era ? commonsUrl(p.era) : null;
+  if (era) img = img.filter(u => u !== era);
+  if (!p.active) {
+    if (era) img = [era, ...img];
+    else if (p.commons) { const c = img.find(u => u.includes("commons.wikimedia.org")); if (c) img = [c, ...img.filter(u => u !== c)]; }
+  } else if (era) {
+    const head = img.filter(u => !u.includes("commons.wikimedia.org"));
+    img = [...head, era, ...img.filter(u => u.includes("commons.wikimedia.org"))];
+  }
   return { id: p.id, n: p.name, y: p.years, p: p.pos, t: p.teams, i: img, c: p.commons || "", a: p.active ? 1 : 0 };
 }

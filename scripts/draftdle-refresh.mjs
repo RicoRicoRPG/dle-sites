@@ -13,6 +13,7 @@
 
 import { p, read, write, sleep } from "./lib.mjs";
 import { infoboxes } from "./draftdle-infobox.mjs";
+import { eraPhotos } from "./draftdle-photos.mjs";
 
 const ENDPOINT = process.env.DRAFTDLE_SPARQL || "https://query.wikidata.org/sparql";
 const UA = "DraftdleBot/1.0 (https://draftdle.pages.dev; info@counterspell.dev) node-fetch";
@@ -179,7 +180,7 @@ export function tierOf(sport, rank) {
   return rank < a ? 1 : rank < a + b ? 2 : 3;
 }
 
-async function refreshSport(sport, nowYear, q, views, infobox) {
+async function refreshSport(sport, nowYear, q, views, infobox, photos) {
   log(`\n${sport.id}: checking ids`);
   const labels = await q(`SELECT ?x ?l (lang(?l) AS ?lang) WHERE { VALUES ?x { ${values(sport.leagues)} } ?x rdfs:label ?l FILTER(lang(?l) IN ("en", "mul")) }`);
   const byId = preferEn(labels);
@@ -267,6 +268,18 @@ async function refreshSport(sport, nowYear, q, views, infobox) {
   }
   players.sort((a, b) => b.fame - a.fame || a.id.localeCompare(b.id));
   const pool = players.slice(0, sport.poolSize).map((pl, i) => ({ ...pl, tier: tierOf(sport, i) }));
+
+  // A photo from the playing years: retired cards lead with it, active ones show it after the
+  // league headshot (itself a current-season portrait).
+  const span = y => { const m = String(y).match(/^(\d{4})(?:–(\d{4}|present))?$/); return m ? [Number(m[1]), m[2] === "present" ? null : Number(m[2] || m[1])] : [null, null]; };
+  const era = await photos(pool.map(pl => { const [start, end] = span(pl.years); return { id: pl.id, name: pl.name, title: raw.get(pl.id)?.title, start, end, active: !!pl.active, commons: pl.commons, teams: pl.teams }; }), { ua: UA, log, nowYear });
+  // Hand picks win: a file name, or false for "no career photo" (two-sport players whose only
+  // photos from those years are from the other sport).
+  const pick = (read(p("data/draftdle/curation.json"), {}).photos || {})[sport.id] || {};
+  for (const pl of pool) {
+    const v = Object.hasOwn(pick, pl.id) ? pick[pl.id] : era.get(pl.id);
+    if (v) pl.era = v;
+  }
   log(`${sport.id}: kept ${pool.length} (dropped ${noName} without a name, ${noPos} without a usable position, ${noTeams} without a listed team, ${coaches} coaches or executives, ${noYears} with no playing years)`);
   return pool;
 }
@@ -286,13 +299,13 @@ export function guessViews(list, k = 25) {
   return n;
 }
 
-export async function refresh(ids = [], { q = sparql, views = enViews, infobox = infoboxes, nowYear = new Date().getUTCFullYear() } = {}) {
+export async function refresh(ids = [], { q = sparql, views = enViews, infobox = infoboxes, photos = eraPhotos, nowYear = new Date().getUTCFullYear() } = {}) {
   const cfg = read(p("data/draftdle/sports.json"));
   const sports = cfg.sports.filter(s => !ids.length || ids.includes(s.id));
   const failed = [];
   for (const sport of sports) {
     try {
-      const pool = await refreshSport(sport, nowYear, q, views, infobox);
+      const pool = await refreshSport(sport, nowYear, q, views, infobox, photos);
       const file = p("data/draftdle", sport.id, "pool.json");
       const prev = read(file, []);
       const expected = prev.length ? Math.min(sport.poolSize, prev.length) : 0;
