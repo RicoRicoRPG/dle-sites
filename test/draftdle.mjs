@@ -96,7 +96,8 @@ const nightlyDb = db => db.nightly;
   const fakeViews = async titles => new Map(titles.map(tt => { const n = Number(tt.replace(/\D/g, "")); return [tt, n >= 140 ? 5e6 : 1000]; }));
   // infobox: one retired player whose Wikidata stints are open
   const fakeBox = async (titles, kind) => kind !== "basketball" ? new Map() : new Map(titles.filter(tt => tt === "Article QP3").map(tt => [tt, { start: 2006, end: 2022, active: false }]));
-  await R.refresh(["nba", "wnba"], { q: fake, views: fakeViews, infobox: fakeBox, nowYear: 2026 });
+  const fakePhotos = async players => new Map(players.filter(pp => pp.id === "QP3" && pp.start === 2006 && pp.end === 2022 && pp.title === "Article QP3").map(pp => [pp.id, "QP3 2010.jpg"]));
+  await R.refresh(["nba", "wnba"], { q: fake, views: fakeViews, infobox: fakeBox, photos: fakePhotos, nowYear: 2026 });
   console.error = origErr; console.log = origLog; process.exitCode = 0;
   if (process.env.DEBUG) console.log(errs);
   const nba = readJ(path.join(T, "data/draftdle/nba/pool.json"));
@@ -104,6 +105,7 @@ const nightlyDb = db => db.nightly;
   ok(nba.length === 160 && nba.every(x => x.teams.length && x.img[0].includes("cdn.nba.com")), `fake refresh builds an NBA pool (${nba.length})`);
   ok(nba.slice(0, 20).every(x => x.views === 5e6) && nba[0].tier === 1, "page views decide fame: the most viewed lead the pool even with few language links");
   const p3 = nba.find(x => x.id === "QP3"), p4 = nba.find(x => x.id === "QP4");
+  ok(p3.era === "QP3 2010.jpg" && !p4.era, "refresh passes each pool player's span and article to the photo picker");
   ok(p3.years === "2006–2022" && p3.active === 0 && p4.years === "2010–present" && p4.active === 1, `infobox years override open Wikidata stints (${p3.years}; others ${p4.years})`);
   ok(R.fameOf(1e6, 10, false) > R.fameOf(5000, 120, true), "a player a million people looked up outranks one with many languages but few readers");
   process.env.DLE_FAST = "1";
@@ -190,6 +192,40 @@ const nightlyDb = db => db.nightly;
   ok(split.size === 4 && !split.has("Bad") && calls < 15, `infoboxes: a failing batch is split until only the bad title is lost, continuations followed (${split.size} of 5, ${calls} calls)`);
   ok(asked.length === 1 && /rvsection=0/.test(asked[0]) && got.get("Jeter")?.end === 2014 && got.get("rondo")?.end === 2022 && !got.has("Gone"), "infoboxes: 50 titles a request, answers mapped back through redirects");
   ok(dead.size === 0 && tries === 4, "infoboxes: an unreachable Wikipedia leaves Wikidata's years in place");
+}
+
+// ---------- 1c. a photo from the playing years ----------
+{
+  const P = await imp("scripts/draftdle-photos.mjs");
+  ok(P.surname("Ken Griffey Jr.") === "griffey" && P.surname("Luka Dončić") === "doncic" && P.surname("Jack Hughes (ice hockey)") === "hughes", "surnames: suffixes, accents and disambiguators dropped");
+  ok(P.photoYear({ DateTimeOriginal: { value: "2011-09-12 13:05:00" } }, "x.jpg") === 2011 && P.photoYear({}, "Tom Brady 2007.jpg") === 2007 && P.photoYear({ ImageDescription: { value: "<p>Brady in <b>2004</b></p>" } }, "x.jpg") === 2004 && P.photoYear({}, "x.jpg") === null, "photo year: Commons date, then the title, then the description");
+  const brady = { name: "Tom Brady", start: 2000, end: 2022, active: false };
+  const c = (file, year, extra = {}) => ({ file, year, width: 800, height: 1000, text: "", ...extra });
+  ok(P.choosePhoto(brady, [c("Tom Brady red carpet 2024.jpg", 2024, { p18: true }), c("Tom Brady 2011.jpg", 2011), c("Gillette Stadium.jpg", 2010)]) === "Tom Brady 2011.jpg", "a retired player's photo comes from his playing years, not a recent red carpet");
+  const oj = { name: "O. J. Simpson", start: 1969, end: 1979, teams: ["Bills", "49ers"] };
+  ok(P.choosePhoto(oj, [c("O.J. Simpson Medical Center 1969.jpg", 1969, { text: "Simpson in a television episode" }), c("O. J. Simpson 1973.jpg", 1973, { text: "Simpson with the Bills" })]) === "O. J. Simpson 1973.jpg", "a game photo with his team beats a TV appearance from the same years");
+  const deion = { name: "Deion Sanders", start: 1989, end: 2005, teams: ["Falcons", "49ers", "Cowboys"] };
+  ok(P.choosePhoto(deion, [c("Deion Sanders Braves 1993.jpg", 1993), c("Deion Sanders Cowboys 1996.jpg", 1996)]) === "Deion Sanders Cowboys 1996.jpg", "a two-sport player's NFL card prefers an NFL team photo");
+  ok(P.choosePhoto(brady, [c("Brady statue 2015.jpg", 2015), c("Tom Brady signature.jpg", 2010), c("Patriots huddle.jpg", 2005, { text: "Tom Brady calls a play" })]) === "Patriots huddle.jpg", "statues and signatures are skipped; a caption naming him counts");
+  ok(P.choosePhoto({ name: "Chan Ho Park", start: 1994, end: 2010 }, [c("Chan Ho Park pitching 2002.jpg", 2002)]) === "Chan Ho Park pitching 2002.jpg", "a surname like Park isn't mistaken for a ballpark");
+  ok(P.choosePhoto(brady, [c("Tom Brady 1995.jpg", 1995), c("Tom Brady.svg", 2010), c("Someone else 2010.jpg", 2010)]) === null, "nothing from his career that names him: no pick");
+  ok(P.choosePhoto({ name: "Caitlin Clark", start: 2024, end: null, active: true }, [c("Caitlin Clark Fever 2025.jpg", 2025), c("Caitlin Clark Iowa 2022.jpg", 2022)], 2026) === "Caitlin Clark Fever 2025.jpg", "an active player's college photo isn't a career photo");
+
+  process.env.DLE_FAST = "1";
+  const era = await P.eraPhotos([{ id: "Q1", name: "Tom Brady", title: "Tom Brady", start: 2000, end: 2022, active: false, commons: "Tom Brady red carpet 2024.jpg" }], { nowYear: 2026, fetchImpl: async (u, o) => {
+    const q = new URLSearchParams(String(o.body));
+    if (q.get("prop") === "images") return { ok: true, status: 200, json: async () => ({ query: { pages: [{ title: "Tom Brady", images: [{ title: "File:Tom Brady 2011.jpg" }, { title: "File:Tom Brady 2009 local.jpg" }, { title: "File:Patriots logo.svg" }] }] } }) };
+    const files = q.get("titles").split("|");
+    return { ok: true, status: 200, json: async () => ({ query: { pages: files.map(t => ({ title: t, imagerepository: /local/.test(t) ? "local" : "shared", imageinfo: [{ width: 900, height: 1200, extmetadata: { DateTimeOriginal: { value: (t.match(/\d{4}/) || ["2024"])[0] } } }] })) } }) };
+  } });
+  delete process.env.DLE_FAST;
+  ok(era.get("Q1") === "Tom Brady 2011.jpg", `eraPhotos: article photos dated and chosen; English Wikipedia's own (non-free) files skipped (${era.get("Q1")})`);
+
+  const { cardOf, commonsUrl } = await imp("scripts/draftdle-lib.mjs");
+  const head = "https://a.espncdn.com/i/headshots/nfl/players/full/2330.png", p18 = commonsUrl("Tom Brady red carpet 2024.jpg");
+  const ret = cardOf({ id: "Q1", name: "Tom Brady", active: 0, img: [head, p18], commons: "Tom Brady red carpet 2024.jpg", era: "Tom Brady 2011.jpg" });
+  const act = cardOf({ id: "Q2", name: "X", active: 1, img: [head, p18], commons: "x.jpg", era: "Tom Brady 2011.jpg" });
+  ok(ret.i[0] === commonsUrl("Tom Brady 2011.jpg") && ret.i.length === 3 && act.i[0] === head && act.i[1] === commonsUrl("Tom Brady 2011.jpg") && act.i[2] === p18, "cards: retired lead with the career photo; active keep the league headshot first, then the career photo");
 }
 
 // ---------- 1b. placeDense keeps slots dense and writes only what moved ----------
