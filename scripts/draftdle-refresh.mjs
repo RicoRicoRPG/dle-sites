@@ -145,25 +145,31 @@ export function teamsLine(sport, stmts, leagueTeams, nowYear) {
   return { teams: out, first: starts.length ? Math.min(...starts) : null, last: ends.length ? Math.max(...ends) : null, lastStart: starts.length ? Math.max(...starts) : null, open };
 }
 
+const BROWSER_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36";
+
 // NBA.com answers a player it has no photo for with a stand-in silhouette rather than an error.
 // Compare each headshot with the stand-in: a real one can lead a retired card (hs); a stand-in
 // is dropped so the card falls through to a photo or the initials.
 export async function checkHeadshots(pool, headshots, { fetchImpl = globalThis.fetch, log = () => {}, concurrency = 8 } = {}) {
   for (const h of headshots.filter(h => h.standin)) {
     const prefix = h.url.split("{id}")[0];
+    // NBA.com's CDN can turn away clients that don't look like a browser; ask the way a page would.
+    const headers = { "User-Agent": BROWSER_UA, Accept: "image/avif,image/webp,image/png,image/*;q=0.8,*/*;q=0.5", Referer: "https://www.nba.com/" };
+    let lastStatus = "";
     const digest = async url => {
       for (let t = 0; t < 3; t++) {
         try {
-          const res = await fetchImpl(url, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(20000) });
+          const res = await fetchImpl(url, { headers, signal: AbortSignal.timeout(20000) });
+          lastStatus = String(res.status);
           if (res.ok) return createHash("sha1").update(Buffer.from(await res.arrayBuffer())).digest("hex");
           if (res.status === 404) return "missing";
-        } catch { /* retry */ }
+        } catch (e) { lastStatus = e.message || String(e); }
         await sleep(process.env.DLE_FAST ? 1 : 1000 * (t + 1));
       }
       return null;
     };
     const standin = await digest(h.url.replace("{id}", h.standin));
-    if (!standin || standin === "missing") { log(`  ${prefix}: stand-in not reachable; headshots left as they are`); continue; }
+    if (!standin || standin === "missing") { log(`  ${prefix}: stand-in not reachable (${standin === "missing" ? "404" : lastStatus}); headshots left as they are`); continue; }
     const todo = pool.map(pl => [pl, (pl.img || []).find(u => u.startsWith(prefix))]).filter(([, u]) => u);
     let real = 0, fake = 0, unknown = 0;
     await Promise.all(Array.from({ length: concurrency }, async () => {
@@ -363,4 +369,21 @@ export async function refresh(ids = [], { q = sparql, views = enViews, infobox =
   if (failed.length) { console.error(`failed: ${failed.join(", ")}`); process.exitCode = 1; }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) await refresh(process.argv.slice(2));
+// Only the headshot check, on the pools already built: cheap enough for every scheduled run.
+export async function recheckHeadshots(ids = [], opts = {}) {
+  const cfg = read(p("data/draftdle/sports.json"));
+  for (const sport of cfg.sports.filter(s => (!ids.length || ids.includes(s.id)) && (s.headshots || []).some(h => h.standin))) {
+    const file = p("data/draftdle", sport.id, "pool.json");
+    const pool = read(file, []);
+    if (!pool.length) continue;
+    console.log(`${sport.id}: checking headshots`);
+    await checkHeadshots(pool, sport.headshots, { log: console.log, ...opts });
+    write(file, pool);
+  }
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const args = process.argv.slice(2);
+  if (args[0] === "--headshots") await recheckHeadshots(args.slice(1));
+  else await refresh(args);
+}
