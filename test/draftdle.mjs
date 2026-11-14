@@ -260,7 +260,7 @@ const nightlyDb = db => db.nightly;
       const c = q.get("cmtitle");
       if (c === "Category:Muggsy Bogues") return reply({ query: { categorymembers: [{ ns: 6, title: "File:Muggsy Bogues Hornets 1993.jpg" }, { ns: 14, title: "Category:Muggsy Bogues in 1995" }] } });
       if (c === "Category:Muggsy Bogues in 1995") return reply({ query: { categorymembers: [{ ns: 6, title: "File:Bogues dribbling 1995.jpg" }] } });
-      if (c === "Category:Old Guy") return reply({ query: { categorymembers: [{ ns: 6, title: "File:Old Guy 2010.jpg" }, { ns: 6, title: "File:Old Guy 1975 portrait.jpg" }] } });
+      if (c === "Category:Old Guy") return reply({ query: { categorymembers: [{ ns: 6, title: "File:Old Guy 2010.jpg" }, { ns: 6, title: "File:Old Guy 1975 hockey portrait.jpg" }] } });
       return reply({ query: { categorymembers: [] } });
     }
     if (q.get("list") === "search") return reply({ query: { search: /Rebecca Lobo/.test(q.get("srsearch")) ? [{ title: "File:Rebecca Lobo Liberty 1999.jpg" }, { title: "File:Lobo family 2015.jpg" }] : [] } });
@@ -268,17 +268,19 @@ const nightlyDb = db => db.nightly;
   } });
   ok(era.offEra.has("Qb") && /Hornets 1993|dribbling 1995/.test(era.get("Qb") || ""), `no career photo in the article: the player's Commons category has one (${era.get("Qb")})`);
   ok(era.get("Ql") === "Rebecca Lobo Liberty 1999.jpg", `no photo anywhere else: a Commons search by name finds one (${era.get("Ql")})`);
-  ok(!era.has("Qo") && era.alt.get("Qo") === "Old Guy 1975 portrait.jpg", `nothing from the career at all: the closest-dated photo, not a blank card (${era.alt.get("Qo")})`);
+  ok(!era.has("Qo") && era.alt.get("Qo") === "Old Guy 1975 hockey portrait.jpg", `nothing from the career at all: the closest-dated photo, not a blank card (${era.alt.get("Qo")})`);
   const nba = "https://cdn.nba.com/headshots/nba/latest/1040x760/177.png", c18 = "https://commons.wikimedia.org/wiki/Special:FilePath/Muggsy%20Bogues%202025%20event.jpg?width=360";
   const cc = (file, year, text = "", extra = {}) => ({ file, year, width: 800, height: 1000, text, ...extra });
   ok(P.closestPhoto({ name: "John Madden", start: 1959, end: 1959 }, [cc("Warren Moon and Marshall Faulk playing Madden NFL 07.jpg", 2006)], 2026) === null
     && P.closestPhoto({ name: "Terry Crews", start: 1991, end: 1996 }, [cc("Everybody Hates Chris.jpg", 2005, "Terry Crews as Julius in the television series")], 2026) === null
-    && P.closestPhoto({ name: "Eddie Giacomin", start: 1965, end: 1978 }, [cc("EddieGiacominNYR.png", null, "")], 2026) === "EddieGiacominNYR.png",
-    "closest photo: the whole name, not a video game or a TV role; PNG portraits count");
-  const altU = "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent("Old Guy 1975 portrait.jpg") + "?width=360";
+    && P.closestPhoto({ name: "Eddie Giacomin", start: 1965, end: 1978 }, [cc("EddieGiacominNYR.png", null, "")], 2026) === "EddieGiacominNYR.png"
+    && P.closestPhoto({ name: "Terry Crews", start: 1991, end: 1996, commons: "Terry Crews by Gage Skidmore 5.jpg" }, [cc("Everybody Hates Chris.jpg", 2005, "", { own: true }), cc("Terry Crews by Gage Skidmore 5.jpg", 2016, "", { p18: true })], 2026) === "Terry Crews by Gage Skidmore 5.jpg"
+    && P.closestPhoto({ name: "John Madden", start: 1959, end: 1959, commons: "John Madden in 2007.jpg" }, [cc("Madden NFL - snow game (3785699843).jpg", 2009, "", { own: true })], 2026) === null,
+    "closest photo: the whole name, not a video game or a TV role, and only sport beats Wikidata's photo; PNG portraits count");
+  const altU = "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent("Old Guy 1975 hockey portrait.jpg") + "?width=360";
   ok(cardOf({ id: "Qb", name: "Muggsy Bogues", active: 0, offEra: 1, img: [c18], commons: "x" }).i.join() === c18
     && cardOf({ id: "Qb", name: "M", active: 0, offEra: 1, hs: 1, img: [nba, c18], commons: "x" }).i.join() === [nba, c18].join()
-    && cardOf({ id: "Qo", name: "Old Guy", active: 0, offEra: 1, alt: "Old Guy 1975 portrait.jpg", img: [c18], commons: "x" }).i.join() === [altU, c18].join(),
+    && cardOf({ id: "Qo", name: "Old Guy", active: 0, offEra: 1, alt: "Old Guy 1975 hockey portrait.jpg", img: [c18], commons: "x" }).i.join() === [altU, c18].join(),
     "off-era photo goes last: a real headshot, then the closest photo, then Wikidata's; never a blank card");
 
   const bytes = s => ({ ok: true, status: 200, arrayBuffer: async () => new TextEncoder().encode(s).buffer });
@@ -290,6 +292,18 @@ const nightlyDb = db => db.nightly;
   delete process.env.DLE_FAST;
   ok(pool[0].hs === 1 && pool[0].img.length === 2 && !pool[1].hs && pool[1].img.length === 0 && !pool[2].hs, "NBA.com: a real headshot is marked, a stand-in silhouette dropped");
   ok(pool2[0].img.length === 1 && !pool2[0].hs && down === 3, "NBA.com unreachable: headshots left as they are");
+  process.env.DLE_FAST = "1";
+  const espn = "https://a.espncdn.com/i/headshots/nba/players/full/";
+  const pool3 = [{ id: "E1", name: "Sleepy Floyd", active: 0, hs: 1, img: [espn + "3703.png"] }, { id: "E2", name: "Real Guy", active: 0, hs: 1, img: [espn + "1.png", c18], commons: "x" }];
+  const methods = [];
+  await R2.checkHeadshots(pool3, [{ url: espn + "{id}.png", real: true }], { fetchImpl: async (u, o) => { methods.push(o.method); return u.includes("3703") ? { ok: false, status: 404 } : { ok: true, status: 200 }; } });
+  ok(pool3[0].img.length === 0 && !pool3[0].hs && pool3[1].hs === 1 && pool3[1].img.length === 2 && methods.every(m => m === "HEAD"), "ESPN: a headshot that isn't there is dropped (header request only), a real one kept");
+  const pool4 = Array.from({ length: 25 }, (_, k) => ({ id: "B" + k, name: "P" + k, hs: 1, img: [espn + k + ".png"] }));
+  await R2.checkHeadshots(pool4, [{ url: espn + "{id}.png", real: true }], { fetchImpl: async () => ({ ok: false, status: 403 }) });
+  ok(pool4.every(pl => pl.img.length === 1 && pl.hs === 1), "a source that turns every request away is left alone, not emptied");
+  const kept = R2.dropPhotoless([{ id: "K1", name: "Has", active: 0, img: [c18], commons: "x" }, { id: "K2", name: "Nobody", active: 0, img: [] }, { id: "K3", name: "Era", active: 0, img: [], era: "Era 1990.jpg" }]);
+  delete process.env.DLE_FAST;
+  ok(kept.map(x => x.id).join() === "K1,K3", "players with no photo anywhere are left out of the pool");
 }
 
 // ---------- 1b. placeDense keeps slots dense and writes only what moved ----------
