@@ -27,7 +27,7 @@
     ["punter", "P", "st"],
     ["long snapper", "LS", "st"]
    ],
-   "headshots": [{ "prop": "P3686", "expectLabel": "ESPN", "url": "https://a.espncdn.com/i/headshots/nfl/players/full/{id}.png" }]
+   "headshots": [{ "prop": "P3686", "expectLabel": "ESPN", "url": "https://a.espncdn.com/i/headshots/nfl/players/full/{id}.png", "real": true }]
   },
   {
    "id": "nba", "name": "NBA", "group": "US leagues", "wave": 1,
@@ -52,7 +52,7 @@
     ["shortstop", "SS", "h"], ["left fielder", "LF", "h"], ["center fielder|centre fielder", "CF", "h"], ["right fielder", "RF", "h"],
     ["outfielder", "OF", "h"], ["designated hitter", "DH", "h"], ["infielder", "IF", "h"], ["utility", "UT", "h"]
    ],
-   "headshots": [{ "prop": "P3541", "expectLabel": "MLB", "url": "https://img.mlbstatic.com/mlb-photos/image/upload/w_360,q_auto:best/v1/people/{id}/headshot/67/current" }]
+   "headshots": [{ "prop": "P3541", "expectLabel": "MLB", "url": "https://img.mlbstatic.com/mlb-photos/image/upload/w_360,q_auto:best/v1/people/{id}/headshot/67/current", "real": true }]
   },
   {
    "id": "nhl", "name": "NHL", "group": "US leagues", "wave": 1,
