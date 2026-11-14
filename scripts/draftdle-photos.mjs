@@ -3,7 +3,8 @@
 // from the playing years too, in games or team portraits. We read the date of every photo the
 // article uses, plus P18, and keep the best one taken during the career that names the player.
 //
-// eraPhotos(players, opts) -> Map id -> Commons file name (no "File:" prefix)
+// eraPhotos(players, opts) -> Map id -> Commons file name (no "File:" prefix); .offEra is the
+// Set of ids whose Wikidata photo (P18) is dated outside their playing years.
 //   players: [{ id, name, title, start, end, active, commons, teams }]
 
 const API = "https://en.wikipedia.org/w/api.php";
@@ -76,7 +77,7 @@ async function post(params, { fetchImpl, ua }) {
 }
 
 export async function eraPhotos(players, { fetchImpl = globalThis.fetch, ua, log = () => {}, nowYear = new Date().getUTCFullYear() } = {}) {
-  const out = new Map();
+  const out = new Map(), offEra = new Set();
   const withTitle = players.filter(p => p.title && p.start);
   // 1. the files each article uses
   const filesOf = new Map();
@@ -135,7 +136,11 @@ export async function eraPhotos(players, { fetchImpl = globalThis.fetch, ua, log
     const cands = (filesOf.get(p.id) || []).map(f => ({ file: f, p18: f === p.commons, ...(info.get(f) || { year: null }) }));
     const pick = choosePhoto(p, cands, nowYear);
     if (pick) out.set(p.id, pick);
+    const own = cands.find(c => c.p18);
+    const last = p.active || !p.end ? nowYear : p.end;
+    if (own && own.year != null && (own.year < p.start - 1 || own.year > last + 1)) offEra.add(p.id);
   }
+  out.offEra = offEra;
   log(`  in-career photos for ${out.size} of ${withTitle.length} players (${all.length} photos checked)`);
   return out;
 }

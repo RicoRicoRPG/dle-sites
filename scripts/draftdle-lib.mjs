@@ -231,6 +231,9 @@ export function cardOf(p) {
   if (era) img = img.filter(u => u !== era);
   if (!p.active) {
     if (era) img = [era, ...img];
+    // Wikidata's photo is from before or after the career and there's no career photo: leave it
+    // out. The card shows a real league headshot if there is one, else the initials.
+    else if (p.offEra) img = img.filter(u => !u.includes("commons.wikimedia.org"));
     else if (p.commons && !p.hs) { const c = img.find(u => u.includes("commons.wikimedia.org")); if (c) img = [c, ...img.filter(u => u !== c)]; }
   } else if (era) {
     const head = img.filter(u => !u.includes("commons.wikimedia.org"));

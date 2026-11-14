@@ -13,6 +13,7 @@
 
 import { p, read, write, sleep } from "./lib.mjs";
 import { infoboxes } from "./draftdle-infobox.mjs";
+import { createHash } from "node:crypto";
 import { eraPhotos } from "./draftdle-photos.mjs";
 
 const ENDPOINT = process.env.DRAFTDLE_SPARQL || "https://query.wikidata.org/sparql";
@@ -144,8 +145,44 @@ export function teamsLine(sport, stmts, leagueTeams, nowYear) {
   return { teams: out, first: starts.length ? Math.min(...starts) : null, last: ends.length ? Math.max(...ends) : null, lastStart: starts.length ? Math.max(...starts) : null, open };
 }
 
+// NBA.com answers a player it has no photo for with a stand-in silhouette rather than an error.
+// Compare each headshot with the stand-in: a real one can lead a retired card (hs); a stand-in
+// is dropped so the card falls through to a photo or the initials.
+export async function checkHeadshots(pool, headshots, { fetchImpl = globalThis.fetch, log = () => {}, concurrency = 8 } = {}) {
+  for (const h of headshots.filter(h => h.standin)) {
+    const prefix = h.url.split("{id}")[0];
+    const digest = async url => {
+      for (let t = 0; t < 3; t++) {
+        try {
+          const res = await fetchImpl(url, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(20000) });
+          if (res.ok) return createHash("sha1").update(Buffer.from(await res.arrayBuffer())).digest("hex");
+          if (res.status === 404) return "missing";
+        } catch { /* retry */ }
+        await sleep(process.env.DLE_FAST ? 1 : 1000 * (t + 1));
+      }
+      return null;
+    };
+    const standin = await digest(h.url.replace("{id}", h.standin));
+    if (!standin || standin === "missing") { log(`  ${prefix}: stand-in not reachable; headshots left as they are`); continue; }
+    const todo = pool.map(pl => [pl, (pl.img || []).find(u => u.startsWith(prefix))]).filter(([, u]) => u);
+    let real = 0, fake = 0, unknown = 0;
+    await Promise.all(Array.from({ length: concurrency }, async () => {
+      while (todo.length) {
+        const [pl, url] = todo.shift();
+        const d = await digest(url);
+        if (d == null) { unknown++; continue; }
+        if (d === standin || d === "missing") { pl.img = pl.img.filter(u => u !== url); fake++; }
+        else { pl.hs = 1; real++; }
+      }
+    }));
+    log(`  ${prefix}: ${real} real headshots, ${fake} stand-ins dropped${unknown ? `, ${unknown} unchecked` : ""}`);
+  }
+}
+
 export function buildPlayer(sport, raw, leagueTeams, headshots, nowYear) {
-  const pos = positionOf(sport, raw.positions);
+  let pos = positionOf(sport, raw.positions);
+  // Wikidata often has no position for this year's rookies; the infobox does.
+  if ((!pos || !pos.abbr) && raw.box?.positions?.length) pos = positionOf(sport, raw.box.positions) || pos;
   if (!pos) return null;
   const t = teamsLine(sport, raw.teams, leagueTeams, nowYear);
   if (!t.teams.length) return null;
@@ -183,7 +220,7 @@ export function tierOf(sport, rank) {
   return rank < a ? 1 : rank < a + b ? 2 : 3;
 }
 
-async function refreshSport(sport, nowYear, q, views, infobox, photos) {
+async function refreshSport(sport, nowYear, q, views, infobox, photos, headshotCheck) {
   log(`\n${sport.id}: checking ids`);
   const labels = await q(`SELECT ?x ?l (lang(?l) AS ?lang) WHERE { VALUES ?x { ${values(sport.leagues)} } ?x rdfs:label ?l FILTER(lang(?l) IN ("en", "mul")) }`);
   const byId = preferEn(labels);
@@ -282,7 +319,11 @@ async function refreshSport(sport, nowYear, q, views, infobox, photos) {
   for (const pl of pool) {
     const v = Object.hasOwn(pick, pl.id) ? pick[pl.id] : era.get(pl.id);
     if (v) pl.era = v;
+    // Wikidata's photo dated outside the playing years: a retired card without a career photo
+    // leaves it out (see cardOf).
+    else if (!pl.active && era.offEra?.has(pl.id)) pl.offEra = 1;
   }
+  await headshotCheck(pool, headshots, { log });
   log(`${sport.id}: kept ${pool.length} (dropped ${noName} without a name, ${noPos} without a usable position, ${noTeams} without a listed team, ${coaches} coaches or executives, ${noYears} with no playing years)`);
   return pool;
 }
@@ -302,13 +343,13 @@ export function guessViews(list, k = 25) {
   return n;
 }
 
-export async function refresh(ids = [], { q = sparql, views = enViews, infobox = infoboxes, photos = eraPhotos, nowYear = new Date().getUTCFullYear() } = {}) {
+export async function refresh(ids = [], { q = sparql, views = enViews, infobox = infoboxes, photos = eraPhotos, headshotCheck = checkHeadshots, nowYear = new Date().getUTCFullYear() } = {}) {
   const cfg = read(p("data/draftdle/sports.json"));
   const sports = cfg.sports.filter(s => !ids.length || ids.includes(s.id));
   const failed = [];
   for (const sport of sports) {
     try {
-      const pool = await refreshSport(sport, nowYear, q, views, infobox, photos);
+      const pool = await refreshSport(sport, nowYear, q, views, infobox, photos, headshotCheck);
       const file = p("data/draftdle", sport.id, "pool.json");
       const prev = read(file, []);
       const expected = prev.length ? Math.min(sport.poolSize, prev.length) : 0;

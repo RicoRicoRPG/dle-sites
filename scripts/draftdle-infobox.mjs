@@ -97,6 +97,11 @@ function spans(list) {
 const seasonList = (f, prefix) => Object.keys(f).filter(k => new RegExp(`^${prefix}\\d+$`).test(k))
   .sort((a, b) => Number(a.slice(prefix.length)) - Number(b.slice(prefix.length))).map(k => f[k]);
 
+// "[[Power forward (basketball)|Power forward]] / [[Center (basketball)|center]]" -> ["power forward", "center"]
+export const boxPositions = v => String(v)
+  .replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, "$1").replace(/\{\{[^{}]*\}\}/g, " ").replace(/<[^>]+>/g, " ")
+  .split(/\s*(?:\/|,|;|\band\b|\bor\b|\n|\*)\s*/i).map(x => x.replace(/\([^)]*\)/g, "").trim().toLowerCase()).filter(x => x && x.length < 40);
+
 export function infoboxYears(text, kind, nowYear = new Date().getUTCFullYear(), leagues = []) {
   const box = infoboxFields(text || "", kind);
   if (!box) return null;
@@ -136,7 +141,10 @@ export function infoboxYears(text, kind, nowYear = new Date().getUTCFullYear(), 
   if (end != null) active = false;
   // An "active" career that started 30+ years ago is a stale article, not a player.
   if (active && start && start < nowYear - 30) active = null;
-  return start || end || active != null ? { start, end, active } : null;
+  // Positions, for players Wikidata doesn't have one for yet (this year's rookies).
+  const positions = boxPositions(f.position || f.career_position || f.positions || "");
+  if (!(start || end || active != null)) return positions.length ? { positions } : null;
+  return { start, end, active, ...(positions.length ? { positions } : {}) };
 }
 
 // Section 0 (the lead, where the infobox lives) for up to 50 titles a request. A batch that keeps
