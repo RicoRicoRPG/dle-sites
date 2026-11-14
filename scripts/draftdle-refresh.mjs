@@ -379,7 +379,7 @@ export function placePhotos(pool, found, pick = {}) {
 
 // Only the photo search, on the pools already built: no Wikidata rebuild needed.
 export async function recheckPhotos(ids = [], opts = {}) {
-  const { eraPhotos, enTitles } = await import("./draftdle-photos.mjs");
+  const { eraPhotos, enTitles, claimsOf } = await import("./draftdle-photos.mjs");
   const cfg = read(p("data/draftdle/sports.json"));
   const pick = read(p("data/draftdle/curation.json"), {}).photos || {};
   const nowYear = new Date().getUTCFullYear();
@@ -389,6 +389,15 @@ export async function recheckPhotos(ids = [], opts = {}) {
     const pool = read(file, []);
     if (!pool.length) continue;
     console.log(`${sport.id}: photos`);
+    // League headshots from the ids Wikidata has now (new sources, ids added since the build).
+    const claims = await claimsOf(pool.map(pl => pl.id), { ua: UA });
+    for (const pl of pool) {
+      const c = claims.get(pl.id) || {};
+      const id = prop => c[prop]?.[0]?.mainsnak?.datavalue?.value;
+      const heads = (sport.headshots || []).filter(h => id(h.prop)).map(h => h.url.replace("{id}", encodeURIComponent(id(h.prop))));
+      pl.img = [...heads, ...(pl.img || []).filter(u => u.includes("commons.wikimedia.org"))];
+      if ((sport.headshots || []).some(h => h.real && id(h.prop))) pl.hs = 1;
+    }
     const titles = await enTitles(pool.map(pl => pl.id), { ua: UA });
     const found = await eraPhotos(pool.map(pl => { const [start, end] = span(pl.years); return { id: pl.id, name: pl.name, title: titles.get(pl.id), start, end, active: !!pl.active, commons: pl.commons, teams: pl.teams }; }), { ua: UA, log: console.log, nowYear, ...opts });
     placePhotos(pool, found, pick[sport.id] || {});

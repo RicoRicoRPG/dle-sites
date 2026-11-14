@@ -15,7 +15,7 @@
 const API = "https://en.wikipedia.org/w/api.php";
 const COMMONS = "https://commons.wikimedia.org/w/api.php";
 const WIKIDATA = "https://www.wikidata.org/w/api.php";
-const PHOTO = /\.(jpe?g|webp|tiff?)$/i;
+const PHOTO = /\.(jpe?g|png|webp|tiff?)$/i;
 // Things that name the player without showing them playing.
 const NOT_HIM = /statue|sculpture|bust\b|mural|grave|tomb|plaque|memorial|signature|autograph|logo|wordmark|jersey|banner|retired[ _]number|trophy|ring\b|stadium|arena|field\b|park\b|house|street|mansion|card\b|stamp|coin|poster|cover|map\b|cartoon|caricature|wax|museum/i;
 const SUFFIX = /^(jr|sr|ii|iii|iv|v)\.?$/i;
@@ -71,14 +71,20 @@ export function choosePhoto(p, cands, nowYear = new Date().getUTCFullYear()) {
 
 // No photo from the career: the one closest to it, so the card still shows the player. Dated
 // photos by distance from the playing years; undated ones after; his own category and P18 win ties.
+// Whole name, letters only: "Terry Crews" in "Terry Crews as Julius", not "Madden NFL 07".
+const plain = s => fold(s).replace(/\([^)]*\)/g, " ").replace(/[^a-z]+/g, " ").trim();
 export function closestPhoto(p, cands, nowYear = new Date().getUTCFullYear()) {
-  const sn = surname(p.name);
+  const sn = surname(p.name), whole = plain(p.name);
   const last = p.active || !p.end ? nowYear : p.end;
   let best = null, bestScore = -Infinity;
   for (const c of cands) {
     if (!PHOTO.test(c.file) || (c.width && c.width < 200)) continue;
     const about = fold(c.file + " " + c.text);
-    if (!(c.own || c.p18 || (sn && about.includes(sn)))) continue;
+    // Another photo of the player, not one that only shares his surname; nothing from a TV show,
+    // a film or a game (Wikidata's own photo is the fallback for those).
+    const said = plain(c.file + " " + c.text);
+    if (!(c.own || c.p18 || (whole && (said.includes(whole) || said.replace(/ /g, "").includes(whole.replace(/ /g, "")))))) continue;
+    if (!c.p18 && (OFF_FIELD.test(about) || /video ?game|\bnfl \d\d|\bnba 2k|\bnhl \d\d|\bfifa \d\d|screenshot|cast\b|as [a-z]+ in\b/.test(about))) continue;
     if (sn && (NOT_HIM.test(fold(c.file).split(sn).join(" ")))) continue;
     const dist = c.year == null || !p.start ? 40 : c.year < p.start ? p.start - c.year : c.year > last ? c.year - last : 0;
     const score = -dist + (c.p18 ? 0.5 : 0) + (c.own ? 0.3 : 0) - (OFF_FIELD.test(about) ? 3 : 0) + (IN_GAME.test(about) ? 1 : 0);
@@ -209,8 +215,8 @@ export async function eraPhotos(players, { fetchImpl = globalThis.fetch, ua, log
         if (pick) { out.set(p.id, pick); fromCategory++; continue; }
       }
       let all = cands.get(p.id).concat(extra);
-      // 5. nobody has anything: search Commons by name, keeping files that give the whole name
-      if (!all.some(c => c.own || c.p18 || fold(c.file + " " + c.text).includes(surname(p.name)))) {
+      // 5. no usable photo yet: search Commons by name, keeping files that give the whole name
+      if (!p.commons && !closestPhoto(p, all, nowYear)) {
         const j = await post({ action: "query", list: "search", srnamespace: "6", srlimit: "30", srsearch: `"${p.name.replace(/\s*\([^)]*\)/g, "")}"` }, { fetchImpl, ua, api: COMMONS });
         const whole = fold(p.name.replace(/\s*\([^)]*\)/g, "")).replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
         const found = (await commonsInfo((j?.query?.search || []).map(x => x.title).filter(t => PHOTO.test(t))))
@@ -229,8 +235,8 @@ export async function eraPhotos(players, { fetchImpl = globalThis.fetch, ua, log
   return out;
 }
 
-// Each player's Commons category (P373), from Wikidata.
-export async function categoriesOf(ids, { fetchImpl = globalThis.fetch, ua } = {}) {
+// Wikidata statements for ids, 50 a request.
+export async function claimsOf(ids, { fetchImpl = globalThis.fetch, ua } = {}) {
   const out = new Map();
   for (let i = 0; i < ids.length; i += 50) {
     for (let t = 0; t < 3; t++) {
@@ -239,14 +245,18 @@ export async function categoriesOf(ids, { fetchImpl = globalThis.fetch, ua } = {
           { headers: { "User-Agent": ua || "Draftdle", Accept: "application/json" }, signal: AbortSignal.timeout(30000) });
         if (!res.ok) throw new Error(String(res.status));
         const j = await res.json();
-        for (const [id, e] of Object.entries(j.entities || {})) {
-          const v = e.claims?.P373?.[0]?.mainsnak?.datavalue?.value;
-          if (v) out.set(id, v);
-        }
+        for (const [id, e] of Object.entries(j.entities || {})) out.set(id, e.claims || {});
         break;
       } catch { await new Promise(r => setTimeout(r, process.env.DLE_FAST ? 1 : 2000 * (t + 1))); }
     }
   }
+  return out;
+}
+
+// Each player's Commons category (P373), from Wikidata.
+export async function categoriesOf(ids, opts = {}) {
+  const out = new Map();
+  for (const [id, c] of await claimsOf(ids, opts)) { const v = c.P373?.[0]?.mainsnak?.datavalue?.value; if (v) out.set(id, v); }
   return out;
 }
 
