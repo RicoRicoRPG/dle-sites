@@ -97,7 +97,7 @@ const nightlyDb = db => db.nightly;
   // infobox: one retired player whose Wikidata stints are open
   const fakeBox = async (titles, kind) => kind !== "basketball" ? new Map() : new Map(titles.filter(tt => tt === "Article QP3").map(tt => [tt, { start: 2006, end: 2022, active: false }]));
   const fakePhotos = async players => new Map(players.filter(pp => pp.id === "QP3" && pp.start === 2006 && pp.end === 2022 && pp.title === "Article QP3").map(pp => [pp.id, "QP3 2010.jpg"]));
-  await R.refresh(["nba", "wnba"], { q: fake, views: fakeViews, infobox: fakeBox, photos: fakePhotos, nowYear: 2026 });
+  await R.refresh(["nba", "wnba"], { q: fake, views: fakeViews, infobox: fakeBox, photos: fakePhotos, headshotCheck: async () => {}, nowYear: 2026 });
   console.error = origErr; console.log = origLog; process.exitCode = 0;
   if (process.env.DEBUG) console.log(errs);
   const nba = readJ(path.join(T, "data/draftdle/nba/pool.json"));
@@ -229,6 +229,39 @@ const nightlyDb = db => db.nightly;
   const noEraNba = cardOf({ id: "Q4", name: "David Robinson", active: 0, img: ["https://cdn.nba.com/headshots/nba/latest/1040x760/764.png", p18], commons: "x.jpg" });
   ok(noEraHs.i[0] === head && noEraNba.i[0] === p18, "no career photo: a real league headshot leads (ESPN, MLB); NBA.com's may be a silhouette, so the Commons photo leads");
   ok(ret.i[0] === commonsUrl("Tom Brady 2011.jpg") && ret.i.length === 3 && act.i[0] === head && act.i[1] === commonsUrl("Tom Brady 2011.jpg") && act.i[2] === p18, "cards: retired lead with the career photo; active keep the league headshot first, then the career photo");
+}
+
+// ---------- 1d. positions from the infobox, off-era photos, NBA.com stand-ins ----------
+{
+  const I = await imp("scripts/draftdle-infobox.mjs");
+  const P = await imp("scripts/draftdle-photos.mjs");
+  const R2 = await imp("scripts/draftdle-refresh.mjs");
+  const { cardOf } = await imp("scripts/draftdle-lib.mjs");
+  ok(JSON.stringify(I.boxPositions("[[Power forward (basketball)|Power forward]] / [[Center (basketball)|center]]")) === '["power forward","center"]', "infobox positions: links and disambiguators stripped, split on slashes");
+  const rookie = I.infoboxYears("{{Infobox basketball biography\n| position = [[Power forward (basketball)|Power forward]]\n| career_start = 2026\n| years1 = {{nbay|2026|start}}–present\n}}", "basketball", 2026, ["NBA"]);
+  const nbaCfg = JSON.parse(fs.readFileSync(path.join(ROOT, "data/draftdle/sports.json"), "utf8")).sports.find(x => x.id === "nba");
+  const pl = R2.buildPlayer(nbaCfg, { id: "Qr", name: "Cameron Boozer", sitelinks: 20, hof: false, positions: [], ext: {}, box: rookie, teams: [{ team: "Q1", label: "Chicago Bulls", start: 2026 }] }, new Set(["Q1"]), [], 2026);
+  ok(pl.pos === "PF" && pl.years === "2026–present", `a rookie with no Wikidata position gets the infobox's (${pl.pos})`);
+
+  process.env.DLE_FAST = "1";
+  const era = await P.eraPhotos([{ id: "Qb", name: "Muggsy Bogues", title: "Muggsy Bogues", start: 1987, end: 2001, active: false, commons: "Muggsy Bogues 2025 event.jpg" }], { nowYear: 2026, fetchImpl: async (u, o) => {
+    const q = new URLSearchParams(String(o.body));
+    if (q.get("prop") === "images") return { ok: true, status: 200, json: async () => ({ query: { pages: [{ title: "Muggsy Bogues", images: [] }] } }) };
+    return { ok: true, status: 200, json: async () => ({ query: { pages: q.get("titles").split("|").map(t => ({ title: t, imagerepository: "shared", imageinfo: [{ width: 900, height: 1200, extmetadata: { DateTimeOriginal: { value: "2025-01-28" } } }] })) } }) };
+  } });
+  ok(!era.has("Qb") && era.offEra.has("Qb"), "a Wikidata photo from 2025 for a career that ended in 2001 is flagged off-era");
+  const nba = "https://cdn.nba.com/headshots/nba/latest/1040x760/177.png", c18 = "https://commons.wikimedia.org/wiki/Special:FilePath/Muggsy%20Bogues%202025%20event.jpg?width=360";
+  ok(cardOf({ id: "Qb", name: "Muggsy Bogues", active: 0, offEra: 1, img: [c18], commons: "x" }).i.length === 0 && cardOf({ id: "Qb", name: "M", active: 0, offEra: 1, hs: 1, img: [nba, c18], commons: "x" }).i.join() === nba, "off-era photo left out: a real headshot shows, else the initials");
+
+  const bytes = s => ({ ok: true, status: 200, arrayBuffer: async () => new TextEncoder().encode(s).buffer });
+  const pool = [{ id: "A", img: ["https://cdn.nba.com/headshots/nba/latest/1040x760/1.png", c18] }, { id: "B", img: ["https://cdn.nba.com/headshots/nba/latest/1040x760/2.png"] }, { id: "C", img: [c18] }];
+  await R2.checkHeadshots(pool, [{ url: "https://cdn.nba.com/headshots/nba/latest/1040x760/{id}.png", standin: "99999999" }], { fetchImpl: async u => u.includes("/2.png") || u.includes("99999999") ? bytes("silhouette") : bytes("real face") });
+  let down = 0;
+  const pool2 = [{ id: "D", img: ["https://cdn.nba.com/headshots/nba/latest/1040x760/4.png"] }];
+  await R2.checkHeadshots(pool2, [{ url: "https://cdn.nba.com/headshots/nba/latest/1040x760/{id}.png", standin: "99999999" }], { fetchImpl: async () => { down++; throw new Error("blocked"); } });
+  delete process.env.DLE_FAST;
+  ok(pool[0].hs === 1 && pool[0].img.length === 2 && !pool[1].hs && pool[1].img.length === 0 && !pool[2].hs, "NBA.com: a real headshot is marked, a stand-in silhouette dropped");
+  ok(pool2[0].img.length === 1 && !pool2[0].hs && down === 3, "NBA.com unreachable: headshots left as they are");
 }
 
 // ---------- 1b. placeDense keeps slots dense and writes only what moved ----------
