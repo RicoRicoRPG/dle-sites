@@ -225,6 +225,9 @@ const nightlyDb = db => db.nightly;
   const head = "https://a.espncdn.com/i/headshots/nfl/players/full/2330.png", p18 = commonsUrl("Tom Brady red carpet 2024.jpg");
   const ret = cardOf({ id: "Q1", name: "Tom Brady", active: 0, img: [head, p18], commons: "Tom Brady red carpet 2024.jpg", era: "Tom Brady 2011.jpg" });
   const act = cardOf({ id: "Q2", name: "X", active: 1, img: [head, p18], commons: "x.jpg", era: "Tom Brady 2011.jpg" });
+  const noEraHs = cardOf({ id: "Q3", name: "Peyton Manning", active: 0, hs: 1, img: [head, p18], commons: "x.jpg" });
+  const noEraNba = cardOf({ id: "Q4", name: "David Robinson", active: 0, img: ["https://cdn.nba.com/headshots/nba/latest/1040x760/764.png", p18], commons: "x.jpg" });
+  ok(noEraHs.i[0] === head && noEraNba.i[0] === p18, "no career photo: a real league headshot leads (ESPN, MLB); NBA.com's may be a silhouette, so the Commons photo leads");
   ok(ret.i[0] === commonsUrl("Tom Brady 2011.jpg") && ret.i.length === 3 && act.i[0] === head && act.i[1] === commonsUrl("Tom Brady 2011.jpg") && act.i[2] === p18, "cards: retired lead with the career photo; active keep the league headshot first, then the career photo");
 }
 
