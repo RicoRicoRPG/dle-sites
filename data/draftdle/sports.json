@@ -39,7 +39,7 @@
     ["power forward", "PF", "all"], ["^center|^centre", "C", "all"], ["guard", "G", "all"], ["forward", "F", "all"]
    ],
    "anyPosition": "all",
-   "headshots": [{ "prop": "P3647", "expectLabel": "NBA.com", "url": "https://cdn.nba.com/headshots/nba/latest/1040x760/{id}.png" }]
+   "headshots": [{ "prop": "P3647", "expectLabel": "NBA.com", "url": "https://cdn.nba.com/headshots/nba/latest/1040x760/{id}.png", "standin": "99999999" }]
   },
   {
    "id": "mlb", "name": "MLB", "group": "US leagues", "wave": 1,
