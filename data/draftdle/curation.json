@@ -1,9 +1,22 @@
 {
   "exclude": {
-    "nfl": ["Q220556", "Q275971"]
+    "nfl": [
+      "Q220556",
+      "Q275971"
+    ]
   },
   "notes": {
     "Q220556": "Brock Lesnar: preseason only; famous for wrestling",
-    "Q275971": "Roman Reigns: practice squads only; famous for wrestling"
+    "Q275971": "Roman Reigns: practice squads only; famous for wrestling",
+    "photos": "Per-sport photo picks: a Commons file name, or false for no career photo. Q221482 Jim Thorpe, Q954184 Deion Sanders."
+  },
+  "photos": {
+    "mlb": {
+      "Q221482": false
+    },
+    "nfl": {
+      "Q954184": false,
+      "Q221482": "Jim Thorpe Canton Bulldogs 1915-20.jpg"
+    }
   }
 }
