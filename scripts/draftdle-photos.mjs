@@ -20,7 +20,7 @@ const PHOTO = /\.(jpe?g|png|webp|tiff?)$/i;
 const NOT_HIM = /statue|sculpture|bust\b|mural|grave|tomb|plaque|memorial|signature|autograph|logo|wordmark|jersey|banner|retired[ _]number|trophy|ring\b|stadium|arena|field\b|park\b|house|street|mansion|card\b|stamp|coin|poster|cover|map\b|cartoon|caricature|wax|museum/i;
 const SUFFIX = /^(jr|sr|ii|iii|iv|v)\.?$/i;
 // Off-the-field occasions: kept as a last resort, behind anything from a game.
-const OFF_FIELD = /premiere|red carpet|award|ceremony|gala|white house|govt|government|senate|congress|visit|meeting|speech|rally|campaign|wedding|interview|conference|television|\btv\b|episode|\bshow\b|film|movie|press|book signing|fundrais|charity|concert|medical center|hospital|military|troops|parade/i;
+const OFF_FIELD = /premiere|red carpet|award|ceremony|gala|white house|govt|government|senate|congress|visit|meeting|speech|rally|campaign|wedding|interview|conference|television|\btv\b|episode|\bshow\b|film|movie|press|book signing|fundrais|charity|concert|medical center|hospital|military|troops|parade|panel|comic-?con|convention|festival|screening|expo\b|summit|podcast|launch|celebrity|cast members|actors?\b|actress/i;
 const IN_GAME = /\b(vs\.?|versus|against|game|match|playing|plays|pitch(ing|es)?|batting|at bat|dunk|shoot(ing|s)?|rush(ing|es)?|pass(ing|es)?|throw(ing|s)?|tackl|skat|goal|warm[- ]?up|practice|training camp|huddle|layup|free throw|on court|on ice|scrimmage|season|playoffs?|final|bowl|series|all-star)\b/i;
 
 export const fold = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
@@ -57,13 +57,13 @@ export function choosePhoto(p, cands, nowYear = new Date().getUTCFullYear()) {
     if (!inName && !inText && !c.p18) continue;
     // Checked with his name taken out, so a Park, a Field or a House isn't thrown away.
     if (NOT_HIM.test(fold(c.file).split(sn).join(" ")) || NOT_HIM.test(fold(c.text).slice(0, 200).split(sn).join(" "))) continue;
-    if (c.width && c.width < 200) continue;
+    if (c.width && c.width < 120) continue;
     const core = c.year >= p.start && c.year <= last;
     const tall = c.height && c.width ? c.height >= c.width * 0.75 : true;
     const about = fold(c.file + " " + c.text);
     const team = (p.teams || []).some(t => t && t.length > 2 && about.includes(fold(t)));
     const score = (inName ? 4 : inText ? 2 : 0) + (team ? 3 : 0) + (IN_GAME.test(about) ? 2 : 0) - (OFF_FIELD.test(about) ? 4 : 0)
-      + (c.p18 ? 2 : 0) + (core ? 1 : 0) + (tall ? 1 : 0);
+      + (c.p18 ? 2 : 0) + (core ? 1 : 0) + (tall ? 1 : 0) - (c.width && c.width < 250 ? 1 : 0);
     if (score > bestScore) { best = c; bestScore = score; }
   }
   return best ? best.file : null;
@@ -73,8 +73,10 @@ export function choosePhoto(p, cands, nowYear = new Date().getUTCFullYear()) {
 // photos by distance from the playing years; undated ones after; his own category and P18 win ties.
 // Video games and other products named after players: "Madden NFL", "NBA 2K".
 const GAME_TITLE = /video ?game|madden nfl|\bnba ?2k|\bnba live\b|\bnhl ?\d\d|\bfifa ?\d\d|\bmlb the show|\bea sports|screenshot|box art|\bcast\b|\bas [a-z]+ in\b/;
-const SPORT_WORDS = /\b(uniform|football|basketball|baseball|hockey|soccer|footballer|quarterback|linebacker|goalie|goaltender|goalkeeper|pitcher|catcher|infielder|outfielder|guard|forward|center|centre|defen[cs]eman|striker|midfielder|rookie|draft|nfl|nba|wnba|nhl|mlb)\b/;
-const sporty = (p, about) => IN_GAME.test(about) || SPORT_WORDS.test(about) || (p.teams || []).some(t => t && t.length > 2 && about.includes(fold(t)));
+// Words that only turn up around sport (not "center", "forward" or "series", which a film panel
+// or a press event can have too).
+const SPORT_WORDS = /\b(uniform|football|basketball|baseball|hockey|soccer|footballer|quarterback|running back|wide receiver|linebacker|cornerback|lineman|goalie|goaltender|goalkeeper|pitcher|pitching|catcher|infielder|outfielder|shortstop|defen[cs]eman|striker|midfielder|point guard|power forward|touchdown|home run|slam dunk|layup|faceoff|nfl|nba|wnba|nhl|mlb|ncaa|super bowl|stanley cup|world series|all-star|playoffs?)\b|\bvs\.? |\bversus\b/;
+const sporty = (p, about) => SPORT_WORDS.test(about) || (p.teams || []).some(t => t && t.length > 2 && about.includes(fold(t)));
 
 // Whole name, letters only: "Terry Crews" in "Terry Crews as Julius", not "Madden NFL 07".
 const plain = s => fold(s).replace(/\([^)]*\)/g, " ").replace(/[^a-z]+/g, " ").trim();
@@ -83,7 +85,7 @@ export function closestPhoto(p, cands, nowYear = new Date().getUTCFullYear()) {
   const last = p.active || !p.end ? nowYear : p.end;
   let best = null, bestScore = -Infinity;
   for (const c of cands) {
-    if (!PHOTO.test(c.file) || (c.width && c.width < 200)) continue;
+    if (!PHOTO.test(c.file) || (c.width && c.width < 120)) continue;
     const about = fold(c.file + " " + c.text);
     // Another photo of the player, not one that only shares his surname; nothing from a TV show,
     // a film or a game (Wikidata's own photo is the fallback for those).
