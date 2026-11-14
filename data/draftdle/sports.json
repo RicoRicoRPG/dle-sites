@@ -39,7 +39,7 @@
     ["power forward", "PF", "all"], ["^center|^centre", "C", "all"], ["guard", "G", "all"], ["forward", "F", "all"]
    ],
    "anyPosition": "all",
-   "headshots": [{ "prop": "P3647", "expectLabel": "NBA.com", "url": "https://cdn.nba.com/headshots/nba/latest/1040x760/{id}.png", "standin": "99999999" }]
+   "headshots": [{ "prop": "P3647", "expectLabel": "NBA.com", "url": "https://cdn.nba.com/headshots/nba/latest/1040x760/{id}.png", "standin": "99999999" }, {"prop": "P3685", "expectLabel": "ESPN", "url": "https://a.espncdn.com/i/headshots/nba/players/full/{id}.png", "real": true}]
   },
   {
    "id": "mlb", "name": "MLB", "group": "US leagues", "wave": 1,
@@ -63,7 +63,7 @@
     ["goaltender|goalie|goalkeeper", "G", "g"], ["^centre|^center", "C", "s"], ["left wing", "LW", "s"],
     ["right wing", "RW", "s"], ["wing", "W", "s"], ["defence|defense", "D", "s"], ["forward", "F", "s"]
    ],
-   "headshots": []
+   "headshots": [{"prop": "P3522", "expectLabel": "NHL", "url": "https://assets.nhle.com/mugs/nhl/latest/{id}.png", "standin": "99999999"}, {"prop": "P3687", "expectLabel": "ESPN", "url": "https://a.espncdn.com/i/headshots/nhl/players/full/{id}.png", "real": true}]
   },
   {
    "id": "soccer", "name": "Soccer", "group": "Soccer", "wave": 1,
@@ -75,7 +75,7 @@
     ["goalkeeper", "GK", "gk"], ["back|defender|sweeper|libero", "DF", "out"], ["midfielder|playmaker", "MF", "out"],
     ["forward|striker|winger|attacker", "FW", "out"]
    ],
-   "headshots": []
+   "headshots": [{"prop": "P3681", "expectLabel": "ESPN", "url": "https://a.espncdn.com/i/headshots/soccer/players/full/{id}.png", "real": true}]
   },
   {
    "id": "wnba", "name": "WNBA", "group": "US leagues", "wave": 1,
@@ -87,7 +87,7 @@
     ["power forward", "PF", "all"], ["^center|^centre", "C", "all"], ["guard", "G", "all"], ["forward", "F", "all"]
    ],
    "anyPosition": "all",
-   "headshots": []
+   "headshots": [{"prop": "P3588", "expectLabel": "WNBA", "url": "https://cdn.wnba.com/headshots/wnba/latest/1040x760/{id}.png", "standin": "99999999"}]
   }
  ]
 }
