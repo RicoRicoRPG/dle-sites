@@ -3,11 +3,18 @@
 // from the playing years too, in games or team portraits. We read the date of every photo the
 // article uses, plus P18, and keep the best one taken during the career that names the player.
 //
-// eraPhotos(players, opts) -> Map id -> Commons file name (no "File:" prefix); .offEra is the
-// Set of ids whose Wikidata photo (P18) is dated outside their playing years.
-//   players: [{ id, name, title, start, end, active, commons, teams }]
+// When the article has nothing from the career, the player's own Commons category is searched
+// (usually full of game photos), and failing that a Commons search by name. Every player who has
+// any photo at all gets one: if none is from the career, the closest-dated one (alt).
+//
+// eraPhotos(players, opts) -> Map id -> Commons file name (no "File:" prefix), with
+//   .alt    Map id -> the closest photo when none is from the career
+//   .offEra Set of ids whose Wikidata photo (P18) is dated outside their playing years
+//   players: [{ id, name, title, start, end, active, commons, teams, category? }]
 
 const API = "https://en.wikipedia.org/w/api.php";
+const COMMONS = "https://commons.wikimedia.org/w/api.php";
+const WIKIDATA = "https://www.wikidata.org/w/api.php";
 const PHOTO = /\.(jpe?g|webp|tiff?)$/i;
 // Things that name the player without showing them playing.
 const NOT_HIM = /statue|sculpture|bust\b|mural|grave|tomb|plaque|memorial|signature|autograph|logo|wordmark|jersey|banner|retired[ _]number|trophy|ring\b|stadium|arena|field\b|park\b|house|street|mansion|card\b|stamp|coin|poster|cover|map\b|cartoon|caricature|wax|museum/i;
@@ -45,7 +52,7 @@ export function choosePhoto(p, cands, nowYear = new Date().getUTCFullYear()) {
   for (const c of cands) {
     if (!PHOTO.test(c.file) || c.year == null) continue;
     if (c.year < p.start - 1 || c.year > last + 1) continue;
-    const inName = fold(c.file).includes(sn);
+    const inName = fold(c.file).includes(sn) || !!c.own;
     const inText = fold(c.text).includes(sn);
     if (!inName && !inText && !c.p18) continue;
     // Checked with his name taken out, so a Park, a Field or a House isn't thrown away.
@@ -62,10 +69,28 @@ export function choosePhoto(p, cands, nowYear = new Date().getUTCFullYear()) {
   return best ? best.file : null;
 }
 
-async function post(params, { fetchImpl, ua }) {
+// No photo from the career: the one closest to it, so the card still shows the player. Dated
+// photos by distance from the playing years; undated ones after; his own category and P18 win ties.
+export function closestPhoto(p, cands, nowYear = new Date().getUTCFullYear()) {
+  const sn = surname(p.name);
+  const last = p.active || !p.end ? nowYear : p.end;
+  let best = null, bestScore = -Infinity;
+  for (const c of cands) {
+    if (!PHOTO.test(c.file) || (c.width && c.width < 200)) continue;
+    const about = fold(c.file + " " + c.text);
+    if (!(c.own || c.p18 || (sn && about.includes(sn)))) continue;
+    if (sn && (NOT_HIM.test(fold(c.file).split(sn).join(" ")))) continue;
+    const dist = c.year == null || !p.start ? 40 : c.year < p.start ? p.start - c.year : c.year > last ? c.year - last : 0;
+    const score = -dist + (c.p18 ? 0.5 : 0) + (c.own ? 0.3 : 0) - (OFF_FIELD.test(about) ? 3 : 0) + (IN_GAME.test(about) ? 1 : 0);
+    if (score > bestScore) { best = c; bestScore = score; }
+  }
+  return best ? best.file : null;
+}
+
+async function post(params, { fetchImpl, ua, api = API }) {
   for (let t = 0; t < 4; t++) {
     try {
-      const res = await fetchImpl(API, { method: "POST", body: new URLSearchParams({ format: "json", formatversion: "2", ...params }),
+      const res = await fetchImpl(api, { method: "POST", body: new URLSearchParams({ format: "json", formatversion: "2", ...params }),
         headers: { "User-Agent": ua || "Draftdle", Accept: "application/json", "Content-Type": "application/x-www-form-urlencoded" },
         signal: AbortSignal.timeout(30000) });
       if (res.ok) { const j = await res.json(); if (!j.error) return j; }
@@ -131,16 +156,114 @@ export async function eraPhotos(players, { fetchImpl = globalThis.fetch, ua, log
     if ((i / 50 + 1) % 40 === 0) log(`  photo dates ${Math.min(i + 50, all.length)}/${all.length}`);
   }
 
-  // 3. choose
+  // 3. choose from the article
+  const cands = new Map();
+  for (const p of withTitle) cands.set(p.id, (filesOf.get(p.id) || []).map(f => ({ file: f, p18: f === p.commons, ...(info.get(f) || { year: null, text: "" }) })));
+  const alt = new Map();
+  let fromArticle = 0, fromCategory = 0, fromSearch = 0;
   for (const p of withTitle) {
-    const cands = (filesOf.get(p.id) || []).map(f => ({ file: f, p18: f === p.commons, ...(info.get(f) || { year: null }) }));
-    const pick = choosePhoto(p, cands, nowYear);
-    if (pick) out.set(p.id, pick);
-    const own = cands.find(c => c.p18);
+    const pick = choosePhoto(p, cands.get(p.id), nowYear);
+    if (pick) { out.set(p.id, pick); fromArticle++; }
+    const own = cands.get(p.id).find(c => c.p18);
     const last = p.active || !p.end ? nowYear : p.end;
     if (own && own.year != null && (own.year < p.start - 1 || own.year > last + 1)) offEra.add(p.id);
   }
+
+  // 4. nothing from the career in the article: the player's own Commons category
+  const need = withTitle.filter(p => !out.has(p.id));
+  const cats = await categoriesOf(need.filter(p => p.category === undefined).map(p => p.id), { fetchImpl, ua });
+  const commonsInfo = async titles => {
+    const got = [];
+    for (let i = 0; i < titles.length; i += 50) {
+      const j = await post({ action: "query", prop: "imageinfo", iiprop: "extmetadata|size", iiextmetadatafilter: "DateTimeOriginal|ImageDescription|ObjectName",
+        titles: titles.slice(i, i + 50).join("|") }, { fetchImpl, ua, api: COMMONS });
+      for (const pg of j?.query?.pages || []) {
+        const ii = pg.imageinfo?.[0];
+        if (!ii) continue;
+        const f = pg.title.replace(/^File:/, ""), meta = ii.extmetadata || {};
+        got.push({ file: f, year: photoYear(meta, f), width: ii.width, height: ii.height,
+          text: [meta.ObjectName?.value, meta.ImageDescription?.value].filter(Boolean).join(" ").replace(/<[^>]+>/g, " ") });
+      }
+    }
+    return got;
+  };
+  const filesIn = async cat => {
+    const j = await post({ action: "query", list: "categorymembers", cmtitle: "Category:" + cat, cmtype: "file|subcat", cmlimit: "200" }, { fetchImpl, ua, api: COMMONS });
+    const m = j?.query?.categorymembers || [];
+    return { files: m.filter(x => x.ns === 6).map(x => x.title).filter(t => PHOTO.test(t)), subcats: m.filter(x => x.ns === 14).map(x => x.title.replace(/^Category:/, "")) };
+  };
+  const queue = [...need];
+  await Promise.all(Array.from({ length: 4 }, async () => {
+    while (queue.length) {
+      const p = queue.shift();
+      const cat = p.category !== undefined ? p.category : cats.get(p.id);
+      let extra = [];
+      if (cat) {
+        const top = await filesIn(cat);
+        let titles = top.files.slice(0, 150);
+        // "Michael Jordan in 1997", "Dawn Staley with the Houston Comets": one level down.
+        const sn = surname(p.name);
+        for (const sub of top.subcats.filter(c => fold(c).includes(sn)).slice(0, 8)) titles = titles.concat((await filesIn(sub)).files.slice(0, 60));
+        extra = (await commonsInfo([...new Set(titles)])).map(c => ({ ...c, own: true }));
+        const pick = choosePhoto(p, extra, nowYear);
+        if (pick) { out.set(p.id, pick); fromCategory++; continue; }
+      }
+      let all = cands.get(p.id).concat(extra);
+      // 5. nobody has anything: search Commons by name, keeping files that give the whole name
+      if (!all.some(c => c.own || c.p18 || fold(c.file + " " + c.text).includes(surname(p.name)))) {
+        const j = await post({ action: "query", list: "search", srnamespace: "6", srlimit: "30", srsearch: `"${p.name.replace(/\s*\([^)]*\)/g, "")}"` }, { fetchImpl, ua, api: COMMONS });
+        const whole = fold(p.name.replace(/\s*\([^)]*\)/g, "")).replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
+        const found = (await commonsInfo((j?.query?.search || []).map(x => x.title).filter(t => PHOTO.test(t))))
+          .filter(c => fold(c.file + " " + c.text).replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").includes(whole));
+        const pick = choosePhoto(p, found, nowYear);
+        if (pick) { out.set(p.id, pick); fromSearch++; continue; }
+        all = all.concat(found);
+      }
+      const near = closestPhoto(p, all, nowYear);
+      if (near && near !== p.commons) alt.set(p.id, near);
+    }
+  }));
   out.offEra = offEra;
-  log(`  in-career photos for ${out.size} of ${withTitle.length} players (${all.length} photos checked)`);
+  out.alt = alt;
+  log(`  in-career photos for ${out.size} of ${withTitle.length} players (article ${fromArticle}, Commons category ${fromCategory}, Commons search ${fromSearch}); closest photo for ${alt.size} more (${all.length} article photos checked)`);
+  return out;
+}
+
+// Each player's Commons category (P373), from Wikidata.
+export async function categoriesOf(ids, { fetchImpl = globalThis.fetch, ua } = {}) {
+  const out = new Map();
+  for (let i = 0; i < ids.length; i += 50) {
+    for (let t = 0; t < 3; t++) {
+      try {
+        const res = await fetchImpl(`${WIKIDATA}?action=wbgetentities&format=json&props=claims&ids=${ids.slice(i, i + 50).join("|")}`,
+          { headers: { "User-Agent": ua || "Draftdle", Accept: "application/json" }, signal: AbortSignal.timeout(30000) });
+        if (!res.ok) throw new Error(String(res.status));
+        const j = await res.json();
+        for (const [id, e] of Object.entries(j.entities || {})) {
+          const v = e.claims?.P373?.[0]?.mainsnak?.datavalue?.value;
+          if (v) out.set(id, v);
+        }
+        break;
+      } catch { await new Promise(r => setTimeout(r, process.env.DLE_FAST ? 1 : 2000 * (t + 1))); }
+    }
+  }
+  return out;
+}
+
+// Titles of the English Wikipedia articles for Wikidata ids (for re-running photos on built pools).
+export async function enTitles(ids, { fetchImpl = globalThis.fetch, ua } = {}) {
+  const out = new Map();
+  for (let i = 0; i < ids.length; i += 50) {
+    for (let t = 0; t < 3; t++) {
+      try {
+        const res = await fetchImpl(`${WIKIDATA}?action=wbgetentities&format=json&props=sitelinks&sitefilter=enwiki&ids=${ids.slice(i, i + 50).join("|")}`,
+          { headers: { "User-Agent": ua || "Draftdle", Accept: "application/json" }, signal: AbortSignal.timeout(30000) });
+        if (!res.ok) throw new Error(String(res.status));
+        const j = await res.json();
+        for (const [id, e] of Object.entries(j.entities || {})) if (e.sitelinks?.enwiki?.title) out.set(id, e.sitelinks.enwiki.title);
+        break;
+      } catch { await new Promise(r => setTimeout(r, process.env.DLE_FAST ? 1 : 2000 * (t + 1))); }
+    }
+  }
   return out;
 }

@@ -322,13 +322,7 @@ async function refreshSport(sport, nowYear, q, views, infobox, photos, headshotC
   // Hand picks win: a file name, or false for "no career photo" (two-sport players whose only
   // photos from those years are from the other sport).
   const pick = (read(p("data/draftdle/curation.json"), {}).photos || {})[sport.id] || {};
-  for (const pl of pool) {
-    const v = Object.hasOwn(pick, pl.id) ? pick[pl.id] : era.get(pl.id);
-    if (v) pl.era = v;
-    // Wikidata's photo dated outside the playing years: a retired card without a career photo
-    // leaves it out (see cardOf).
-    else if (!pl.active && era.offEra?.has(pl.id)) pl.offEra = 1;
-  }
+  placePhotos(pool, era, pick);
   await headshotCheck(pool, headshots, { log });
   log(`${sport.id}: kept ${pool.length} (dropped ${noName} without a name, ${noPos} without a usable position, ${noTeams} without a listed team, ${coaches} coaches or executives, ${noYears} with no playing years)`);
   return pool;
@@ -369,6 +363,39 @@ export async function refresh(ids = [], { q = sparql, views = enViews, infobox =
   if (failed.length) { console.error(`failed: ${failed.join(", ")}`); process.exitCode = 1; }
 }
 
+// Write what the photo search found onto pool players: era (from the career), alt (closest other
+// photo, when there's no era one), offEra (Wikidata's photo is from outside the career). A hand
+// pick in curation.json wins; false means "no career photo" and no stand-in either.
+export function placePhotos(pool, found, pick = {}) {
+  for (const pl of pool) {
+    delete pl.era; delete pl.alt; delete pl.offEra;
+    const curated = Object.hasOwn(pick, pl.id);
+    const v = curated ? pick[pl.id] : found.get(pl.id);
+    if (v) { pl.era = v; continue; }
+    if (!pl.active && found.offEra?.has(pl.id)) pl.offEra = 1;
+    if (!curated && found.alt?.has(pl.id)) pl.alt = found.alt.get(pl.id);
+  }
+}
+
+// Only the photo search, on the pools already built: no Wikidata rebuild needed.
+export async function recheckPhotos(ids = [], opts = {}) {
+  const { eraPhotos, enTitles } = await import("./draftdle-photos.mjs");
+  const cfg = read(p("data/draftdle/sports.json"));
+  const pick = read(p("data/draftdle/curation.json"), {}).photos || {};
+  const nowYear = new Date().getUTCFullYear();
+  const span = y => { const m = String(y).match(/^(\d{4})(?:–(\d{4}|present))?$/); return m ? [Number(m[1]), m[2] === "present" ? null : Number(m[2] || m[1])] : [null, null]; };
+  for (const sport of cfg.sports.filter(s => !ids.length || ids.includes(s.id))) {
+    const file = p("data/draftdle", sport.id, "pool.json");
+    const pool = read(file, []);
+    if (!pool.length) continue;
+    console.log(`${sport.id}: photos`);
+    const titles = await enTitles(pool.map(pl => pl.id), { ua: UA });
+    const found = await eraPhotos(pool.map(pl => { const [start, end] = span(pl.years); return { id: pl.id, name: pl.name, title: titles.get(pl.id), start, end, active: !!pl.active, commons: pl.commons, teams: pl.teams }; }), { ua: UA, log: console.log, nowYear, ...opts });
+    placePhotos(pool, found, pick[sport.id] || {});
+    write(file, pool);
+  }
+}
+
 // Only the headshot check, on the pools already built: cheap enough for every scheduled run.
 export async function recheckHeadshots(ids = [], opts = {}) {
   const cfg = read(p("data/draftdle/sports.json"));
@@ -385,5 +412,6 @@ export async function recheckHeadshots(ids = [], opts = {}) {
 if (import.meta.url === `file://${process.argv[1]}`) {
   const args = process.argv.slice(2);
   if (args[0] === "--headshots") await recheckHeadshots(args.slice(1));
+  else if (args[0] === "--photos") await recheckPhotos(args.slice(1));
   else await refresh(args);
 }

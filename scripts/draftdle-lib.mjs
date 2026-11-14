@@ -226,18 +226,18 @@ export function freezeDaily(eligible, seedStr, { rounds = 10, recentPlayers = ne
 // real (hs), else with the Wikidata photo.
 export const commonsUrl = f => "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(f) + "?width=360";
 export function cardOf(p) {
-  let img = p.img || [];
-  const era = p.era ? commonsUrl(p.era) : null;
-  if (era) img = img.filter(u => u !== era);
-  if (!p.active) {
-    if (era) img = [era, ...img];
-    // Wikidata's photo is from before or after the career and there's no career photo: leave it
-    // out. The card shows a real league headshot if there is one, else the initials.
-    else if (p.offEra) img = img.filter(u => !u.includes("commons.wikimedia.org"));
-    else if (p.commons && !p.hs) { const c = img.find(u => u.includes("commons.wikimedia.org")); if (c) img = [c, ...img.filter(u => u !== c)]; }
-  } else if (era) {
-    const head = img.filter(u => !u.includes("commons.wikimedia.org"));
-    img = [...head, era, ...img.filter(u => u.includes("commons.wikimedia.org"))];
-  }
+  const era = p.era ? commonsUrl(p.era) : null, alt = p.alt ? commonsUrl(p.alt) : null;
+  const rest = (p.img || []).filter(u => u !== era && u !== alt);
+  const heads = rest.filter(u => !u.includes("commons.wikimedia.org")), commons = rest.filter(u => u.includes("commons.wikimedia.org"));
+  const A = alt ? [alt] : [];
+  let img;
+  // Every card ends on some photo of the player when one exists; the order says which first.
+  if (p.active) img = [...heads, ...(era ? [era] : []), ...A, ...commons];
+  else if (era) img = [era, ...heads, ...commons];
+  // Wikidata's photo is from before or after the career: a real headshot, then the closest other
+  // photo, and that one only as a last resort.
+  else if (p.offEra) img = [...heads, ...A, ...commons];
+  else if (commons.length && !p.hs) img = [...commons, ...A, ...heads];
+  else img = [...heads, ...A, ...commons];
   return { id: p.id, n: p.name, y: p.years, p: p.pos, t: p.teams, i: img, c: p.commons || "", a: p.active ? 1 : 0 };
 }
