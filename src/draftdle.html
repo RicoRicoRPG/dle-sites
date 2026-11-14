@@ -154,8 +154,11 @@ function artHTML(c){
 function creditHTML(idx){
   const img = document.querySelector(`.card[data-idx="${idx}"] img`);
   const c = (current() || [])[idx];
-  if (!img || !c || !c.c || !/commons\.wikimedia\.org/.test(img.currentSrc || img.src)) return '';
-  return ` · <span class="credit"><a href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(c.c.replace(/ /g,'_'))}" target="_blank" rel="noopener">photo: Wikimedia Commons</a></span>`;
+  // Credit the Commons file actually on screen (a career photo, or the Wikidata one).
+  const m = img && /commons\.wikimedia\.org\/wiki\/Special:FilePath\/([^?#]+)/.exec(img.currentSrc || img.src);
+  if (!c || !m) return '';
+  let file; try { file = decodeURIComponent(m[1]); } catch { file = m[1]; }
+  return ` · <span class="credit"><a href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(file.replace(/ /g,'_'))}" target="_blank" rel="noopener">photo: Wikimedia Commons</a></span>`;
 }
 function current(){ if (view.mode === 'daily' && daily) { const i = daily.revealed ? daily.picks.length - 1 : daily.picks.length; return daily.pairs[i] && daily.pairs[i].cards; } if (view.mode === 'endless' && run) return run.shown && run.shown.cards; return null; }
 function pct(x){ return Math.round(x * 100) + '%'; }
