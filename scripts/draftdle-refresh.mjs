@@ -15,6 +15,7 @@ import { p, read, write, sleep } from "./lib.mjs";
 import { infoboxes } from "./draftdle-infobox.mjs";
 import { createHash } from "node:crypto";
 import { eraPhotos } from "./draftdle-photos.mjs";
+import { cardOf } from "./draftdle-lib.mjs";
 
 const ENDPOINT = process.env.DRAFTDLE_SPARQL || "https://query.wikidata.org/sparql";
 const UA = "DraftdleBot/1.0 (https://draftdle.pages.dev; info@counterspell.dev) node-fetch";
@@ -147,42 +148,61 @@ export function teamsLine(sport, stmts, leagueTeams, nowYear) {
 
 const BROWSER_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36";
 
-// NBA.com answers a player it has no photo for with a stand-in silhouette rather than an error.
-// Compare each headshot with the stand-in: a real one can lead a retired card (hs); a stand-in
-// is dropped so the card falls through to a photo or the initials.
+// Check every league headshot a card might show. NBA.com, NHL.com and WNBA.com answer a player
+// they have no photo for with a stand-in silhouette (standin), so those are compared with it;
+// ESPN and MLB answer with an error (real), so a header request is enough. Missing ones and
+// stand-ins are dropped; a player with any headshot that checks out gets hs.
 export async function checkHeadshots(pool, headshots, { fetchImpl = globalThis.fetch, log = () => {}, concurrency = 8 } = {}) {
-  for (const h of headshots.filter(h => h.standin)) {
+  // Some image servers turn away clients that don't look like a browser; ask the way a page would.
+  const headers = { "User-Agent": BROWSER_UA, Accept: "image/avif,image/webp,image/png,image/*;q=0.8,*/*;q=0.5" };
+  // Per player: true once any headshot checks out, false if all checked ones were missing;
+  // unreachable answers leave a player as they were.
+  const verdict = new Map();
+  for (const h of headshots.filter(h => h.standin || h.real)) {
     const prefix = h.url.split("{id}")[0];
-    // NBA.com's CDN can turn away clients that don't look like a browser; ask the way a page would.
-    const headers = { "User-Agent": BROWSER_UA, Accept: "image/avif,image/webp,image/png,image/*;q=0.8,*/*;q=0.5", Referer: "https://www.nba.com/" };
     let lastStatus = "";
-    const digest = async url => {
+    // "missing" for a 4xx, a digest (stand-in sources) or "ok" (header check), null if unreachable.
+    const look = async url => {
       for (let t = 0; t < 3; t++) {
         try {
-          const res = await fetchImpl(url, { headers, signal: AbortSignal.timeout(20000) });
+          const res = await fetchImpl(url, { method: h.standin ? "GET" : "HEAD", headers: { ...headers, Referer: new URL(url).origin + "/" }, signal: AbortSignal.timeout(20000) });
           lastStatus = String(res.status);
-          if (res.ok) return createHash("sha1").update(Buffer.from(await res.arrayBuffer())).digest("hex");
-          if (res.status === 404) return "missing";
+          if (res.ok) return h.standin ? createHash("sha1").update(Buffer.from(await res.arrayBuffer())).digest("hex") : "ok";
+          if (res.status >= 400 && res.status < 500 && res.status !== 429) return "missing";
         } catch (e) { lastStatus = e.message || String(e); }
         await sleep(process.env.DLE_FAST ? 1 : 1000 * (t + 1));
       }
       return null;
     };
-    const standin = await digest(h.url.replace("{id}", h.standin));
-    if (!standin || standin === "missing") { log(`  ${prefix}: stand-in not reachable (${standin === "missing" ? "404" : lastStatus}); headshots left as they are`); continue; }
+    let standin = null;
+    if (h.standin) {
+      standin = await look(h.url.replace("{id}", h.standin));
+      if (!standin || standin === "missing") { log(`  ${prefix}: stand-in not reachable (${standin === "missing" ? "404" : lastStatus}); headshots left as they are`); continue; }
+    }
     const todo = pool.map(pl => [pl, (pl.img || []).find(u => u.startsWith(prefix))]).filter(([, u]) => u);
-    let real = 0, fake = 0, unknown = 0;
+    const results = [];
     await Promise.all(Array.from({ length: concurrency }, async () => {
-      while (todo.length) {
-        const [pl, url] = todo.shift();
-        const d = await digest(url);
-        if (d == null) { unknown++; continue; }
-        if (d === standin || d === "missing") { pl.img = pl.img.filter(u => u !== url); fake++; }
-        else { pl.hs = 1; real++; }
-      }
+      while (todo.length) { const [pl, url] = todo.shift(); results.push([pl, url, await look(url)]); }
     }));
-    log(`  ${prefix}: ${real} real headshots, ${fake} stand-ins dropped${unknown ? `, ${unknown} unchecked` : ""}`);
+    const real = results.filter(([, , d]) => d && d !== "missing" && d !== standin).length;
+    // Nothing at all came back as a real photo: the server is turning us away, not missing them all.
+    if (results.length >= 20 && real === 0) { log(`  ${prefix}: no headshot answered (${lastStatus}); left as they are`); continue; }
+    let fake = 0, unknown = 0;
+    for (const [pl, url, d] of results) {
+      if (d == null) { unknown++; continue; }
+      if (d === "missing" || d === standin) { pl.img = pl.img.filter(u => u !== url); fake++; if (!verdict.get(pl.id)) verdict.set(pl.id, false); }
+      else verdict.set(pl.id, true);
+    }
+    log(`  ${prefix}: ${real} real headshots, ${fake} missing or stand-ins dropped${unknown ? `, ${unknown} unchecked` : ""}`);
   }
+  for (const pl of pool) if (verdict.has(pl.id)) { if (verdict.get(pl.id)) pl.hs = 1; else delete pl.hs; }
+}
+
+// No photo of any kind after every source: not a card. A blank card helps nobody.
+export function dropPhotoless(pool, log = () => {}) {
+  const gone = pool.filter(pl => !cardOf(pl).i.length);
+  if (gone.length) log(`  no photo anywhere for ${gone.length}: ${gone.map(pl => pl.name).join(", ")}`);
+  return pool.filter(pl => cardOf(pl).i.length);
 }
 
 export function buildPlayer(sport, raw, leagueTeams, headshots, nowYear) {
@@ -313,7 +333,8 @@ async function refreshSport(sport, nowYear, q, views, infobox, photos, headshotC
     players.push(pl);
   }
   players.sort((a, b) => b.fame - a.fame || a.id.localeCompare(b.id));
-  const pool = players.slice(0, sport.poolSize).map((pl, i) => ({ ...pl, tier: tierOf(sport, i) }));
+  // A few extra, so players with no photo anywhere can be dropped and the pool still fills.
+  let pool = players.slice(0, Math.ceil(sport.poolSize * 1.15));
 
   // A photo from the playing years: retired cards lead with it, active ones show it after the
   // league headshot (itself a current-season portrait).
@@ -324,6 +345,7 @@ async function refreshSport(sport, nowYear, q, views, infobox, photos, headshotC
   const pick = (read(p("data/draftdle/curation.json"), {}).photos || {})[sport.id] || {};
   placePhotos(pool, era, pick);
   await headshotCheck(pool, headshots, { log });
+  pool = dropPhotoless(pool, log).slice(0, sport.poolSize).map((pl, i) => ({ ...pl, tier: tierOf(sport, i) }));
   log(`${sport.id}: kept ${pool.length} (dropped ${noName} without a name, ${noPos} without a usable position, ${noTeams} without a listed team, ${coaches} coaches or executives, ${noYears} with no playing years)`);
   return pool;
 }
@@ -408,13 +430,15 @@ export async function recheckPhotos(ids = [], opts = {}) {
 // Only the headshot check, on the pools already built: cheap enough for every scheduled run.
 export async function recheckHeadshots(ids = [], opts = {}) {
   const cfg = read(p("data/draftdle/sports.json"));
-  for (const sport of cfg.sports.filter(s => (!ids.length || ids.includes(s.id)) && (s.headshots || []).some(h => h.standin))) {
+  for (const sport of cfg.sports.filter(s => !ids.length || ids.includes(s.id))) {
     const file = p("data/draftdle", sport.id, "pool.json");
     const pool = read(file, []);
     if (!pool.length) continue;
     console.log(`${sport.id}: checking headshots`);
-    await checkHeadshots(pool, sport.headshots, { log: console.log, ...opts });
-    write(file, pool);
+    await checkHeadshots(pool, sport.headshots || [], { log: console.log, ...opts });
+    // Tiers keep their sizes; the next full rebuild backfills the dropped places.
+    const kept = dropPhotoless(pool, console.log);
+    write(file, kept.map((pl, i) => ({ ...pl, tier: tierOf(sport, i) })));
   }
 }
 

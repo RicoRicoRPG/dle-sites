@@ -71,6 +71,11 @@ export function choosePhoto(p, cands, nowYear = new Date().getUTCFullYear()) {
 
 // No photo from the career: the one closest to it, so the card still shows the player. Dated
 // photos by distance from the playing years; undated ones after; his own category and P18 win ties.
+// Video games and other products named after players: "Madden NFL", "NBA 2K".
+const GAME_TITLE = /video ?game|madden nfl|\bnba ?2k|\bnba live\b|\bnhl ?\d\d|\bfifa ?\d\d|\bmlb the show|\bea sports|screenshot|box art|\bcast\b|\bas [a-z]+ in\b/;
+const SPORT_WORDS = /\b(uniform|football|basketball|baseball|hockey|soccer|footballer|quarterback|linebacker|goalie|goaltender|goalkeeper|pitcher|catcher|infielder|outfielder|guard|forward|center|centre|defen[cs]eman|striker|midfielder|rookie|draft|nfl|nba|wnba|nhl|mlb)\b/;
+const sporty = (p, about) => IN_GAME.test(about) || SPORT_WORDS.test(about) || (p.teams || []).some(t => t && t.length > 2 && about.includes(fold(t)));
+
 // Whole name, letters only: "Terry Crews" in "Terry Crews as Julius", not "Madden NFL 07".
 const plain = s => fold(s).replace(/\([^)]*\)/g, " ").replace(/[^a-z]+/g, " ").trim();
 export function closestPhoto(p, cands, nowYear = new Date().getUTCFullYear()) {
@@ -84,7 +89,9 @@ export function closestPhoto(p, cands, nowYear = new Date().getUTCFullYear()) {
     // a film or a game (Wikidata's own photo is the fallback for those).
     const said = plain(c.file + " " + c.text);
     if (!(c.own || c.p18 || (whole && (said.includes(whole) || said.replace(/ /g, "").includes(whole.replace(/ /g, "")))))) continue;
-    if (!c.p18 && (OFF_FIELD.test(about) || /video ?game|\bnfl \d\d|\bnba 2k|\bnhl \d\d|\bfifa \d\d|screenshot|cast\b|as [a-z]+ in\b/.test(about))) continue;
+    if (!c.p18 && (OFF_FIELD.test(about) || GAME_TITLE.test(about))) continue;
+    // Wikidata already has a photo of him: another one only beats it if it looks like sport.
+    if (!c.p18 && p.commons && !sporty(p, about)) continue;
     if (sn && (NOT_HIM.test(fold(c.file).split(sn).join(" ")))) continue;
     const dist = c.year == null || !p.start ? 40 : c.year < p.start ? p.start - c.year : c.year > last ? c.year - last : 0;
     const score = -dist + (c.p18 ? 0.5 : 0) + (c.own ? 0.3 : 0) - (OFF_FIELD.test(about) ? 3 : 0) + (IN_GAME.test(about) ? 1 : 0);
