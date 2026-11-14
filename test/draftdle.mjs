@@ -275,6 +275,8 @@ const nightlyDb = db => db.nightly;
     && P.closestPhoto({ name: "Terry Crews", start: 1991, end: 1996 }, [cc("Everybody Hates Chris.jpg", 2005, "Terry Crews as Julius in the television series")], 2026) === null
     && P.closestPhoto({ name: "Eddie Giacomin", start: 1965, end: 1978 }, [cc("EddieGiacominNYR.png", null, "")], 2026) === "EddieGiacominNYR.png"
     && P.closestPhoto({ name: "Terry Crews", start: 1991, end: 1996, commons: "Terry Crews by Gage Skidmore 5.jpg" }, [cc("Everybody Hates Chris.jpg", 2005, "", { own: true }), cc("Terry Crews by Gage Skidmore 5.jpg", 2016, "", { p18: true })], 2026) === "Terry Crews by Gage Skidmore 5.jpg"
+    && P.closestPhoto({ name: "Terry Crews", start: 1991, end: 1996, commons: "Terry Crews by Gage Skidmore 5.jpg" }, [cc("Cody Cameron, Kris Pearn, Terry Crews, Anna Faris.jpg", 2013, "Panel at the convention center")], 2026) === null
+    && P.choosePhoto({ name: "Kordell Stewart", start: 1995, end: 2005 }, [cc("Kordell Stewart Pittsburgh Steelers 2002.jpg", 2002, "", { width: 176, height: 573 })], 2026) === "Kordell Stewart Pittsburgh Steelers 2002.jpg"
     && P.closestPhoto({ name: "John Madden", start: 1959, end: 1959, commons: "John Madden in 2007.jpg" }, [cc("Madden NFL - snow game (3785699843).jpg", 2009, "", { own: true })], 2026) === null,
     "closest photo: the whole name, not a video game or a TV role, and only sport beats Wikidata's photo; PNG portraits count");
   const altU = "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent("Old Guy 1975 hockey portrait.jpg") + "?width=360";
