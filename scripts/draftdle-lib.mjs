@@ -222,6 +222,8 @@ export function freezeDaily(eligible, seedStr, { rounds = 10, recentPlayers = ne
 // no photo of with a silhouette (not an error), so the page's fallback would never reach Commons.
 // Pictures in the order the card tries them. A photo from the playing years (era) leads for
 // retired players; active players keep the league headshot first, a current-season portrait.
+// Without an era photo a retired player leads with a league headshot only when it's known to be
+// real (hs), else with the Wikidata photo.
 export const commonsUrl = f => "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(f) + "?width=360";
 export function cardOf(p) {
   let img = p.img || [];
@@ -229,7 +231,7 @@ export function cardOf(p) {
   if (era) img = img.filter(u => u !== era);
   if (!p.active) {
     if (era) img = [era, ...img];
-    else if (p.commons) { const c = img.find(u => u.includes("commons.wikimedia.org")); if (c) img = [c, ...img.filter(u => u !== c)]; }
+    else if (p.commons && !p.hs) { const c = img.find(u => u.includes("commons.wikimedia.org")); if (c) img = [c, ...img.filter(u => u !== c)]; }
   } else if (era) {
     const head = img.filter(u => !u.includes("commons.wikimedia.org"));
     img = [...head, era, ...img.filter(u => u.includes("commons.wikimedia.org"))];

@@ -171,7 +171,10 @@ export function buildPlayer(sport, raw, leagueTeams, headshots, nowYear) {
   if (raw.image) img.push("https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(raw.image) + "?width=360");
   return {
     id: raw.id, name: raw.name, years, pos: pos.abbr, grp: pos.grp, teams: t.teams, img,
-    commons: raw.image || "", active: active ? 1 : 0, views: raw.views || 0, fame: fameOf(raw.views, raw.sitelinks, raw.hof)
+    commons: raw.image || "", active: active ? 1 : 0, views: raw.views || 0, fame: fameOf(raw.views, raw.sitelinks, raw.hof),
+    // ESPN and MLB answer a missing player with an error, so a headshot that loads is real;
+    // NBA.com answers with a stand-in silhouette, so its headshot can't lead for a retired player.
+    ...(headshots.some(h => h.real && raw.ext[h.prop]) ? { hs: 1 } : {})
   };
 }
 
