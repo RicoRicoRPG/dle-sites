@@ -270,6 +270,11 @@ const nightlyDb = db => db.nightly;
   ok(era.get("Ql") === "Rebecca Lobo Liberty 1999.jpg", `no photo anywhere else: a Commons search by name finds one (${era.get("Ql")})`);
   ok(!era.has("Qo") && era.alt.get("Qo") === "Old Guy 1975 portrait.jpg", `nothing from the career at all: the closest-dated photo, not a blank card (${era.alt.get("Qo")})`);
   const nba = "https://cdn.nba.com/headshots/nba/latest/1040x760/177.png", c18 = "https://commons.wikimedia.org/wiki/Special:FilePath/Muggsy%20Bogues%202025%20event.jpg?width=360";
+  const cc = (file, year, text = "", extra = {}) => ({ file, year, width: 800, height: 1000, text, ...extra });
+  ok(P.closestPhoto({ name: "John Madden", start: 1959, end: 1959 }, [cc("Warren Moon and Marshall Faulk playing Madden NFL 07.jpg", 2006)], 2026) === null
+    && P.closestPhoto({ name: "Terry Crews", start: 1991, end: 1996 }, [cc("Everybody Hates Chris.jpg", 2005, "Terry Crews as Julius in the television series")], 2026) === null
+    && P.closestPhoto({ name: "Eddie Giacomin", start: 1965, end: 1978 }, [cc("EddieGiacominNYR.png", null, "")], 2026) === "EddieGiacominNYR.png",
+    "closest photo: the whole name, not a video game or a TV role; PNG portraits count");
   const altU = "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent("Old Guy 1975 portrait.jpg") + "?width=360";
   ok(cardOf({ id: "Qb", name: "Muggsy Bogues", active: 0, offEra: 1, img: [c18], commons: "x" }).i.join() === c18
     && cardOf({ id: "Qb", name: "M", active: 0, offEra: 1, hs: 1, img: [nba, c18], commons: "x" }).i.join() === [nba, c18].join()
