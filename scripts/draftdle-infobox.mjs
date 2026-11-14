@@ -107,13 +107,15 @@ export function infoboxYears(text, kind, nowYear = new Date().getUTCFullYear(), 
     end = /present/i.test(f.career_end || "") ? null : first(f.career_end || "");
     if (start && !f.career_end) active = true;
     if (/present/i.test(f.career_end || "")) active = true;
-    // career_start/end cover a whole pro career (Giannis from Greece in 2011); the season rows
-    // say which were in the league. Rows also cover boxes that leave career_start blank.
-    const rows = seasonList(f, "years");
-    const league = leagueRows(rows, leagues);
-    if (league !== rows || (!start && !end)) {
-      const s = spans(league);
-      if (s.lo) { start = s.lo; end = s.open ? null : s.hi; active = s.open; }
+    // career_start/end cover a whole pro career (Giannis from Greece in 2011); the season rows,
+    // when there are any, say which were in the league and when the last one ended.
+    const rows = seasonList(f, "years"), league = leagueRows(rows, leagues), s = spans(league);
+    if (league !== rows && s.lo) { start = s.lo; end = s.open ? null : s.hi; active = s.open; }
+    else if (s.lo) {
+      // Unmarked rows can include youth clubs (Marta Xargay from 1996), so they only fill gaps:
+      // a missing start, or a career_end nobody filled in (Chasity Melvin, 1999–2010).
+      if (!start) start = s.lo;
+      if (end == null && !/present/i.test(f.career_end || "")) { if (s.open) active = true; else { end = s.hi; active = false; } }
     }
   } else if (box.kind === "baseball") {
     start = first(f.debutyear || f.debutdate || "");
@@ -129,7 +131,7 @@ export function infoboxYears(text, kind, nowYear = new Date().getUTCFullYear(), 
     start = s.lo; end = s.open ? null : s.hi; if (s.lo) active = s.open;
   }
   // A box with a coaching career and no playing seasons: a coach or executive, not a player.
-  if (!start && !end && Object.keys(f).some(k => /^(coach|cyears|cteam|coaching|exec|gm_)/.test(k))) return { coachOnly: true };
+  if (!start && !end && Object.keys(f).some(k => /^(coach|cyears|cteam|coaching|exec|gm_|regular_record|playoff_record|overall_record|pfr_coach|record$)/.test(k))) return { coachOnly: true };
   if (end && end > nowYear) end = null;
   if (end != null) active = false;
   // An "active" career that started 30+ years ago is a stale article, not a player.
