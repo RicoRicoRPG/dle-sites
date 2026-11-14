@@ -17,6 +17,10 @@ on:
         description: "Rebuild every player pool from Wikidata first"
         type: boolean
         default: false
+      photos:
+        description: "Re-run the photo search on the current pools (no rebuild)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -68,6 +72,9 @@ jobs:
           if [ "${{ inputs.refresh }}" = "true" ]; then node scripts/draftdle-refresh.mjs || echo "::warning::Some Draftdle pools failed to refresh; see the log above"
           elif [ -n "$missing" ]; then node scripts/draftdle-refresh.mjs $missing || echo "::warning::Some Draftdle pools failed to build; see the log above"
           else echo "all pools present"; fi
+      - name: Photo search
+        if: inputs.photos == true && inputs.refresh != true
+        run: node scripts/draftdle-refresh.mjs --photos || echo "::warning::Photo search failed; see the log above"
       - name: Headshot check
         if: github.event_name != 'push' && inputs.refresh != true
         run: node scripts/draftdle-refresh.mjs --headshots || echo "::warning::Headshot check failed; see the log above"
