@@ -1,9 +1,11 @@
 name: Weekly data refresh
 
-# Mondays 03:40 UTC:
-# - re-pull every Speedrundle world record from the speedrun.com API (about 20 minutes at its rate limit)
-# - refresh Peakdle's Steam header image paths and drop apps Steam marks adult-only
-# Commits the results; the next daily run builds puzzles and pages from them.
+# Mondays 03:40 UTC, two jobs that each commit their own data:
+# - records: re-pull every Speedrundle world record from the speedrun.com API (about 25 minutes at
+#   its rate limit), refresh CCUdle's Steam image paths and prices, drop apps Steam marks adult-only
+# - draftdle: rebuild Draftdle's player pools from Wikidata (two hours or more)
+# They used to share one job, and the Draftdle step ran the job past its time limit before anything
+# was committed, so the world records were never refreshed.
 on:
   schedule:
     - cron: "40 3 * * 1"
@@ -13,9 +15,9 @@ permissions:
   contents: write
 
 jobs:
-  refresh:
+  records:
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -23,8 +25,26 @@ jobs:
           node-version: 22
       - name: Refresh world records
         run: node scripts/speedrundle-refresh.mjs
-      - name: Refresh Steam images
+      - name: Refresh Steam images and prices
         run: node scripts/peakdle-assets.mjs
+      - name: Commit
+        run: |
+          git config user.name "dle-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/speedrundle/records.json data/peakdle/pool.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Weekly data $(date -u +%F)"
+            for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done
+          fi
+
+  draftdle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - name: Refresh Draftdle player pools (Wikidata)
         continue-on-error: true
         run: node scripts/draftdle-refresh.mjs
@@ -32,9 +52,8 @@ jobs:
         run: |
           git config user.name "dle-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/speedrundle/records.json data/peakdle/pool.json data/draftdle
+          git add data/draftdle
           if ! git diff --cached --quiet; then
-            git commit -m "Weekly data $(date -u +%F)"
-            git pull --rebase
-            git push
+            git commit -m "Weekly Draftdle pools $(date -u +%F)"
+            for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done
           fi
