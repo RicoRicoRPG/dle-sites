@@ -8,6 +8,7 @@
 import fs from "node:fs";
 import { p, read, utcDay, now, addDays, sites } from "./lib.mjs";
 import { poolFor, modesFor } from "./puzzles.mjs";
+import { winnerIndex, ratioOf } from "../src/core.mjs";
 
 const args = new Set(process.argv.slice(2));
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -46,8 +47,113 @@ ${ads ? `<meta name="google-adsense-account" content="${esc(site.adsense.client)
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${esc(site.adsense.client)}" crossorigin="anonymous"></script>` : ""}`;
 }
 
-function footerLinks(ads) {
-  return `<nav class="links" aria-label="Site"><a href="/about">How to play &amp; about</a><a href="/privacy">Privacy</a>${ads ? `<a href="#" data-privacy-choices hidden>Privacy choices</a>` : ""}</nav>`;
+function footerLinks(ads, site) {
+  return `<nav class="links" aria-label="Site"><a href="/about">How to play &amp; about</a>${site && site.name !== "draftdle" ? `<a href="/answers">Past answers</a>` : ""}<a href="/privacy">Privacy</a>${ads ? `<a href="#" data-privacy-choices hidden>Privacy choices</a>` : ""}</nav>`;
+}
+
+
+// ---------- answers (finished days) ----------
+// A puzzle date has finished in every time zone once UTC is two days past it (local dates run from
+// UTC-12 to UTC+14), so answers for it can't spoil anyone's game.
+const longDay = iso => new Date(iso + "T12:00:00Z").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+const shortDay = iso => new Date(iso + "T12:00:00Z").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" });
+const siteConfig = site => Function(`"use strict"; return (${fs.readFileSync(p("sites", site.name, "game.js"), "utf8").trim()});`)();
+function priceJoin(site) {
+  if (site.name !== "peakdle") return items => items;
+  const prices = new Map(read(p("data/peakdle/pool.json"), []).map(a => [String(a.appid), a]));
+  return items => items.map(it => { const a = prices.get(String(it.group)); return a ? { ...it, free: a.free, price: a.price || 0 } : it; });
+}
+function answerDays(site) {
+  const cut = addDays(utcDay(now()), -2);
+  const out = {};
+  for (const mode of modesFor(site)) {
+    const dir = p("data/puzzles", site.name, mode);
+    if (!fs.existsSync(dir)) continue;
+    const days = fs.readdirSync(dir).filter(f => /^\d{4}-\d{2}-\d{2}\.json$/.test(f)).map(f => f.slice(0, 10)).filter(d => d <= cut).sort().reverse();
+    if (days.length) out[mode] = days;
+  }
+  return out;
+}
+const answerPath = (site, mode, day) => modesFor(site)[0] === mode ? `/answers/${day}` : `/answers/${mode}/${day}`;
+function answerIntro(site, cfg, modeCfg, puzzle) {
+  if (site.name === "speedrundle") return `<p>The ten pairs from that day's Speedrundle, in the order they were played. In each pair the faster world record is listed first, with the margin and who holds it. Times are the records as they stood when the puzzle was made.</p>`;
+  const src = puzzle.meta?.day ? ` The counts are each game's highest number of people playing at once on Steam during ${esc(longDay(puzzle.meta.day))} (UTC).` : puzzle.meta?.since ? ` The counts are each game's highest recorded peak since ${esc(longDay(puzzle.meta.since))}.` : "";
+  return `<p>The ten pairs from that day's ${esc(site.title)} ${esc(modeCfg.label)}, in the order they were played. In each pair the game with more players is listed first.${src}</p>`;
+}
+function answersList(site, cfg, modeCfg, pairs) {
+  return `<ol class="answers">${pairs.map(pair => {
+    const w = winnerIndex(pair, cfg.better);
+    const [a, b] = [pair[w], pair[1 - w]];
+    const label = x => { const c = modeCfg.card(x); return `${esc(c.name)}${c.pill ? ` <span class="pill">${esc(c.pill)}</span>` : ""}${c.meta ? ` <span class="quiet">${esc(c.meta)}</span>` : ""}`; };
+    return `<li><div class="row win"><span class="nm">${label(a)}</span><span class="v">${esc(modeCfg.format(a))}</span></div><div class="row"><span class="nm">${label(b)}</span><span class="v">${esc(modeCfg.format(b))}</span></div><div class="note">${esc(modeCfg.ratioText(ratioOf(pair[0], pair[1])))} · ${modeCfg.detail(a)}</div></li>`;
+  }).join("")}</ol>`;
+}
+function answersPage(site, ads, mode, day, days) {
+  const cfg = siteConfig(site), modeCfg = cfg.modes.find(m => m.id === mode) || cfg.modes[0];
+  const puzzle = read(p("data/puzzles", site.name, mode, day + ".json"));
+  const pairs = puzzle.pairs.map(priceJoin(site));
+  const i = days.indexOf(day), newer = days[i - 1], older = days[i + 1];
+  const modeName = modesFor(site).length > 1 ? ` ${modeCfg.label}` : "";
+  const nav = `<p class="pager">${older ? `<a href="${answerPath(site, mode, older)}">← ${esc(shortDay(older))}</a>` : "<span></span>"}<a href="/answers">All answers</a>${newer ? `<a href="${answerPath(site, mode, newer)}">${esc(shortDay(newer))} →</a>` : "<span></span>"}</p>`;
+  const body = `<h1>${esc(site.title)}${esc(modeName)} answers for ${esc(longDay(day))}</h1>
+${answerIntro(site, cfg, modeCfg, puzzle)}
+${answersList(site, cfg, modeCfg, pairs)}
+${adBlock(site, ads, "footer")}
+${nav}
+<p><a href="/">Play today's ${esc(site.title)}</a></p>`;
+  return { path: answerPath(site, mode, day), title: `Answers for ${shortDay(day)}${modeName}`, description: `The ten pairs and answers from ${site.title}${modeName} on ${longDay(day)}.`, body, ads };
+}
+function answersIndex(site, ads, byMode) {
+  const cfg = siteConfig(site);
+  const sections = Object.entries(byMode).map(([mode, days]) => {
+    const m = cfg.modes.find(x => x.id === mode) || cfg.modes[0];
+    const head = Object.keys(byMode).length > 1 || modesFor(site).length > 1 ? `<h2>${esc(m.label)}</h2>` : "";
+    return `${head}<ul class="days">${days.map(d => `<li><a href="${answerPath(site, mode, d)}">${esc(longDay(d))}</a></li>`).join("")}</ul>`;
+  }).join("\n");
+  const body = `<h1>Past ${esc(site.title)} answers</h1>
+<p>Every finished day's ten pairs with the answers. A day shows up here once it has ended in every time zone, so these never spoil a puzzle someone is still playing.</p>
+${sections || "<p>No finished days yet. Check back in two days.</p>"}
+<p><a href="/">Play today's ${esc(site.title)}</a></p>`;
+  // a list of links is a navigation page: no ads on it (AdSense policy)
+  return { path: "/answers", title: "Past answers", description: `Answers to every past ${site.title} puzzle.`, body, ads: false };
+}
+function adBlock(site, ads, slotName) {
+  const slot = ads && (site.adsense.slots || {})[slotName];
+  if (args.has("--ad-preview")) return `<aside class="ad preview"><span class="adlabel">Advertisement</span><ins></ins></aside>`;
+  if (!slot) return "";
+  return `<aside class="ad"><span class="adlabel">Advertisement</span><ins class="adsbygoogle" style="display:block" data-ad-client="${esc(site.adsense.client)}" data-ad-slot="${esc(slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></aside>`;
+}
+// Written content under the game: the page has to make sense to someone (or a crawler) that never
+// runs the script.
+function guide(site, byMode) {
+  const cfg = siteConfig(site);
+  const how = `<h2>How to play</h2>
+<p>Each day has ten pairs. Pick the card you think wins; the answer and the margin show right away. The first three pairs are far apart, the middle four are closer, and the last three are within 1.5× of each other. Everyone gets the same ten pairs, and a new set starts at midnight in your time zone. Your results and streak stay in this browser. Keys: 1 or ← for the left card, 2 or → for the right.</p>`;
+  const intro = site.name === "speedrundle"
+    ? `<h2>About Speedrundle</h2>
+<p>Speedrundle is a daily guessing game about speedrunning. Each card is one speedrun category of one game, and you pick the one whose world record is faster. The records come from the community leaderboards on speedrun.com, covering ${read(p("data/speedrundle/records.json"), []).length.toLocaleString("en-US")} categories across thousands of games, from arcade classics to this year's releases.</p>
+<h2>Reading the cards</h2>
+<p>The category name matters more than the game. <b>Any%</b> means reaching the end by any means, which often skips most of the game. <b>100%</b> means collecting everything, <b>Glitchless</b> rules out the big skips, and a named level or ending covers only that part. A long game's Any% can beat a short game's 100%. Times are the current world record for that category, timed the way its leaderboard times it.</p>`
+    : `<h2>About ${esc(site.title)}</h2>
+<p>${esc(site.title)} is a daily guessing game about Steam games. CCU means concurrent users: how many people are playing a game at the same moment. Each card is a game on Steam, and you pick the one that had more people playing at its peak. The pool covers ${read(p("data/peakdle/pool.json"), []).length.toLocaleString("en-US")} games, from the biggest free-to-play shooters to small indie hits.</p>
+<h2>How the counts work</h2>
+<p>Live compares each game's peak on one UTC day: the most people playing at once, from hourly samples of Steam's own player counts. Players start each day at different times around the world, so a puzzle uses the day that finished two days before it, and the question names that day. Only Steam players count, so a game's players on consoles or other stores don't show up here.</p>`;
+  const [mode, days] = Object.entries(byMode)[0] || [];
+  let latest = "";
+  if (days && days.length) {
+    const modeCfg = cfg.modes.find(m => m.id === mode) || cfg.modes[0];
+    const puzzle = read(p("data/puzzles", site.name, mode, days[0] + ".json"));
+    latest = `<h2>Answers for ${esc(longDay(days[0]))}</h2>
+${answerIntro(site, cfg, modeCfg, puzzle)}
+${answersList(site, cfg, modeCfg, puzzle.pairs.map(priceJoin(site)))}
+<p><a href="/answers">All past answers</a></p>`;
+  }
+  return `<section class="guide" id="guide">
+${intro}
+${how}
+${latest}
+<p><a href="/about">More about ${esc(site.title)} and its data</a></p>
+</section>`;
 }
 
 // ---------- the game page ----------
@@ -82,7 +188,7 @@ function gamePage(site, ads) {
     name: site.name, title: site.title, url: site.url, epoch: site.epoch,
     shareUrl: site.url.replace(/^https?:\/\//, "").replace(/\/$/, ""),
     ads: { client: ads ? site.adsense.client : "", slots: ads ? site.adsense.slots : {}, preview: args.has("--ad-preview") },
-    footerLinks: footerLinks(ads), allowDateParam: args.has("--allow-date")
+    footerLinks: footerLinks(ads, site), allowDateParam: args.has("--allow-date")
   };
   const config = `(() => { const c = ${game}; c.modes = c.modes.filter(m => ${json(modes)}.includes(m.id)); return c; })()`;
   return tpl
@@ -91,7 +197,15 @@ function gamePage(site, ads) {
     .replace("/*SITE*/", () => json(SITE))
     .replace("/*CONFIG*/", () => config)
     .replace("/*PUZZLES*/", () => json(puzzles))
-    .replace("/*POOLS*/", () => json(pools));
+    .replace("/*POOLS*/", () => json(pools))
+    .replace('<h1 id="title"></h1>', () => `<h1 id="title">${esc(site.title)}</h1>`)
+    .replace('<div id="game"></div>', () => `<div id="game"><noscript><p class="noscript">${esc(site.title)} needs JavaScript to play. The answers to past days are on the <a href="/answers">answers page</a>.</p></noscript></div>`)
+    .replace('<footer id="footer"></footer>', () => `${guide(site, answerDays(site))}\n  <footer id="footer">${siteConfig(site).footer}${footerLinks(ads, site)}</footer>`)
+    .replace("</style>", () => `${ANSWERS_CSS}
+.guide{max-width:640px;margin:36px auto 0;padding-top:8px;border-top:1px solid var(--line);font-size:15px;line-height:1.55}
+.guide h2{font-size:14px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin:24px 0 6px}.guide p{margin:8px 0}.guide a{color:inherit}
+.noscript{text-align:center;color:var(--quiet);margin:24px 0}
+</style>`);
 }
 
 // ---------- Draftdle ----------
@@ -117,7 +231,7 @@ function draftdlePage(site, ads) {
     name: site.name, title: site.title, url: site.url,
     shareUrl: site.url.replace(/^https?:\/\//, "").replace(/\/$/, ""),
     ads: { client: ads ? site.adsense.client : "", slots: ads ? site.adsense.slots : {}, preview: args.has("--ad-preview") },
-    footerLinks: footerLinks(ads), allowDateParam: args.has("--allow-date"), turnstile: site.turnstileSiteKey || "",
+    footerLinks: footerLinks(ads, site), allowDateParam: args.has("--allow-date"), turnstile: site.turnstileSiteKey || "",
     footer: `<p>Players, positions, careers and teams from <a href="https://www.wikidata.org" target="_blank" rel="noopener">Wikidata</a> (CC0), refreshed weekly. Photos load from league sites and <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>; each Commons photo links to its author and licence on the reveal.</p><p>Answers come from Draftdle players' votes. Not affiliated with any league, team or player.</p>`
   };
   return tpl
@@ -130,6 +244,13 @@ function draftdlePage(site, ads) {
 }
 
 // ---------- text pages ----------
+const ANSWERS_CSS = `.answers{list-style:none;counter-reset:a;padding:0;margin:14px 0}
+.answers li{counter-increment:a;border:1px solid var(--line);border-radius:8px;padding:10px 12px 10px 40px;margin:8px 0;position:relative}
+.answers li::before{content:counter(a);position:absolute;left:12px;top:10px;font-weight:800;color:var(--quiet)}
+.answers .row{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.answers .row .v{font-variant-numeric:tabular-nums;white-space:nowrap}
+.answers .row.win .nm,.answers .row.win .v{font-weight:800}.answers .row.win .v{color:var(--good)}
+.answers .pill{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:0 7px;white-space:nowrap}
+.answers .quiet{font-size:13px}.answers .note{font-size:13px;color:var(--quiet);margin-top:4px}`;
 const PAGE_CSS = `:root{--bg:#fff;--ink:#1a1a1b;--quiet:#787c7e;--line:#d3d6da;--good:#6aaa64}
 @media (prefers-color-scheme: dark){:root{--bg:#121213;--ink:#f8f8f8;--quiet:#818384;--line:#3a3a3c;--good:#538d4e}}
 *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Helvetica Neue",Arial,"Segoe UI",Roboto,sans-serif}
@@ -139,22 +260,25 @@ const PAGE_CSS = `:root{--bg:#fff;--ink:#1a1a1b;--quiet:#787c7e;--line:#d3d6da;-
 main{max-width:640px;margin:0 auto;padding:8px 16px 48px}a{color:inherit}
 h1{font-size:28px;font-weight:800;margin:22px 0 8px}h2{font-size:15px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin:28px 0 6px}p,li{max-width:66ch}
 .quiet{color:var(--quiet);font-size:14px}footer{margin-top:36px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--quiet);text-align:center}footer a{color:var(--quiet);margin:0 7px}
-@media (max-width:420px){.bar a.home{font-size:24px}.bar a.play{padding:6px 10px;font-size:11px}}`;
+@media (max-width:420px){.bar a.home{font-size:24px}.bar a.play{padding:6px 10px;font-size:11px}}
+${ANSWERS_CSS}
+.days{padding-left:20px}.days li{margin:3px 0}.pager{display:flex;justify-content:space-between;gap:12px;margin-top:24px}
+.ad{margin:24px 0;text-align:center}.ad .adlabel{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--quiet);margin-bottom:4px}.ad.preview ins{display:block;height:120px;background:repeating-linear-gradient(45deg,var(--line) 0 8px,transparent 8px 16px)}`;
 
-function textPage(site, ads, { path, title, description, body }) {
+function textPage(site, adsOn, { path, title, description, body, ads = false }) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-${head(site, { title: `${title} · ${site.title}`, description, path, ads: false })}
+${head(site, { title: `${title} · ${site.title}`, description, path, ads: adsOn && ads })}
 <style>${PAGE_CSS}</style>
 </head>
 <body>
 <header class="bar"><a class="home" href="/">${esc(site.title)}</a><a class="play" href="/">Play</a></header>
 <main>
 ${body}
-<footer><a href="/">Play</a><a href="/about">About</a><a href="/privacy">Privacy</a></footer>
+<footer><a href="/">Play</a>${site.name !== "draftdle" ? `<a href="/answers">Answers</a>` : ""}<a href="/about">About</a><a href="/privacy">Privacy</a></footer>
 </main>
 </body>
 </html>
@@ -196,7 +320,7 @@ ${how}
 <h2>All-Time</h2>
 <p>All-Time compares the highest peak ${esc(site.title)} has recorded for each game since it started tracking. It opens once there are ${esc(site.alltime.minTrackedDays)} days of history.</p>
 <h2>Where the data comes from</h2>
-<p>Player counts come from the Steam Web API. Genre and price model come from <a href="https://steamspy.com" target="_blank" rel="noopener">SteamSpy</a>. Only games on Steam are included, so a game's players on other stores and consoles don't count. ${esc(site.title)} isn't affiliated with or endorsed by Valve or Steam. Steam is a trademark of Valve Corporation.</p>
+<p>Player counts are Steam's own counts, from <a href="https://steamcharts.com" target="_blank" rel="noopener">SteamCharts</a>' hourly record and our own sampling of the Steam Web API. Genres come from <a href="https://steamspy.com" target="_blank" rel="noopener">SteamSpy</a>, and prices are regular US prices from the Steam store. Only games on Steam are included, so a game's players on other stores and consoles don't count. ${esc(site.title)} isn't affiliated with or endorsed by Valve or Steam. Steam is a trademark of Valve Corporation.</p>
 ${contact}
 <p class="quiet">Made by ${esc(site.operator)}.</p>`;
   return { path: "/about", title: "How to play & about", description: `How ${site.title} works and where its data comes from.`, body };
@@ -249,9 +373,21 @@ for (const site of sites()) {
   put("about.html", textPage(site, ads, about(site)));
   put("privacy.html", textPage(site, ads, privacy(site, ads)));
   put("404.html", textPage(site, ads, notFound(site)));
+  const extra = [];
+  if (site.name !== "draftdle") {
+    const byMode = answerDays(site);
+    put("answers.html", textPage(site, ads, answersIndex(site, ads, byMode)));
+    extra.push("/answers");
+    for (const [mode, days] of Object.entries(byMode)) for (const day of days) {
+      const pg = answersPage(site, ads, mode, day, days);
+      fs.mkdirSync(`${out}${pg.path.replace(/\/[^/]+$/, "")}`, { recursive: true });
+      put(`${pg.path.slice(1)}.html`, textPage(site, ads, pg));
+      extra.push(pg.path);
+    }
+  }
   if (ads) put("ads.txt", `google.com, ${site.adsense.client.replace("ca-", "")}, DIRECT, f08c47fec0942fa0\n`);
   put("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${site.url.replace(/\/$/, "")}/sitemap.xml\n`);
-  put("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${["/", "/about", "/privacy"].map(u => `  <url><loc>${esc(site.url.replace(/\/$/, "") + u)}</loc></url>`).join("\n")}\n</urlset>\n`);
+  put("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${["/", "/about", "/privacy", ...extra].map(u => `  <url><loc>${esc(site.url.replace(/\/$/, "") + u)}</loc></url>`).join("\n")}\n</urlset>\n`);
   put("_headers", `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n\n/\n  Cache-Control: public, max-age=300, must-revalidate\n\n/og.png\n  Cache-Control: public, max-age=86400\n`);
   for (const f of fs.readdirSync(p("static", site.name))) fs.copyFileSync(p("static", site.name, f), `${out}/${f}`);
   const size = fs.statSync(`${out}/index.html`).size;
