@@ -38,7 +38,7 @@ function playDay(pg) {
   }
   return null;
 }
-function checkDist(distRoot, label) {
+function checkDist(distRoot, label, today = (process.env.DLE_NOW || new Date().toISOString()).slice(0, 10)) {
   for (const site of ["speedrundle", "peakdle", "draftdle"]) {
     const dir = path.join(distRoot, site);
     for (const f of ["index.html", "about.html", "privacy.html", "404.html", "robots.txt", "sitemap.xml", "_headers", "favicon.svg", "og.png", "apple-touch-icon.png"])
@@ -46,6 +46,22 @@ function checkDist(distRoot, label) {
     const html = fs.readFileSync(path.join(dir, "index.html"), "utf8");
     ok(!/\/\*(CORE|SITE|CONFIG|PUZZLES|POOLS|BASECSS|SPORTS|STATUS)\*\/|<!--HEAD-->/.test(html), `${label} ${site}: unfilled template marker`);
     ok(/<link rel="canonical"/.test(html) && /og:image/.test(html), `${label} ${site}: missing canonical/og tags`);
+    if (site === "draftdle") continue;
+    // AdSense won't serve on a page that's empty without its script: the game page carries written content
+    const text = h => h.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<style[\s\S]*?<\/style>/g, "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    const words = text(html).split(" ").length;
+    ok(words >= 250 && /<section class="guide"/.test(html), `${label} ${site}: game page has only ${words} words of static content`);
+    ok(fs.existsSync(path.join(dir, "answers.html")) && !/adsbygoogle/.test(fs.readFileSync(path.join(dir, "answers.html"), "utf8")), `${label} ${site}: answers index missing, or carries ads (it's a navigation page)`);
+    const ansDir = path.join(dir, "answers");
+    const days = fs.existsSync(ansDir) ? fs.readdirSync(ansDir).filter(f => /^\d{4}-\d{2}-\d{2}\.html$/.test(f)).map(f => f.slice(0, 10)) : [];
+    const cut = new Date(Date.parse(today + "T00:00:00Z") - 2 * 864e5).toISOString().slice(0, 10);
+    ok(days.every(d => d <= cut), `${label} ${site}: an answers page exists for a day that may still be in play (${days.filter(d => d > cut)})`);
+    const sm = fs.readFileSync(path.join(dir, "sitemap.xml"), "utf8");
+    ok(/\/answers</.test(sm) && days.every(d => sm.includes(`/answers/${d}<`)), `${label} ${site}: sitemap lists the answers pages`);
+    for (const d of days.slice(-2)) {
+      const a = fs.readFileSync(path.join(ansDir, d + ".html"), "utf8");
+      ok((a.match(/<li><div class="row win">/g) || []).length === 10 && text(a).split(" ").length >= 150, `${label} ${site}: answers ${d} should list ten pairs with content`);
+    }
   }
 }
 
@@ -289,7 +305,7 @@ polls("2026-12-06", HOURS); daily("2026-12-07");
   const day = "2026-12-20";
   for (const n of ["speedrundle", "peakdle"]) setSite(n, { adsense: { client: "", slots: { results: "", footer: "" } } });
   run("scripts/build.mjs", { DLE_NOW: `${day}T00:20:00Z` }, ["--allow-date"]);
-  checkDist(path.join(T, "dist"), "ads-off");
+  checkDist(path.join(T, "dist"), "ads-off", day);
   ok(!fs.existsSync(path.join(T, "dist/speedrundle/ads.txt")), "ads off: no ads.txt");
   ok(!/googlesyndication|google-adsense-account/.test(fs.readFileSync(path.join(T, "dist/speedrundle/index.html"), "utf8")), "ads off: no AdSense script");
 
