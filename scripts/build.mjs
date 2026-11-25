@@ -76,7 +76,7 @@ function answerDays(site) {
 }
 const answerPath = (site, mode, day) => modesFor(site)[0] === mode ? `/answers/${day}` : `/answers/${mode}/${day}`;
 function answerIntro(site, cfg, modeCfg, puzzle) {
-  if (site.name === "speedrundle") return `<p>The ten pairs from that day's Speedrundle, in the order they were played. In each pair the faster world record is listed first, with the margin and who holds it. Times are the records as they stood when the puzzle was made.</p>`;
+  if (site.name === "speedrundle") return `<p>The ten pairs from that day's Speedrundle, in the order they were played. In each pair the faster world record is listed first, with the margin and, where the leaderboard names one, the runner. Times are the records as they stood when the puzzle was made.</p>`;
   const src = puzzle.meta?.day ? ` The counts are each game's highest number of people playing at once on Steam during ${esc(longDay(puzzle.meta.day))} (UTC).` : puzzle.meta?.since ? ` The counts are each game's highest recorded peak since ${esc(longDay(puzzle.meta.since))}.` : "";
   return `<p>The ten pairs from that day's ${esc(site.title)} ${esc(modeCfg.label)}, in the order they were played. In each pair the game with more players is listed first.${src}</p>`;
 }
