@@ -69,7 +69,7 @@ fs.rmSync(path.join(T, "data/peakdle/peaks"), { recursive: true, force: true });
 fs.writeFileSync(path.join(T, "data/peakdle/alltime.json"), "{}");
 fs.symlinkSync(path.join(ROOT, "node_modules"), path.join(T, "node_modules"));
 const run = (script, env = {}, args = []) => execFileSync("node", [path.join(T, script), ...args], {
-  env: { ...process.env, DLE_FAST: "1", PEAKDLE_STATE: path.join(T, "state"), ...env }, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"]
+  env: { ...process.env, DLE_FAST: "1", PEAKDLE_STATE: path.join(T, "state"), PEAKDLE_STEAMCHARTS: "off", ...env }, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"]
 });
 const setSite = (name, patch) => {
   const f = path.join(T, "sites", name, "site.json");
@@ -225,6 +225,35 @@ polls("2026-12-06", HOURS); daily("2026-12-07");
   ok(btn, "alltime: mode button shows");
   if (btn) { btn.click(); ok(/since Dec 1, 2026/.test(pg.d.querySelector(".question")?.textContent || ""), "alltime: question says since when"); }
   pg.w.close();
+}
+
+// SteamCharts fallback: days the hourly poll missed close from SteamCharts' hourly series
+{
+  const allPath = path.join(T, "data/peakdle/alltime.json");
+  const before = fs.readFileSync(allPath, "utf8");
+  const saved = { now: process.env.DLE_NOW, state: process.env.PEAKDLE_STATE, sc: process.env.PEAKDLE_STEAMCHARTS };
+  Object.assign(process.env, { DLE_NOW: "2026-12-20T00:20:00Z", PEAKDLE_STATE: path.join(T, "state"), PEAKDLE_STEAMCHARTS: "https://sc.test" });
+  const { close } = await import(pathToFileURL(path.join(T, "scripts/peakdle-close.mjs")));
+  const hours = (d, n, v) => Array.from({ length: n }, (_, h) => [Date.parse(`${d}T${String(h).padStart(2, "0")}:00:00Z`), Math.round(v * (0.6 + 0.4 * Math.sin(Math.PI * h / 23)))]);
+  const urls = [];
+  const fake = async url => {
+    urls.push(url);
+    const id = url.match(/\/app\/(\d+)\//)[1];
+    if (id === "570") return { ok: false, status: 404, json: async () => ({}) };
+    return { ok: true, status: 200, json: async () => [...hours("2026-12-18", 10, 1000), ...hours("2026-12-19", 24, sample[id] || 500)] };
+  };
+  const got = await close({ fetchImpl: fake, log: () => {} });
+  const f = path.join(T, "data/peakdle/peaks/2026-12-19.json");
+  const j = fs.existsSync(f) ? readJ(f) : { peaks: {} };
+  ok(got.includes("2026-12-19") && j.source === "steamcharts" && j.peaks["730"] === Math.max(...hours("2026-12-19", 24, sample["730"]).map(x => x[1])), "close: SteamCharts fills a day the poll missed, peak = max hourly sample");
+  ok(!got.includes("2026-12-18") && !("570" in j.peaks), "close: SteamCharts days with too few samples stay open; apps it lacks are skipped");
+  ok(urls.every(u => u.startsWith("https://sc.test/app/")), "close: SteamCharts requests go to the configured base");
+  // blocked: every request fails, nothing closes
+  fs.rmSync(f); fs.writeFileSync(allPath, before);
+  const down = await close({ fetchImpl: async () => ({ ok: false, status: 403, json: async () => ({}) }), log: () => {} });
+  ok(!down.length && !fs.existsSync(f), "close: SteamCharts blocked, nothing closes");
+  fs.writeFileSync(allPath, before);
+  for (const [k, e] of [["DLE_NOW", "now"], ["PEAKDLE_STATE", "state"], ["PEAKDLE_STEAMCHARTS", "sc"]]) { if (saved[e] === undefined) delete process.env[k]; else process.env[k] = saved[e]; }
 }
 
 // ---------- 3. puzzle rules over 40 simulated days of Speedrundle ----------
