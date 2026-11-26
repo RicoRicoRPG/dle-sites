@@ -5,7 +5,7 @@ Three daily pick-one-of-two games (CCUdle was called Peakdle; its files, folders
 | | Speedrundle | CCUdle |
 |---|---|---|
 | Question | Which world record is faster? | Which Steam game had more players at its peak? |
-| Data | speedrun.com API, refreshed weekly | Steam Web API, sampled hourly |
+| Data | speedrun.com API, refreshed weekly | Steam's player counts, hourly: our own poll of the Steam Web API, or SteamCharts' hourly record for days the poll missed |
 | Pool | 3,604 categories across 1,426 games | 1,712 Steam apps |
 | Card art | Box art from speedrun.com | Header art from Steam's store CDN |
 | Modes | Daily | Live (from day one); All-Time (after 30 days of history) |
@@ -15,13 +15,20 @@ Three daily pick-one-of-two games (CCUdle was called Peakdle; its files, folders
 
 | Workflow | When | What it does |
 |---|---|---|
-| `peakdle-poll.yml` | Every hour at :07 | Samples current players for every pool app. Keeps each app's daily maximum in the Actions cache. |
-| `daily.yml` | 00:20 UTC, and on every push to `main` | Closes finished Steam days into `data/peakdle/peaks/`. Freezes puzzles for yesterday, today and tomorrow (UTC). Runs the tests, builds both sites, commits the new data and deploys to Cloudflare. |
-| `weekly-refresh.yml` | Mondays 03:40 UTC | Re-pulls every world record (about 20 minutes at speedrun.com's rate limit). Refreshes Steam image paths and drops apps Steam marks adult-only. Commits both. |
+| `peakdle-poll.yml` | Every hour at :07 (in practice GitHub runs it only a few times a day) | Samples current players for every pool app. Keeps each app's daily maximum in the Actions cache. |
+| `daily.yml` | 00:20 UTC, and on every push to `main` | Closes finished Steam days into `data/peakdle/peaks/`: from the poll if it ran at least 12 times that day, otherwise from SteamCharts' hourly series; the last 7 days are retried. Freezes puzzles for yesterday, today and tomorrow (UTC). Runs the tests, builds both sites, commits the new data and deploys to Cloudflare. |
+| `weekly-refresh.yml` | Mondays 03:40 UTC | Two jobs that commit separately. `records`: re-pulls every world record (about 25 minutes at speedrun.com's rate limit), refreshes Steam image paths and regular US prices, drops apps Steam marks adult-only. `draftdle`: rebuilds Draftdle's player pools from Wikidata (two hours or more). They used to share one job, which timed out before committing anything. |
 
 Once a puzzle file is written it never changes. A data refresh only affects future days.
 
-CCUdle Live uses the UTC day that ended two days before the puzzle date, because players' local midnights span 26 hours. The question names that day. If a day's polling failed, Live uses the newest earlier day instead.
+CCUdle Live uses the UTC day that ended two days before the puzzle date, because players' local midnights span 26 hours. The question names that day. If a day never closed, Live uses the newest earlier day instead.
+
+## Pages
+
+Each game site has the game page, About, Privacy, a 404, and past answers:
+
+- **The game page carries written content** (what the game is, how to play, how to read the cards, the latest finished day's answers) in the HTML itself, under the game. AdSense rejected Speedrundle when the page was empty without its script ("ads on screens without publisher content"); the `--dist` check now fails a build whose game page has under 250 words of static text.
+- **`/answers`** lists every finished day; **`/answers/<date>`** shows that day's ten pairs with the answers (CCUdle's All-Time days, once it opens, are under `/answers/alltime/<date>`). A day appears only when UTC is two days past it, so it has ended in every time zone. Day pages carry the footer ad unit; the index is a page of links, which AdSense doesn't allow ads on, so it has none. All of them are in the sitemap.
 
 ## One-time setup
 
@@ -58,14 +65,16 @@ GitHub turns off scheduled workflows after 60 days with no repository activity. 
 2. In AdSense, add each domain under **Sites**. Copy your publisher ID into `adsense.client` (format `ca-pub-` plus 16 digits) in both `site.json` files and push. The deploy adds the AdSense script, the `google-adsense-account` meta tag and `/ads.txt`. Then request review in AdSense.
 3. Under **Privacy & messaging**, create a **European regulations** message and a **US state regulations** message for both sites. Google requires a certified consent tool for visitors in the EEA, UK and Switzerland. Google's own counts, and no code is needed. The "Privacy choices" link in each game's footer reopens it.
 4. After approval, create two display ad units per site, named "results" and "footer". Put their numeric `data-ad-slot` ids in `adsense.slots` and push.
-5. Keep **Auto ads** off. The two manual slots sit below the results and at the bottom of the page, away from the cards. AdSense's policy on accidental clicks makes ads next to game controls a risk.
+5. Status (Nov 25, 2026): publisher `ca-pub-7874618173366273`; both sites in Search Console (domain properties, DNS TXT in Cloudflare) with sitemaps submitted; Cloudflare Web Analytics on for both; the consent messages are published; ad units `results` 6535376262 and `footer` 2596131259 are shared by both sites. Speedrundle was rejected once for thin content, fixed and resubmitted; CCUdle awaiting review.
+6. Keep **Auto ads** off. The two manual slots sit below the results and at the bottom of the page, away from the cards. AdSense's policy on accidental clicks makes ads next to game controls a risk.
 
 To check the layout before ads are approved, run `node scripts/build.mjs --ad-preview`. It draws striped boxes where the ads go.
 
 ## Data and licences: read before launch
 
 - **speedrun.com.** The October 2026 terms now give leaderboard data its own licence. Per speedrun.com's announcement, it allows any use, including commercial, but automated access has to go through the API and AI training is excluded. This code uses only the documented v1 API and sends a User-Agent naming the site. Read the Leaderboard Data License (linked from speedrun.com's Terms of Use) before launch.
-- **Steam.** Counts come from Valve's `GetNumberOfCurrentPlayers`. The footer and About page carry the non-affiliation line. The terms allow 100,000 calls a day; the hourly poll uses about 41,600.
+- **Steam.** Counts come from Valve's `GetNumberOfCurrentPlayers`, directly through the poll or as recorded hourly by SteamCharts. The footer and About page carry the non-affiliation line and credit SteamCharts. The terms allow 100,000 calls a day; the hourly poll uses about 41,600 when it runs every hour.
+- **SteamCharts.** Since Nov 2026 most CCUdle days close from SteamCharts' public `chart-data.json` series (one request per app per day, with a User-Agent naming the site), because GitHub drops most of the hourly poll runs. SteamCharts publishes no terms for this use. Ask SteamCharts for permission, or make the hourly poll reliable (for example a Cloudflare Worker cron that triggers `peakdle-poll.yml` through the GitHub API every hour), and set `PEAKDLE_STEAMCHARTS=off` in `daily.yml` to stop using it.
 - **All-Time.** All-Time uses only peaks CCUdle recorded itself, so the question says "since <first day>". `data/peakdle/seed-steamcharts.json` holds the true all-time peaks from Steam Charts. It is **off**. Turn it on with `"alltime": { "seed": "steamcharts" }` only if Steam Charts gives you permission.
 - **Images.** Cards load game art straight from Steam's and speedrun.com's servers. Nothing is copied into the repo. The art belongs to each game's publisher, as on any store or stats site that shows it. To serve the art from your own domain instead, ask for a mirror step.
 - **SteamSpy.** Genre and Free/Paid labels come from a SteamSpy snapshot, credited on the page.
